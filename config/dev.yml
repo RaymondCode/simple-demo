@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  mode: 'release'
+
+redis:
+  Addr: '127.0.0.1:6379'
+  password: '123456'
+  db: 0
+
+mysql:
+  user: root
+  password: '1111'
+  path: '127.0.0.1:3306'
+  database: 'test'
+  config: 'charset=utf8&parseTime=True&loc=Local'
+  driver: 'mysql'
+  maxIdleConns: 10
+  maxOpenConns: 100
+  log: false
+  autoMigrate: false
+
+session:
+  key: 'DY_SESSIONID'
+  size: 10
+  # 7 * 86400 7天
+  maxAge: 604800
+  path: '/'
+  domain: ''
+  httpOnly: true
