@@ -14,7 +14,7 @@ type VideoListResponse struct {
 
 // Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
-	token := c.Query("token")
+	token := c.PostForm("token")
 
 	if _, exist := usersLoginInfo[token]; !exist {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
