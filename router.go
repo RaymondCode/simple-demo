@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/common/mid"
 	"github.com/RaymondCode/simple-demo/controller"
 	"github.com/gin-gonic/gin"
 )
@@ -14,10 +13,7 @@ func initRouter(r *gin.Engine) {
 
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)
-
-	//在需要鉴权的接口类似的使用token鉴权
-	apiRouter.GET("/user/", mid.JWTAuthMiddleware(), controller.UserInfo)
-
+	apiRouter.GET("/user/", controller.UserInfo)
 	apiRouter.POST("/user/register/", controller.Register)
 	apiRouter.POST("/user/login/", controller.Login)
 	apiRouter.POST("/publish/action/", controller.Publish)
