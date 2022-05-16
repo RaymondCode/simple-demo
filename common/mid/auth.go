@@ -1,9 +1,10 @@
 package mid
 
 import (
-	"github.com/RaymondCode/simple-demo/common/jwt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/fitenne/youthcampus-dousheng/common/jwt"
+	"github.com/gin-gonic/gin"
 )
 
 const (

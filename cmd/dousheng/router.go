@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/common/mid"
-	"github.com/RaymondCode/simple-demo/controller"
+	"github.com/fitenne/youthcampus-dousheng/common/mid"
+	"github.com/fitenne/youthcampus-dousheng/internal/controller"
 	"github.com/gin-gonic/gin"
 )
 
