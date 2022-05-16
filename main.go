@@ -7,6 +7,7 @@ import (
 
 func main() {
 	r := gin.Default()
+
 	//配置文件初始化
 	if err := settings.Init(); err != nil {
 		panic("config init failed...")
