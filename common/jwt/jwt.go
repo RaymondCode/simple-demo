@@ -11,7 +11,7 @@ const (
 	TokenExpireDuration = time.Hour * 24 //token过期时间
 )
 
-var mySecret = []byte("going小分队")
+var mySecret = []byte(viper.GetString("app.secret"))
 
 // 仅用于根据token值返回密钥
 func keyFunc(token *jwt.Token) (interface{}, error) {

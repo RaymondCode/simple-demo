@@ -6,12 +6,19 @@ import (
 	"net/http"
 )
 
+const (
+	UserIDKey = "userID"
+)
+
 // JWTAuthMiddleware 在需要判断用户登录状态的地方使用此中间件，若判断登录状态不合法，则直接返回响应，且不会执行后续的处理函数
 // example: api.GET("/xxx/xx/", mid.JWTAuthMiddleware(),xxxxHandler)
 func JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		//  Token放在query中
 		token := c.Query("token")
+		if token == "" {
+			token = c.PostForm("token")
+		}
 		if token == "" {
 			c.JSON(http.StatusOK, gin.H{
 				"status_code": "-1",
@@ -31,7 +38,7 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 			return
 		}
 		// 将当前请求的userID信息保存到请求的上下文c上
-		c.Set("userID", mc.UserID)
+		c.Set(UserIDKey, mc.UserID)
 		c.Next() // 后续的处理函数可以用过c.Get("userID")来获取当前请求的用户信息
 	}
 
