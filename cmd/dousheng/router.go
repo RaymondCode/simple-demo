@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fitenne/youthcampus-dousheng/common/mid"
+	"github.com/fitenne/youthcampus-dousheng/internal/common/mid"
 	"github.com/fitenne/youthcampus-dousheng/internal/controller"
 	"github.com/gin-gonic/gin"
 )

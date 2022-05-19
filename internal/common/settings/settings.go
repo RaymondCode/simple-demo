@@ -3,13 +3,14 @@ package settings
 //  配置文件
 import (
 	"fmt"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
 
 // Init 此初始化需要在main中调用
 func Init() (err error) {
-	viper.SetConfigFile("config.yaml")
+	viper.SetConfigName("config")
 	viper.AddConfigPath(".") // 还可以在工作目录中查找配置
 	err = viper.ReadInConfig()
 	if err != nil { // 处理读取配置文件的错误

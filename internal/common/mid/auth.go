@@ -3,7 +3,7 @@ package mid
 import (
 	"net/http"
 
-	"github.com/fitenne/youthcampus-dousheng/common/jwt"
+	"github.com/fitenne/youthcampus-dousheng/internal/common/jwt"
 	"github.com/gin-gonic/gin"
 )
 
