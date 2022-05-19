@@ -9,9 +9,8 @@ import (
 )
 
 // Init 此初始化需要在main中调用
-func Init() (err error) {
-	viper.SetConfigName("config")
-	viper.AddConfigPath(".") // 还可以在工作目录中查找配置
+func Init(config string) (err error) {
+	viper.SetConfigFile(config)
 	err = viper.ReadInConfig()
 	if err != nil { // 处理读取配置文件的错误
 		fmt.Printf("viper.ReadInConfig failed err:  %s", err)

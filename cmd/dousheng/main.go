@@ -18,7 +18,7 @@ func main() {
 
 func init() {
 	//配置文件初始化
-	if err := settings.Init(); err != nil {
+	if err := settings.Init("config.yaml"); err != nil {
 		panic("config init failed...")
 	}
 
