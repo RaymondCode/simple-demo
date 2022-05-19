@@ -1,9 +1,11 @@
 package main
 
 import (
+	"github.com/fitenne/youthcampus-dousheng/internal/common/jwt"
 	"github.com/fitenne/youthcampus-dousheng/internal/common/settings"
 	"github.com/fitenne/youthcampus-dousheng/internal/repository"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 func main() {
@@ -20,16 +22,16 @@ func init() {
 		panic("config init failed...")
 	}
 
-	c := repository.DBConfig{
-		Driver:   "mysql",
-		Host:     "example.com",
-		Port:     "3306",
-		User:     "demo",
-		Password: "secret",
-		DBname:   "dousheng",
-	}
+	jwt.Init([]byte(viper.GetString("app.secret")))
 
-	err := repository.Init(c)
+	err := repository.Init(repository.DBConfig{
+		Driver:   viper.GetString("db.driver"),
+		Host:     viper.GetString("db.host"),
+		Port:     viper.GetString("db.port"),
+		User:     viper.GetString("db.user"),
+		Password: viper.GetString("db.pass"),
+		DBname:   viper.GetString("db.database"),
+	})
 	if err != nil {
 		panic(err.Error())
 	}
