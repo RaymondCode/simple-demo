@@ -1,0 +1,8 @@
+# example:
+# 读取app下的name：viper.GetString("app.name")
+# 读取int类型：    viper.GetInt("xxx.xxx")
+# 详情见：https://github.com/spf13/viper
+
+app:
+  name: dousheng
+  secret: going小分队
