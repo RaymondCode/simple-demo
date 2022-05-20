@@ -2,16 +2,19 @@ package jwt
 
 import (
 	"errors"
+	"sync"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
-	"time"
 )
 
 const (
 	TokenExpireDuration = time.Hour * 24 //token过期时间
 )
 
-var mySecret = []byte(viper.GetString("app.secret"))
+var mySecret []byte
+var initOnce sync.Once
 
 // 仅用于根据token值返回密钥
 func keyFunc(token *jwt.Token) (interface{}, error) {
@@ -53,4 +56,11 @@ func ParseToken(tokenString string) (*MyClaims, error) {
 		return claims, nil
 	}
 	return nil, errors.New("invalid token")
+}
+
+// 用 secret 初始化 jwt 组件，多次调用只有第一次有效
+func Init(secret []byte) {
+	initOnce.Do(func() {
+		mySecret = secret
+	})
 }

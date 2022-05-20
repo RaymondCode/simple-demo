@@ -6,3 +6,11 @@
 app:
   name: dousheng
   secret: going小分队
+
+db:
+  driver: mysql
+  host: example.com
+  port: 3306
+  user: demo
+  pass: secret
+  database: dousheng
