@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"github.com/fitenne/youthcampus-dousheng/pkg/model"
 	"sync"
 
 	"gorm.io/driver/mysql"
@@ -62,7 +63,13 @@ func Init(c DBConfig) error {
 		if err != nil {
 			return
 		}
-
+		//创建表video
+		var db = dbProvider.GetDB()
+		if !db.Migrator().HasTable(&model.Video{}) {
+			if err := db.Set("gorm:table_options", "ENGINE=InnoDB").Migrator().CreateTable(model.Video{}).Error; err != nil {
+				panic(err)
+			}
+		}
 		err = nil
 	})
 	return err

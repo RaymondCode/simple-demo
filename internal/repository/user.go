@@ -31,7 +31,7 @@ var ctl userCtl
 
 // 指定 User 对应的数据库表名
 func (User) TableName() string {
-	return "user"
+	return "users"
 }
 
 func GetUserCtl() model.UserCtl {
