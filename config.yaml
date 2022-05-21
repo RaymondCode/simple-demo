@@ -1,0 +1,16 @@
+# example:
+# 读取app下的name：viper.GetString("app.name")
+# 读取int类型：    viper.GetInt("xxx.xxx")
+# 详情见：https://github.com/spf13/viper
+
+app:
+  name: dousheng
+  secret: going小分队
+
+db:
+  driver: mysql
+  host: example.com
+  port: 3306
+  user: demo
+  pass: secret
+  database: dousheng
