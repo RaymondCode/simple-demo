@@ -28,7 +28,7 @@ CREATE TABLE `videos`  (
    `favorite_count` bigint NOT NULL DEFAULT 0 COMMENT '点赞数',
    `comment_count` bigint NOT NULL DEFAULT 0 COMMENT '评论数',
    `created_at` bigint NOT NULL COMMENT '投递时间',
-   `deleted_at` datetime(3) NOT NULL COMMENT '删除标记位',
+   `deleted_at` datetime(3) default NULL COMMENT '删除标记位',
    PRIMARY KEY (`id`) USING BTREE,
    #created_at聚簇索引
    UNIQUE INDEX `create_time_index`(`created_at`, `deleted_at`, `id`, `author_id`, `play_url`, `cover_url`, `favorite_count`, `comment_count`) USING BTREE,
