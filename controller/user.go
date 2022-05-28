@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"net/http"
+	"strconv"
+	"sync/atomic"
+
 	"github.com/RaymondCode/simple-demo/model/response"
+	"github.com/RaymondCode/simple-demo/service"
 	"github.com/RaymondCode/simple-demo/utils"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"sync/atomic"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -95,5 +98,18 @@ func UserInfo(c *gin.Context) {
 	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 	//	})
 	//}
-	response.OkWithUserInfo(user1, "success", c)
+	token := c.Query("token")
+	user_id, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	if err != nil {
+		response.FailWithMessage("user_id参数无效", c)
+	}
+	user, err := service.GroupApp.UserService.QueryUser(user_id, token)
+	if err != nil {
+		response.FailWithMessage("获取user过程发生错误", c)
+	}
+	if user == nil {
+		response.FailWithMessage("无法获取user_id对应的user", c)
+	} else {
+		response.OkWithUserInfo(*user, "success", c)
+	}
 }

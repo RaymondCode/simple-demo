@@ -20,3 +20,21 @@ func (vr *VideoRepository) QueryByIds(ids []int64) ([]model.Video, error) {
 func (vr *VideoRepository) UpdateFavoriteCount(videoId int64, count int64) error {
 	return global.DB.Model(&model.Video{}).Where("id = ?", videoId).Update("favorite_count", count).Error
 }
+
+func (vr *VideoRepository) QueryVideosSince(latestTimeStr string) ([]model.Video, error) {
+	var videos []model.Video
+	err := global.DB.Preload("Author").Where("create_time < ?", latestTimeStr).Limit(30).Order("create_time DESC").Find(&videos).Error
+	if err != nil {
+		return nil, err
+	}
+	return videos, nil
+}
+
+func (vr *VideoRepository) QueryAllVideos() ([]model.Video, error) {
+	var videos []model.Video
+	err := global.DB.Preload("Author").Limit(30).Order("create_time DESC").Find(&videos).Error
+	if err != nil {
+		return nil, err
+	}
+	return videos, nil
+}

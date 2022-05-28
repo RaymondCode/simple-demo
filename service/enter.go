@@ -2,7 +2,8 @@ package service
 
 type Group struct {
 	FavoriteService
-	// UserService
+	FeedService
+	UserService
 	// VideoService
 	// ...
 }
