@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"github.com/RaymondCode/simple-demo/model/response"
+	"github.com/RaymondCode/simple-demo/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"sync/atomic"
@@ -58,35 +60,40 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
+	// 方便测试, 这里直接让userId为1, 生成token, 返回
+	token, _ := utils.GenerateToken(1)
+	response.OkWithToken(1, token, c)
 
-	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
-	}
+	//username := c.Query("username")
+	//password := c.Query("password")
+	//
+	//token := username + password
+	//
+	//if user, exist := usersLoginInfo[token]; exist {
+	//	c.JSON(http.StatusOK, UserLoginResponse{
+	//		Response: Response{StatusCode: 0},
+	//		UserId:   user.Id,
+	//		Token:    token,
+	//	})
+	//} else {
+	//	c.JSON(http.StatusOK, UserLoginResponse{
+	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	//	})
+	//}
 }
 
 func UserInfo(c *gin.Context) {
-	token := c.Query("token")
-
-	if user, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 0},
-			User:     user,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
-	}
+	//token := c.Query("token")
+	//
+	//if user, exist := usersLoginInfo[token]; exist {
+	//	c.JSON(http.StatusOK, UserResponse{
+	//		Response: Response{StatusCode: 0},
+	//		User:     user,
+	//	})
+	//} else {
+	//	c.JSON(http.StatusOK, UserResponse{
+	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	//	})
+	//}
+	response.OkWithUserInfo(user1, "success", c)
 }

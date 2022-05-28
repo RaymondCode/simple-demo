@@ -1,15 +1,18 @@
-package main
+package initialize
 
 import (
 	"github.com/RaymondCode/simple-demo/controller"
+	"github.com/RaymondCode/simple-demo/middleware/jwt"
 	"github.com/gin-gonic/gin"
 )
 
-func initRouter(r *gin.Engine) {
+func Routers(r *gin.Engine) {
 	// public directory is used to serve static resources
 	r.Static("/static", "./public")
 
 	apiRouter := r.Group("/douyin")
+
+	apiRouter.Use(jwt.JWT())
 
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)
@@ -29,4 +32,5 @@ func initRouter(r *gin.Engine) {
 	apiRouter.POST("/relation/action/", controller.RelationAction)
 	apiRouter.GET("/relation/follow/list/", controller.FollowList)
 	apiRouter.GET("/relation/follower/list/", controller.FollowerList)
+
 }
