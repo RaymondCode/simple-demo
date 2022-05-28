@@ -4,7 +4,8 @@ type Group struct {
 	FavoriteService
 	FeedService
 	UserService
-	// VideoService
+	PublishService
+	//VideoService
 	// ...
 }
 

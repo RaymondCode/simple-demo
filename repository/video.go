@@ -38,3 +38,13 @@ func (vr *VideoRepository) QueryAllVideos() ([]model.Video, error) {
 	}
 	return videos, nil
 }
+
+// QueryVideosByUserId 根据用户id查询此用户上传的video集合
+func (vr *VideoRepository) QueryVideosByUserId(userId int64) ([]model.Video, error) {
+	//todo: 用户已上传的视频id存储在redis中
+	var videos []model.Video
+	if err := global.DB.Where("user_id = ?", userId).Find(&videos).Error; err != nil {
+		return nil, err
+	}
+	return videos, nil
+}
