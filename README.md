@@ -28,4 +28,5 @@
   * **`utils.IsFavorite(userId, videoId) ` 判断用户是否点赞了该视频**
 * service下存放业务操作，repository下直接操作数据库
 * model下存放模型与表对应，model.response下存放返回的response结构
-* 为了测试方便, 我在demo_data.go的根据model下的模型，定义了user1,user2,以及videos数据，登录接口直接利用user1.Id生成token并返回，用户信息接口也是直接返回user1的信息，视频流接口返回直接videos。
+* 为了测试方便, 我在demo_data.go的根据model下的模型，定义了user1,user2,以及videos数据，登录接口直接利用user1.Id生成token并返回，用户信息接口也是直接返回user1的信息，视频流接口直接返回videos
+* 数据库SQL我也放上来了，之前文档有更新，表结构有改动
