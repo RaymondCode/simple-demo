@@ -1,10 +1,13 @@
 package main
 
 import (
+	"github.com/RaymondCode/simple-demo/service"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	service.InitDB()
+
 	r := gin.Default()
 
 	initRouter(r)
