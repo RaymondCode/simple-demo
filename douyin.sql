@@ -47,8 +47,9 @@ CREATE TABLE `user_follower`  (
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `follow_count` int(0) NOT NULL,
   `follower_count` int(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -57,8 +58,8 @@ CREATE TABLE `user_info`  (
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES (1, 'zhangsan', '123456', 0, 0);
-INSERT INTO `user_info` VALUES (2, 'lisi', '123456', 0, 0);
+INSERT INTO `user_info` VALUES (1, 'zhangsan', '123456', 'zhangsan', 0, 0);
+INSERT INTO `user_info` VALUES (2, 'lisi', '123456', 'lisi', 0, 0);
 
 -- ----------------------------
 -- Table structure for video_favorite

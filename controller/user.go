@@ -1,14 +1,14 @@
 package controller
 
 import (
-	"net/http"
-	"strconv"
-	"sync/atomic"
-
+	"fmt"
 	"github.com/RaymondCode/simple-demo/model/response"
 	"github.com/RaymondCode/simple-demo/service"
 	"github.com/RaymondCode/simple-demo/utils"
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -37,52 +37,58 @@ type UserResponse struct {
 	User User `json:"user"`
 }
 
+// Register 用户注册功能，要求用户输入用户名、密码和昵称。其中，用户名要求是唯一的。
+// 当请求没有携带必要的参数时，返回412。
 func Register(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-
-	token := username + password
-
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
-		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
-		newUser := User{
-			Id:   userIdSequence,
-			Name: username,
-		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   userIdSequence,
-			Token:    username + password,
-		})
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	nickname := c.PostForm("nickname")
+	if username == "" || password == "" {
+		c.JSON(http.StatusPreconditionFailed, Response{StatusCode: 1, StatusMsg: "用户名或密码没有给出"})
+		return
 	}
+	// 检查用户名存在的情况
+	count := service.GroupApp.UserService.IfNameExist(username)
+	if count > 0 {
+		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "用户名已存在"})
+		return
+	}
+	// 如果没有携带昵称，就用用户名当昵称
+	if nickname == "" {
+		nickname = username
+	}
+	// 存db，返回用户Id
+	userId := service.GroupApp.UserService.SaveUser(username, password, nickname)
+	token, err := utils.GenerateToken(userId)
+	// 如果无法生成token，打log记录问题并返回500
+	if err != nil {
+		log.Println(fmt.Sprintf("无法生成token, err: %s", err))
+		c.JSON(http.StatusInternalServerError, Response{StatusCode: 1, StatusMsg: "服务器异常，请联系管理员"})
+		return
+	}
+	response.OkWithToken(userId, token, c)
 }
 
 func Login(c *gin.Context) {
-	// 方便测试, 这里直接让userId为1, 生成token, 返回
-	token, _ := utils.GenerateToken(1)
-	response.OkWithToken(1, token, c)
-
-	//username := c.Query("username")
-	//password := c.Query("password")
-	//
-	//token := username + password
-	//
-	//if user, exist := usersLoginInfo[token]; exist {
-	//	c.JSON(http.StatusOK, UserLoginResponse{
-	//		Response: Response{StatusCode: 0},
-	//		UserId:   user.Id,
-	//		Token:    token,
-	//	})
-	//} else {
-	//	c.JSON(http.StatusOK, UserLoginResponse{
-	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-	//	})
-	//}
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	if username == "" || password == "" {
+		c.JSON(http.StatusPreconditionFailed, Response{StatusCode: 1, StatusMsg: "用户名或密码没有给出"})
+		return
+	}
+	userId, err := service.GroupApp.UserService.QueryUserByNameAndPassword(username, password)
+	if err != nil || userId == 0 {
+		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "用户名或密码有误"})
+		return
+	}
+	token, err := utils.GenerateToken(userId)
+	// 如果无法生成token，打log记录问题并返回500
+	if err != nil {
+		log.Println(fmt.Sprintf("无法生成token, err: %s", err))
+		c.JSON(http.StatusInternalServerError, Response{StatusCode: 1, StatusMsg: "服务器异常，请联系管理员"})
+		return
+	}
+	response.OkWithToken(userId, token, c)
 }
 
 func UserInfo(c *gin.Context) {
