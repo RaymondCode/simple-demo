@@ -3,6 +3,7 @@ package repository
 type Group struct {
 	VideoRepository
 	UserRepository
+	RelationRepository
 	// VideoRepository
 	// ...
 }

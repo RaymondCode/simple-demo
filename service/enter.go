@@ -5,6 +5,7 @@ type Group struct {
 	FeedService
 	UserService
 	PublishService
+	RelationService
 	//VideoService
 	// ...
 }

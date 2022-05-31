@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//获取UserId
 func GetUserId(c *gin.Context) int64 {
 	userId, flag := c.Get("userId")
 	if !flag {

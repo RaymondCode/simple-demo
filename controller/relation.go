@@ -1,42 +1,45 @@
 package controller
 
 import (
+	"github.com/RaymondCode/simple-demo/model/response"
+	"github.com/RaymondCode/simple-demo/service"
+	"github.com/RaymondCode/simple-demo/utils"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"strconv"
 )
 
-type UserListResponse struct {
-	Response
-	UserList []User `json:"user_list"`
-}
-
-// RelationAction no practical effect, just check if token is valid
+//首先判断用户是否有效，获取请求
 func RelationAction(c *gin.Context) {
-	token := c.Query("token")
-
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
-	} else {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	toUserIdStr := c.Query("to_user_id")
+	toUserId, err := strconv.ParseInt(toUserIdStr, 10, 64)
+	if err != nil {
+		response.FailWithMessage("to_userId type is error", c)
+		return
 	}
+	actionType := c.Query("action_type")
+	if err := service.GroupApp.RelationService.RelationAction(utils.GetUserId(c), toUserId, actionType); err != nil {
+		response.FailWithMessage("RelationAction failed", c)
+		return
+	}
+	response.Ok(c)
 }
 
-// FollowList all users have same follow list
+//获取关注列表
 func FollowList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	userList, err := service.GroupApp.RelationService.FollowList(utils.GetUserId(c))
+	if err != nil {
+		response.FailWithMessage("FollowList failed", c)
+		return
+	}
+	response.OkWithUserList(userList, c)
 }
 
-// FollowerList all users have same follower list
+//获取粉丝列表
 func FollowerList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	userList, err := service.GroupApp.RelationService.FollowerList(utils.GetUserId(c))
+	if err != nil {
+		response.FailWithMessage("FollowerList failed", c)
+		return
+	}
+	response.OkWithUserList(userList, c)
 }
