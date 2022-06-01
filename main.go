@@ -1,12 +1,15 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/service"
+	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
 )
 
+func init() {
+	dao.InitDB()
+}
+
 func main() {
-	service.InitDB()
 
 	r := gin.Default()
 
