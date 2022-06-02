@@ -1,8 +1,10 @@
 package controller
 
-import "github.com/warthecatalyst/douyin/service"
+import (
+	"github.com/warthecatalyst/douyin/api"
+)
 
-var DemoVideos = []service.Video{
+var DemoVideos = []api.Video{
 	{
 		Id:            1,
 		Author:        DemoUser,
@@ -14,7 +16,7 @@ var DemoVideos = []service.Video{
 	},
 }
 
-var DemoComments = []service.Comment{
+var DemoComments = []api.Comment{
 	{
 		Id:         1,
 		User:       DemoUser,
@@ -23,7 +25,7 @@ var DemoComments = []service.Comment{
 	},
 }
 
-var DemoUser = service.User{
+var DemoUser = api.User{
 	Id:            1,
 	Name:          "TestUser",
 	FollowCount:   0,

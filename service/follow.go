@@ -1,37 +1,69 @@
 package service
 
-import "github.com/warthecatalyst/douyin/dao"
-
-const (
-	followAct   = "follow"
-	unfollowAct = "unfollow"
+import (
+	"errors"
+	"github.com/warthecatalyst/douyin/api"
+	"github.com/warthecatalyst/douyin/dao"
 )
 
+func FollowAction(userId, toUserId int64, actTyp int) error {
+	return NewFollowActionFlow(userId, toUserId, actTyp).Do()
+}
+
+func NewFollowActionFlow(userId, toUserId int64, actTyp int) *FollowActionFlow {
+	return &FollowActionFlow{
+		FromUserId: userId,
+		ToUserId:   toUserId,
+		ActionType: actTyp,
+	}
+}
+
+type FollowActionFlow struct {
+	FromUserId int64
+	ToUserId   int64
+	ActionType int
+}
+
+func (f *FollowActionFlow) Do() error {
+	if err := f.checkParam(); err != nil {
+		return err
+	}
+	return f.followImpl()
+}
+
+func (f *FollowActionFlow) checkParam() error {
+	if f.ActionType != api.FollowAction && f.ActionType != api.UnfollowAction {
+		return errors.New("未知关注相关操作类型！")
+	}
+
+	return nil
+}
+
 // TODO 并发：1.隔离级别，2.3处修改并发提高效率
-func followImpl(userId, toUserId int64, actTyp string) error {
+func (f *FollowActionFlow) followImpl() error {
 	tx := dao.GetTx()
-	if actTyp == followAct {
-		if err := dao.AddFollow(tx, userId, toUserId); err != nil {
+	if f.ActionType == api.FollowAction {
+		if err := dao.NewFollowDaoInstance().AddFollow(tx, f.FromUserId, f.ToUserId); err != nil {
 			tx.Rollback()
 			return err
 		}
 	} else {
-		if err := dao.DeleteFollow(tx, userId, toUserId); err != nil {
+		if err := dao.NewFollowDaoInstance().DeleteFollow(tx, f.FromUserId, f.ToUserId); err != nil {
 			tx.Rollback()
 			return err
 		}
 	}
-	user, err := dao.GetUserById(userId)
+	user, err := dao.GetUserById(f.FromUserId)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
-	toUser, err := dao.GetUserById(toUserId)
+	toUser, err := dao.GetUserById(f.ToUserId)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
-	if actTyp == followAct {
+	if f.ActionType == api.FollowAction {
 		user.FollowCount++
 		toUser.FollowerCount++
 	} else {
@@ -52,17 +84,9 @@ func followImpl(userId, toUserId int64, actTyp string) error {
 	return nil
 }
 
-func Follow(userId, toUserId int64) error {
-	return followImpl(userId, toUserId, followAct)
-}
-
-func UnFollow(userId, toUserId int64) error {
-	return followImpl(userId, toUserId, unfollowAct)
-}
-
-func GetFollowList(userId int64) ([]*User, error) {
-	var users []*User
-	relationList, err := dao.GetFollowList(userId)
+func GetFollowList(userId int64) ([]*api.User, error) {
+	var users []*api.User
+	relationList, err := dao.NewFollowDaoInstance().GetFollowList(userId)
 	if err != nil {
 		return users, err
 	}
@@ -71,7 +95,7 @@ func GetFollowList(userId int64) ([]*User, error) {
 		if err != nil {
 			return users, err
 		}
-		users = append(users, &User{
+		users = append(users, &api.User{
 			Id:            user.UserID,
 			Name:          user.UserName,
 			FollowCount:   user.FollowCount,
@@ -83,9 +107,9 @@ func GetFollowList(userId int64) ([]*User, error) {
 	return users, nil
 }
 
-func GetFollowerList(userId int64) ([]*User, error) {
-	var users []*User
-	relationListTmp, err := dao.GetFollowList(userId)
+func GetFollowerList(userId int64) ([]*api.User, error) {
+	var users []*api.User
+	relationListTmp, err := dao.NewFollowDaoInstance().GetFollowList(userId)
 	if err != nil {
 		return users, err
 	}
@@ -93,7 +117,7 @@ func GetFollowerList(userId int64) ([]*User, error) {
 	for _, relation := range relationListTmp {
 		followUserIdList[relation.ToUserID] = true
 	}
-	relationList, err := dao.GetFollowerList(userId)
+	relationList, err := dao.NewFollowDaoInstance().GetFollowerList(userId)
 	if err != nil {
 		return users, err
 	}
@@ -102,7 +126,7 @@ func GetFollowerList(userId int64) ([]*User, error) {
 		if err != nil {
 			return users, err
 		}
-		users = append(users, &User{
+		users = append(users, &api.User{
 			Id:            user.UserID,
 			Name:          user.UserName,
 			FollowCount:   user.FollowCount,

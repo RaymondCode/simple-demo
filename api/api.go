@@ -1,4 +1,4 @@
-package service
+package api
 
 type Response struct {
 	StatusCode int32  `json:"status_code"`
@@ -29,3 +29,8 @@ type User struct {
 	FollowerCount int64  `json:"follower_count"`
 	IsFollow      bool   `json:"is_follow"`
 }
+
+const (
+	FollowAction   = 1
+	UnfollowAction = 2
+)
