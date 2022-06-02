@@ -3,9 +3,25 @@ package dao
 import (
 	"github.com/warthecatalyst/douyin/model"
 	"gorm.io/gorm"
+	"sync"
 )
 
-func AddFollow(tx *gorm.DB, userId, toUserId int64) error {
+type FollowDao struct{}
+
+var (
+	followDao  *FollowDao
+	followOnce sync.Once
+)
+
+func NewFollowDaoInstance() *FollowDao {
+	followOnce.Do(
+		func() {
+			followDao = &FollowDao{}
+		})
+	return followDao
+}
+
+func (*FollowDao) AddFollow(tx *gorm.DB, userId, toUserId int64) error {
 	follow := &model.Follow{
 		FromUserID: userId,
 		ToUserID:   toUserId,
@@ -13,12 +29,12 @@ func AddFollow(tx *gorm.DB, userId, toUserId int64) error {
 	return tx.Create(follow).Error
 }
 
-func DeleteFollow(tx *gorm.DB, userId, toUserId int64) error {
+func (*FollowDao) DeleteFollow(tx *gorm.DB, userId, toUserId int64) error {
 	follow := &model.Follow{}
 	return tx.Where("from_user_id = ? AND to_user_id = ?", userId, toUserId).Delete(follow).Error
 }
 
-func GetFollowList(userId int64) ([]model.Follow, error) {
+func (*FollowDao) GetFollowList(userId int64) ([]model.Follow, error) {
 	var followUserIdList []model.Follow
 	if err := db.Where("from_user_id = ?", userId).Find(&followUserIdList).Error; err != nil {
 		return followUserIdList, err
@@ -27,7 +43,7 @@ func GetFollowList(userId int64) ([]model.Follow, error) {
 	return followUserIdList, nil
 }
 
-func GetFollowerList(userId int64) ([]model.Follow, error) {
+func (*FollowDao) GetFollowerList(userId int64) ([]model.Follow, error) {
 	var followerUserIdList []model.Follow
 	if err := db.Where("to_user_id = ?", userId).Find(&followerUserIdList).Error; err != nil {
 		return followerUserIdList, err

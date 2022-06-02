@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"github.com/warthecatalyst/douyin/api"
 	"github.com/warthecatalyst/douyin/dao"
 )
 
@@ -64,7 +65,7 @@ func (f *FavoriteActionInfoFlow) DelRecord() error {
 }
 
 type VideoList struct {
-	videoList *[]Video
+	videoList *[]api.Video
 }
 
 // FavoriteListInfo 获得用户点赞后的视频列表
