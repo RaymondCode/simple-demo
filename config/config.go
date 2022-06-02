@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"gopkg.in/ini.v1"
 	"log"
 	"strconv"
@@ -33,6 +34,7 @@ func init() {
 		log.Fatal("BcryptCost 加载失败")
 	}
 	TokenEncryptKey = f.Section("password").Key("tokenEncryptKey").Value()
+	fmt.Println(TokenEncryptKey)
 }
 
 // loadServer 加载服务器配置

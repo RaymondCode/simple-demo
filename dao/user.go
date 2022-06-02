@@ -5,7 +5,7 @@ import (
 )
 
 func GetUserById(userId int64) (*model.User, error) {
-	var user *model.User
+	user := &model.User{}
 	if err := db.Where("user_id = ?", userId).First(user).Error; err != nil {
 		return nil, err
 	}
