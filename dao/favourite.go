@@ -2,7 +2,7 @@ package dao
 
 import (
 	"errors"
-	"github.com/RaymondCode/simple-demo/model"
+	"github.com/warthecatalyst/douyin/model"
 	"gorm.io/gorm"
 	"sync"
 )

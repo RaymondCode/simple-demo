@@ -8,15 +8,16 @@ import (
 
 // 解析配置文件
 var (
-	AppMode    string // 服务器启动模式默认 debug 模式
-	Port       string //服务启动端口
-	Dbtype     string //数据库类型
-	DbHost     string //数据库服务器主机
-	DbPort     string //数据服务器端口
-	DbUser     string //数据库用户
-	DbPassWord string //数据库密码
-	BcryptCost int    //bcrypt 生成密码时的cost
-	DbName     string //数据库名
+	AppMode         string // 服务器启动模式默认 debug 模式
+	Port            string //服务启动端口
+	Dbtype          string //数据库类型
+	DbHost          string //数据库服务器主机
+	DbPort          string //数据服务器端口
+	DbUser          string //数据库用户
+	DbPassWord      string //数据库密码
+	BcryptCost      int    //bcrypt 生成密码时的cost
+	TokenEncryptKey string //token加密时需要的密钥
+	DbName          string //数据库名
 )
 
 func init() {
@@ -31,6 +32,7 @@ func init() {
 	if err != nil {
 		log.Fatal("BcryptCost 加载失败")
 	}
+	TokenEncryptKey = f.Section("password").Key("tokenEncryptKey").Value()
 }
 
 // loadServer 加载服务器配置

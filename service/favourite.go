@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"github.com/RaymondCode/simple-demo/dao"
-	"github.com/RaymondCode/simple-demo/model"
+	"github.com/warthecatalyst/douyin/dao"
+	"github.com/warthecatalyst/douyin/model"
 )
 
 // FavoriteActionInfo service层添加或者删除一条点赞记录
