@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"github.com/warthecatalyst/douyin/dao"
-	"github.com/warthecatalyst/douyin/model"
 )
 
 // FavoriteActionInfo service层添加或者删除一条点赞记录
@@ -64,11 +63,33 @@ func (f *FavoriteActionInfoFlow) DelRecord() error {
 	return nil
 }
 
-type VideoListInfo struct {
-	videoList []*model.Video
+type VideoList struct {
+	videoList *[]Video
 }
 
 // FavoriteListInfo 获得用户点赞后的视频列表
-func FavoriteListInfo(userId int64) (*VideoListInfo, error) {
-	return &VideoListInfo{}, nil //还没写，先暂时写个demo
+func FavoriteListInfo(userId int64) (*VideoList, error) {
+	return &VideoList{}, nil //还没写，先暂时写个demo
+}
+
+func NewFavoriteListInfoFlow(userId int64) *FavoriteListInfoFlow {
+	return &FavoriteListInfoFlow{
+		userId: userId,
+	}
+}
+
+type FavoriteListInfoFlow struct {
+	userId int64
+}
+
+func (f *FavoriteListInfoFlow) Do() (*VideoList, error) {
+	return f.getFavoriteList()
+}
+
+func (f *FavoriteListInfoFlow) getFavoriteList() (*VideoList, error) {
+	_, err := dao.NewFavoriteDaoInstance().VideoIDListByUserID(f.userId)
+	if err != nil {
+		return &VideoList{}, err
+	}
+	return nil, nil
 }

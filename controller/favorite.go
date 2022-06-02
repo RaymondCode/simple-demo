@@ -2,8 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/warthecatalyst/douyin/logx"
 	"github.com/warthecatalyst/douyin/service"
-	"log"
+	"github.com/warthecatalyst/douyin/tokenx"
 	"net/http"
 	"strconv"
 )
@@ -12,9 +13,9 @@ import (
 func FavoriteAction(c *gin.Context) {
 	token := c.Query("token")
 	//通过token得到UserId，这边应该调用User的函数，此处仅为一个demo
-	userId, err := strconv.ParseInt(token, 10, 64)
+	userId, err := tokenx.GetUserIdFromToken(token)
 	if err != nil {
-		log.Printf("Can't get userId from token\n")
+		logx.DyLogger.Print("Can't get userId from token\n")
 		c.JSON(http.StatusOK, service.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
 	}
 	vId := c.Query("video_id")
@@ -36,12 +37,13 @@ func FavoriteAction(c *gin.Context) {
 
 // FavoriteList 传递给前端被登录用户点赞的所有视频
 func FavoriteList(c *gin.Context) {
-	//token := c.Query("token")
-	////类似的，通过token获取userId
-	//userId, err := strconv.ParseInt(token, 10, 64)
-	//if err != nil {
-	//	c.JSON(http.StatusOK, Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
-	//}
+	token := c.Query("token")
+	//类似的，通过token获取userId
+	_, err := tokenx.GetUserIdFromToken(token)
+	if err != nil {
+		logx.DyLogger.Print("Can't get userId from token\n")
+		c.JSON(http.StatusOK, service.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
+	}
 
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: service.Response{
