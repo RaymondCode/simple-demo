@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-//数据库关系实体的基类
+// Model 数据库关系实体的基类
 type Model struct {
 	ID       uint64    `gorm:"comment:自增主键"`
 	CreateAt time.Time `gorm:"type:timestamp;not null;default:current_timestamp()"`
 	UpdateAt time.Time `gorm:"type:timestamp;not null;default:current_timestamp()"`
 }
 
-//视频：数据库实体
+// Video 视频：数据库实体
 type Video struct {
 	Model
 	gorm.DeletedAt
@@ -25,7 +25,7 @@ type Video struct {
 	CoverURL      string `gorm:"type:varchar(100);not null" json:"cover_url" validate:""`
 }
 
-//用户:数据库实体
+// User 用户:数据库实体
 type User struct {
 	Model
 	UserID        int64  `gorm:"type:bigint;unsigned;not null;unique;uniqueIndex:idx_user_id" json:"user_id"`
@@ -35,7 +35,7 @@ type User struct {
 	FollowerCount int64  `gorm:"type:bigint;unsigned;not null;default:0" json:"follower_count"`
 }
 
-//评论：数据库实体
+// Comment 评论：数据库实体
 type Comment struct {
 	Model
 	UserID  int64  `gorm:"type:BIGINT;not null;index:idx_user_id;评论用户ID" json:"user_id"`
@@ -43,14 +43,14 @@ type Comment struct {
 	Content string `gorm:"type:varchar(300);not null;comment:评论内容" json:"content"`
 }
 
-//点赞：数据库实体
+// Favourite 点赞：数据库实体
 type Favourite struct {
 	Model
 	UserID  int64 `gorm:"type:BIGINT;not nul;index:idx_user_id;comment:点赞用户ID" json:"user_id"`
 	VideoID int64 `gorm:"type:BIGINT;not null;index:idx_video_id;comment:被点赞视频ID" json:"video_id" `
 }
 
-//关注：数据库实体
+// Follow 关注：数据库实体
 type Follow struct {
 	Model
 	FromUserID int64 `gorm:"type:BIGINT;not null;index:idx_user_id;comment:粉丝用户ID" json:"from_user_id" validate:""`

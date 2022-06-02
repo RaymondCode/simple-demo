@@ -3,8 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/warthecatalyst/douyin/api"
-	"github.com/warthecatalyst/douyin/logx"
-	"github.com/warthecatalyst/douyin/middleware"
+	"github.com/warthecatalyst/douyin/global"
 	"github.com/warthecatalyst/douyin/service"
 	"net/http"
 	"strconv"
@@ -14,9 +13,9 @@ import (
 func FavoriteAction(c *gin.Context) {
 	token := c.Query("token")
 	//通过token得到UserId，这边应该调用User的函数，此处仅为一个demo
-	userId, err := middleware.GetUserIdFromToken(token)
+	userId, err := global.GetUserIdFromToken(token)
 	if err != nil {
-		logx.DyLogger.Print("Can't get userId from token\n")
+		global.DyLogger.Print("Can't get userId from token\n")
 		c.JSON(http.StatusOK, api.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
 
 	}
@@ -41,9 +40,9 @@ func FavoriteAction(c *gin.Context) {
 func FavoriteList(c *gin.Context) {
 	token := c.Query("token")
 	//类似的，通过token获取userId
-	_, err := middleware.GetUserIdFromToken(token)
+	_, err := global.GetUserIdFromToken(token)
 	if err != nil {
-		logx.DyLogger.Print("Can't get userId from token\n")
+		global.DyLogger.Print("Can't get userId from token\n")
 		c.JSON(http.StatusOK, api.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
 	}
 

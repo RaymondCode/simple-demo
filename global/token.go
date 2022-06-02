@@ -1,11 +1,10 @@
-package middleware
+package global
 
 import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"github.com/warthecatalyst/douyin/config"
-	"github.com/warthecatalyst/douyin/logx"
 	"strconv"
 )
 
@@ -26,7 +25,7 @@ func CreateToken(userId int64, username, password string) (string, error) {
 	// TODO add salt
 	token, err := aesCtrCrypt([]byte(strconv.FormatInt(userId, 10)), []byte(config.TokenEncryptKey))
 	if err != nil {
-		logx.DyLogger.Errorf("aesCtrCrypt error: %s", err)
+		DyLogger.Errorf("aesCtrCrypt error: %s", err)
 		return "", err
 	}
 	return string(token), nil
@@ -35,13 +34,13 @@ func CreateToken(userId int64, username, password string) (string, error) {
 func GetUserIdFromToken(token string) (int64, error) {
 	code, err := aesCtrCrypt([]byte(token), []byte(config.TokenEncryptKey))
 	if err != nil {
-		logx.DyLogger.Errorf("aesCtrCrypt error: %s", err)
+		DyLogger.Errorf("aesCtrCrypt error: %s", err)
 		return -1, err
 	}
 
 	userId, err := strconv.Atoi(string(code))
 	if err != nil {
-		logx.DyLogger.Errorf("strconv.Atoi error: %s", err)
+		DyLogger.Errorf("strconv.Atoi error: %s", err)
 		return -1, err
 	}
 
