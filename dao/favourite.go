@@ -88,7 +88,7 @@ func (*FavouriteDao) VideoIDListByUserID(userID int64) ([]int64, error) {
 	var f []model.Favourite
 	err := db.Model(&model.Favourite{}).
 		Select("video_id").
-		Where("user_id = ", userID).
+		Where("user_id = ?", userID).
 		Find(&f).Error
 
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {

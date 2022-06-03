@@ -23,7 +23,7 @@ func NewVideoDaoInstance() *VideoDao {
 // GetUserIdFromVideoId 从VideoId得到对应的UserId
 func (v *VideoDao) GetUserIdFromVideoId(videoId int64) (int64, error) {
 	var video model.Video
-	err := db.Select("user_id").Where("video_id = ", videoId).First(&video).Error
+	err := db.Select("user_id").Where("video_id = ?", videoId).First(&video).Error
 	if err != nil {
 		return 0, err
 	}

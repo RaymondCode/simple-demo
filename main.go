@@ -33,11 +33,12 @@ func initRouter(r *gin.Engine) {
 	apiRouter.GET("/relation/follower/list/", global.CheckLogin(), controller.FollowerList)
 }
 
-func init() {
+func initAll() {
 	dao.InitDB()
 }
 
 func main() {
+	initAll()
 	r := gin.Default()
 
 	initRouter(r)
