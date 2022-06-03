@@ -7,7 +7,7 @@ import (
 )
 
 func UserExist(userId int64) (bool, error) {
-	user, err := dao.GetUserById(userId)
+	user, err := dao.NewUserDaoInstance().GetUserById(userId)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false, nil
 	}

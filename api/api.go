@@ -31,6 +31,8 @@ type User struct {
 }
 
 const (
-	FollowAction   = 1
-	UnfollowAction = 2
+	FavoriteAction   = 1
+	UnFavoriteAction = 2
+	FollowAction     = 1
+	UnfollowAction   = 2
 )

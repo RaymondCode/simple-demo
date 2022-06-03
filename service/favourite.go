@@ -8,10 +8,10 @@ import (
 
 // FavoriteActionInfo service层添加或者删除一条点赞记录
 func FavoriteActionInfo(userId, videoId int64, actionType int32) error {
-	return NewFavoriteActionInfoFlow(userId, videoId, actionType).Do()
+	return newFavoriteActionInfoFlow(userId, videoId, actionType).Do()
 }
 
-func NewFavoriteActionInfoFlow(userId, videoId int64, actionType int32) *FavoriteActionInfoFlow {
+func newFavoriteActionInfoFlow(userId, videoId int64, actionType int32) *FavoriteActionInfoFlow {
 	return &FavoriteActionInfoFlow{
 		userId:     userId,
 		videoId:    videoId,
@@ -26,11 +26,11 @@ type FavoriteActionInfoFlow struct {
 }
 
 func (f *FavoriteActionInfoFlow) Do() error {
-	if f.actionType == 1 { //1为点赞
+	if f.actionType == api.FavoriteAction {
 		if err := f.AddRecord(); err != nil {
 			return err
 		}
-	} else if f.actionType == 2 { //2为取消点赞
+	} else if f.actionType == api.UnFavoriteAction {
 		if err := f.checkRecord(); err != nil {
 			return err
 		}
@@ -64,16 +64,14 @@ func (f *FavoriteActionInfoFlow) DelRecord() error {
 	return nil
 }
 
-type VideoList struct {
-	videoList *[]api.Video
-}
+type VideoList []api.Video
 
 // FavoriteListInfo 获得用户点赞后的视频列表
 func FavoriteListInfo(userId int64) (*VideoList, error) {
-	return &VideoList{}, nil //还没写，先暂时写个demo
+	return newFavoriteListInfoFlow(userId).Do()
 }
 
-func NewFavoriteListInfoFlow(userId int64) *FavoriteListInfoFlow {
+func newFavoriteListInfoFlow(userId int64) *FavoriteListInfoFlow {
 	return &FavoriteListInfoFlow{
 		userId: userId,
 	}
@@ -88,9 +86,27 @@ func (f *FavoriteListInfoFlow) Do() (*VideoList, error) {
 }
 
 func (f *FavoriteListInfoFlow) getFavoriteList() (*VideoList, error) {
-	_, err := dao.NewFavoriteDaoInstance().VideoIDListByUserID(f.userId)
+	videoIds, err := dao.NewFavoriteDaoInstance().VideoIDListByUserID(f.userId)
 	if err != nil {
-		return &VideoList{}, err
+		return nil, err
 	}
-	return nil, nil
+	var videolist VideoList
+	for _, videoId := range videoIds {
+		user, err := videoService.getUserFromVideoId(videoId)
+		if err != nil {
+			return nil, err
+		}
+		video, err := dao.NewVideoDaoInstance().GetVideoFromId(videoId)
+
+		videolist = append(videolist, api.Video{
+			Id:            videoId,
+			Author:        *user,
+			PlayUrl:       video.PlayURL,
+			CoverUrl:      video.CoverURL,
+			FavoriteCount: int64(video.FavoriteCount),
+			CommentCount:  int64(video.CommentCount),
+			IsFavorite:    false,
+		})
+	}
+	return &videolist, nil
 }

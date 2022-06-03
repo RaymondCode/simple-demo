@@ -53,12 +53,12 @@ func (f *FollowActionFlow) followImpl() error {
 			return err
 		}
 	}
-	user, err := dao.GetUserById(f.FromUserId)
+	user, err := dao.NewUserDaoInstance().GetUserById(f.FromUserId)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
-	toUser, err := dao.GetUserById(f.ToUserId)
+	toUser, err := dao.NewUserDaoInstance().GetUserById(f.ToUserId)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -70,11 +70,11 @@ func (f *FollowActionFlow) followImpl() error {
 		user.FollowCount--
 		toUser.FollowerCount--
 	}
-	if err := dao.UpdateUser(user); err != nil {
+	if err := dao.NewUserDaoInstance().UpdateUser(user); err != nil {
 		tx.Rollback()
 		return err
 	}
-	if err := dao.UpdateUser(toUser); err != nil {
+	if err := dao.NewUserDaoInstance().UpdateUser(toUser); err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -91,7 +91,7 @@ func GetFollowList(userId int64) ([]*api.User, error) {
 		return users, err
 	}
 	for _, relation := range relationList {
-		user, err := dao.GetUserById(relation.ToUserID)
+		user, err := dao.NewUserDaoInstance().GetUserById(relation.ToUserID)
 		if err != nil {
 			return users, err
 		}
@@ -122,7 +122,7 @@ func GetFollowerList(userId int64) ([]*api.User, error) {
 		return users, err
 	}
 	for _, relation := range relationList {
-		user, err := dao.GetUserById(relation.FromUserID)
+		user, err := dao.NewUserDaoInstance().GetUserById(relation.FromUserID)
 		if err != nil {
 			return users, err
 		}

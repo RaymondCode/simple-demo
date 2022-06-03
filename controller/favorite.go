@@ -40,16 +40,16 @@ func FavoriteAction(c *gin.Context) {
 func FavoriteList(c *gin.Context) {
 	token := c.Query("token")
 	//类似的，通过token获取userId
-	_, err := global.GetUserIdFromToken(token)
+	userId, err := global.GetUserIdFromToken(token)
 	if err != nil {
 		global.DyLogger.Print("Can't get userId from token\n")
 		c.JSON(http.StatusOK, api.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
 	}
-
+	videoList, err := service.FavoriteListInfo(userId)
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: api.Response{
 			StatusCode: 0,
 		},
-		VideoList: DemoVideos,
+		VideoList: *videoList,
 	})
 }
