@@ -1,0 +1,17 @@
+mysql:
+  path: 127.0.0.1
+  port: 3306
+  config: charset=utf8&parseTime=True&loc=Local
+  db-name: douyin
+  username: root
+  password: 123456
+  max-idle-conns: 10
+  max-open-conns: 100
+redis:
+  db: 0
+  addr: xiaozhang.fit:6379
+  password: "94264944htz"
+jwt:
+  issuer: douyin
+  signing-key: af4ffea3-cc5c-4c57-9fbe-86d3c3c370f9
+  expires-time: 604800
