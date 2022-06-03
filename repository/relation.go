@@ -34,7 +34,7 @@ func (rr *RelationRepository) GetFollowListByUserId(userId int64) ([]*model.User
 func (rr *RelationRepository) GetFollowerListByToUserId(toUserId int64) ([]*model.User, error) {
 	var userList []*model.User
 	if err := global.DB.Where("id in (?)",
-		global.DB.Table("user_follower").Select("user_id").Where("to_user_id"), toUserId).Find(&userList).Error; err != nil {
+		global.DB.Table("user_follower").Select("user_id").Where("to_user_id = ?", toUserId)).Find(&userList).Error; err != nil {
 		return nil, err
 	}
 	return userList, nil

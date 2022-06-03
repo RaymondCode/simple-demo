@@ -47,7 +47,7 @@ func (rs *RelationService) RelationAction(userId, toUserId int64, actionType str
 		})
 		return err
 	default:
-		return errors.New("action_type is wrong")
+		return errors.New("action_type value is wrong")
 	}
 }
 

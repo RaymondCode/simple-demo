@@ -40,7 +40,15 @@ CREATE TABLE `user_follower`  (
   `to_user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
+INSERT INTO `user_follower` VALUES (1,1,2);
+INSERT INTO `user_follower` VALUES (2,1,3);
+INSERT INTO `user_follower` VALUES (3,1,4);
+Insert INTO `user_follower` VALUES (4,2,5);
+INSERT INTO `user_follower` VALUES (5,2,1);
+INSERT INTO `user_follower` VALUES (6,3,1);
+INSERT INTO `user_follower` VALUES (7,3,3);
+INSERT INTO `user_follower` VALUES (8,5,3);
+INSERT INTO `user_follower` VALUES (9,6,5);
 -- ----------------------------
 -- Table structure for user_info
 -- ----------------------------
@@ -60,7 +68,10 @@ CREATE TABLE `user_info`  (
 -- ----------------------------
 INSERT INTO `user_info` VALUES (1, 'zhangsan', '123456', 'zhangsan', 0, 0);
 INSERT INTO `user_info` VALUES (2, 'lisi', '123456', 'lisi', 0, 0);
-
+INSERT INTO `user_info` VALUES (3,'wangwu','123456','xiaogang',0,0);
+INSERT INTO `user_info` VALUES (4,'xingyunye','123456','xingyunye',0,0);
+INSERT INTO `user_info` VALUES (5, 'yunlinyou','123456','yunlinyou',0,0);
+INSERT INTO `user_info` VALUES (6,'zhangliu','123456','zhangliu',0,0);
 -- ----------------------------
 -- Table structure for video_favorite
 -- ----------------------------
