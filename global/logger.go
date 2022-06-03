@@ -1,4 +1,4 @@
-package util
+package global
 
 import (
 	"context"
@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"runtime"
 	"time"
 )
+
+var DyLogger = NewLogger(os.Stdout, "[douyin]", log.Lshortfile|log.Llongfile)
 
 type Level int8
 
@@ -128,17 +131,17 @@ func (l *Logger) Output(level Level, message string) {
 	content := string(body)
 	switch level {
 	case LevelDebug:
-		l.newLogger.Print(content)
+		l.newLogger.Output(3, content)
 	case LevelInfo:
-		l.newLogger.Print(content)
+		l.newLogger.Output(3, content)
 	case LevelWarn:
-		l.newLogger.Print(content)
+		l.newLogger.Output(3, content)
 	case LevelError:
-		l.newLogger.Print(content)
+		l.newLogger.Output(3, content)
 	case LevelFatal:
-		l.newLogger.Fatal(content)
+		l.newLogger.Output(3, content)
 	case LevelPanic:
-		l.newLogger.Panic(content)
+		l.newLogger.Output(3, content)
 	}
 }
 

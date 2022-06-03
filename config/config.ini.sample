@@ -1,0 +1,17 @@
+[server]
+AppMode =
+Port =
+
+
+[database]
+Dbtype =
+DbHost =
+DbPort =
+DbUser =
+DbPassWord =
+DbName =
+
+
+[password]
+bcryptCost =
+tokenEncryptKey =

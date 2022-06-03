@@ -21,3 +21,6 @@
 go.work
 
 .idea
+
+# due to security concerns
+config/config.ini

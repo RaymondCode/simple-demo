@@ -2,8 +2,8 @@ package dao
 
 import (
 	"fmt"
-	"github.com/RaymondCode/simple-demo/config"
-	"github.com/RaymondCode/simple-demo/model"
+	"github.com/warthecatalyst/douyin/config"
+	"github.com/warthecatalyst/douyin/model"
 	"log"
 	"time"
 
@@ -13,6 +13,10 @@ import (
 )
 
 var db *gorm.DB
+
+func GetTx() *gorm.DB {
+	return db.Begin()
+}
 
 func InitDB() {
 	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",

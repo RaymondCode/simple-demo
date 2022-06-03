@@ -2,7 +2,7 @@ package dao
 
 import (
 	"errors"
-	"github.com/RaymondCode/simple-demo/model"
+	"github.com/warthecatalyst/douyin/model"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -35,7 +35,7 @@ func (*FavouriteDao) QueryCountOfVideo(conditions map[string]interface{}) (int32
 //IsFavourite 查询 userID的用户是否对videoID的视频进行点赞
 func (*FavouriteDao) IsFavourite(userID, videoID int64) bool {
 	var fav model.Favourite
-	result := db.Where("UserID = ? AND VideoID = ?", userID, videoID).First(&fav)
+	result := db.Where("user_id = ? AND video_id = ?", userID, videoID).First(&fav)
 	return result.RowsAffected != 0
 }
 
@@ -52,7 +52,7 @@ func (*FavouriteDao) Add(userID, videoID int64) error {
 
 	//不要忘记在Video表中更新点赞记录
 	var video model.Video
-	err = db.Where("VideoID = ?", videoID).First(&video).Error
+	err = db.Where("video_id = ?", videoID).First(&video).Error
 	if err != nil {
 		return err
 	}
@@ -74,7 +74,7 @@ func (*FavouriteDao) Del(userID, videoID int64) error {
 		return err
 	}
 	var video model.Video
-	err = db.Where("VideoID = ?", videoID).First(&video).Error
+	err = db.Where("video_id = ?", videoID).First(&video).Error
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (*FavouriteDao) VideoIDListByUserID(userID int64) ([]int64, error) {
 	var f []model.Favourite
 	err := db.Model(&model.Favourite{}).
 		Select("video_id").
-		Where("user_id").
+		Where("user_id = ?", userID).
 		Find(&f).Error
 
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
