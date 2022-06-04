@@ -34,6 +34,15 @@ func (*FollowDao) DeleteFollow(tx *gorm.DB, userId, toUserId int64) error {
 	return tx.Where("from_user_id = ? AND to_user_id = ?", userId, toUserId).Delete(follow).Error
 }
 
+func (*FollowDao) FindFollow(userId, toUserId int64) ([]model.Follow, error) {
+	var follow []model.Follow
+	if err := db.Where("from_user_id = ? AND to_user_id = ?", userId, toUserId).Find(&follow).Error; err != nil {
+		return follow, err
+	}
+
+	return follow, nil
+}
+
 func (*FollowDao) GetFollowList(userId int64) ([]model.Follow, error) {
 	var followUserIdList []model.Follow
 	if err := db.Where("from_user_id = ?", userId).Find(&followUserIdList).Error; err != nil {
