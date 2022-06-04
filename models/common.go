@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type Response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,omitempty"`
@@ -28,4 +30,10 @@ type User struct {
 	FollowCount   int64  `json:"follow_count,omitempty"`
 	FollowerCount int64  `json:"follower_count,omitempty"`
 	IsFollow      bool   `json:"is_follow,omitempty"`
+}
+
+type TokenData struct {
+	Name     string    `json:"name"`
+	Password string    `json:"password"`
+	CreateAt time.Time `json:"create_at"`
 }
