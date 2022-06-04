@@ -16,7 +16,7 @@ func CheckLogin() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusOK, api.Response{StatusCode: api.TokenInvalidErr, StatusMsg: "非法token！"})
 			return
 		}
-		if exist, err := service.UserExist(userId); err != nil {
+		if exist, err := service.NewUserServiceInstance().UserExist(userId); err != nil {
 			c.AbortWithStatusJSON(http.StatusOK, api.Response{StatusCode: api.InnerErr, StatusMsg: fmt.Sprintf("service.UserExist error: %s", err)})
 			return
 		} else if !exist {
