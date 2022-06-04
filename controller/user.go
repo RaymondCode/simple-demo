@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/warthecatalyst/douyin/api"
+	"github.com/warthecatalyst/douyin/service"
 	"net/http"
 	"strconv"
 	"sync/atomic"
@@ -112,15 +113,33 @@ func Login(c *gin.Context) {
 
 func UserInfo(c *gin.Context) {
 	token := c.Query("token")
-
-	if user, exist := usersLoginInfo[token]; exist {
+	userId, err := strconv.ParseInt(token, 10, 64)
+	if err != nil {
 		c.JSON(http.StatusOK, UserResponse{
-			Response: api.Response{StatusCode: 0},
-			User:     user,
+			Response: api.Response{StatusCode: 2, StatusMsg: "Can't get UserId from token"},
+		})
+		return
+	}
+
+	if user, err := service.NewUserServiceInstance().GetUserFromUserId(userId); err != nil {
+		c.JSON(http.StatusOK, UserResponse{
+			Response: api.Response{StatusCode: 1, StatusMsg: "Something goes wrong"},
 		})
 	} else {
 		c.JSON(http.StatusOK, UserResponse{
-			Response: api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: api.Response{StatusCode: 0},
+			User:     *user,
 		})
 	}
+
+	//if user, exist := usersLoginInfo[token]; exist {
+	//	c.JSON(http.StatusOK, UserResponse{
+	//		Response: api.Response{StatusCode: 0},
+	//		User:     user,
+	//	})
+	//} else {
+	//	c.JSON(http.StatusOK, UserResponse{
+	//		Response: api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	//	})
+	//}
 }
