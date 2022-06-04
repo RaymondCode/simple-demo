@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"douyin-simple/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -10,16 +11,16 @@ func FavoriteAction(c *gin.Context) {
 	token := c.Query("token")
 
 	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
+		c.JSON(http.StatusOK, models.Response{StatusCode: 0})
 	} else {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+		c.JSON(http.StatusOK, models.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
 }
 
 // FavoriteList all users have same favorite video list
 func FavoriteList(c *gin.Context) {
 	c.JSON(http.StatusOK, VideoListResponse{
-		Response: Response{
+		Response: models.Response{
 			StatusCode: 0,
 		},
 		VideoList: DemoVideos,
