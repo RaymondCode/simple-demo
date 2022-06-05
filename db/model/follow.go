@@ -38,7 +38,7 @@ func DeleteFollow(ctx context.Context, userID uint, followedUser uint) error {
 	return DB.Table("follow").WithContext(ctx).Where("user_id = ? and followed_user = ? ", userID, followedUser).Delete(&Follow{}).Error
 }
 
-// QueryNote query list of note info
+// QueryFollow query list of note info
 func QueryFollow(ctx context.Context, userID int64, status, limit, offset int) ([]*Follow, int64, error) {
 	var total int64
 	var res []*Follow
