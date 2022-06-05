@@ -7,5 +7,7 @@ type Comment struct {
 	UserId    int64
 	VideoId   int64
 	Content   string
+	Status    int
 	CreatedAt time.Time
+	UpdatedAt time.Time
 }
