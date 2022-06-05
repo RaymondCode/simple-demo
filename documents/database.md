@@ -32,13 +32,15 @@
 
 ### Comment
 
-| 字段         | 类型       | 备注   |
-| ---------- | -------- | ---- |
-| id         | int      |      |
-| user_id    | Int      | 用户id |
-| video_id   | int      | 视频id |
-| content    | text     | 评论内容 |
-| created_at | datetime | 创建时间 |
+| 字段         | 类型       | 备注        |
+| ---------- | -------- |-----------|
+| id         | int      |           |
+| user_id    | Int      | 用户id      |
+| video_id   | int      | 视频id      |
+| content    | text     | 评论内容      |
+| status     | tinyint  | 评论状态（1/0） |
+| created_at | datetime | 创建时间      |
+| updated_at | datetime | 修改时间      |
 
 ### Favorite
 
