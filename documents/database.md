@@ -4,39 +4,63 @@
 
 ## MySQL数据库字段
 
-> MySQL包含3个表，分别是User表、Video表、Comment表，分别记录用户信息、视频信息、评论信息
+> MySQL包含5个表，分别是User、Video、Comment、Favorite、Follow，分别记录用户信息、视频信息、评论信息、点赞信息、关注信息
 
-### User表
+## 数据库表
 
-|字段|类型|备注|
-|:---:|:---:|:---:|
-|id|Integer|Video id|
-|name|varchar||
-|follow_count|int|关注数，要不要用字符串？|
-|follower_count|int|粉丝数|
-|is_follow|book|是否关注？不清楚什么用|
+### User
 
-### Video表
+| 字段             | 类型       | 备注   |
+| -------------- | -------- | ---- |
+| id             | int      |      |
+| name           | varchar  | 姓名   |
+| follow_count   | Int      | 关注数  |
+| follower_count | Int      | 粉丝数  |
+| create_time    | datetime | 创建时间 |
 
-|字段|类型|备注|
-|:---:|:---:|:---:|
-|id|Integer|Video id|
-|user_id|Integer|foreign key|
-|play_url|varchar||
-|cover_url|varchar||
-|favorite_count|int|点赞数|
-|comment_count|int|评论数|
-|is_favorite|bool||
-|title|varchar||
+### Video
 
-### Comment表
+| 字段             | 类型       | 备注   |
+| -------------- | -------- | ---- |
+| id             | int      |      |
+| author_id      | Int      | 姓名   |
+| play_url       | varcher  | 播放地址 |
+| cover_url      | varcher  | 封面地址 |
+| favorite_count | Int      | 点赞数  |
+| comment_count  | int      | 评论数  |
+| created_at     | datetime | 创建时间 |
 
-|字段|类型|备注|
-|:---:|:---:|:---:|
-|id|Integer||
-|user_id|Integer|foreign key|
-|content|text||
-|create_date|date|auto create|
+### Comment
+
+| 字段         | 类型       | 备注   |
+| ---------- | -------- | ---- |
+| id         | int      |      |
+| user_id    | Int      | 用户id |
+| video_id   | int      | 视频id |
+| content    | text     | 评论内容 |
+| created_at | datetime | 创建时间 |
+
+### Favorite
+
+| 字段         | 类型       | 备注        |
+| ---------- | -------- | --------- |
+| id         | int      |           |
+| user_id    | Int      | 用户id      |
+| video_id   | int      | 视频id      |
+| status     | tinyint  | 是否点赞（1/0） |
+| created_at | datetime | 创建时间      |
+| updated_at | datetime | 修改时间      |
+
+### Follow
+
+| 字段            | 类型       | 备注     |
+| ------------- | -------- | ------ |
+| id            | int      |        |
+| user_id       | Int      | 用户id   |
+| followed_user | int      | 被关注者id |
+| status        | tinyint  | 关注状态   |
+| created_at    | datetime | 创建时间   |
+| updated_at    | datetime | 修改时间|
 
 ## MongoDB数据库字段
 
