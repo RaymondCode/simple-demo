@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"gopkg.in/ini.v1"
+	"gorm.io/gorm"
 	"log"
 	"strconv"
 )
@@ -19,6 +20,8 @@ var (
 	BcryptCost      int    //bcrypt 生成密码时的cost
 	TokenEncryptKey string //token加密时需要的密钥
 	DbName          string //数据库名
+
+	//HostIp string
 )
 
 func init() {
@@ -54,4 +57,10 @@ func loadDb(file *ini.File) {
 	DbHost = s.Key("DbHost").MustString("DbHost")
 	DbUser = s.Key("DbUser").MustString("root")
 	DbPassWord = s.Key("DbPassWord").MustString("123456")
+}
+
+var Db *gorm.DB
+
+func GetDB() *gorm.DB {
+	return Db
 }

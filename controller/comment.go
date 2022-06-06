@@ -13,7 +13,7 @@ type CommentListResponse struct {
 
 type CommentActionResponse struct {
 	api.Response
-	Comment api.Comment `json:"comment,omitempty"`
+	Comment api.Comment `json:"common,omitempty"`
 }
 
 // CommentAction no practical effect, just check if token is valid
@@ -39,7 +39,7 @@ func CommentAction(c *gin.Context) {
 	}
 }
 
-// CommentList all videos have same demo comment list
+// CommentList all videos have same demo common list
 func CommentList(c *gin.Context) {
 	c.JSON(http.StatusOK, CommentListResponse{
 		Response:    api.Response{StatusCode: 0},
