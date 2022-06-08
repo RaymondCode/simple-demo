@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/warthecatalyst/douyin/api"
+	"github.com/warthecatalyst/douyin/db"
+	"github.com/warthecatalyst/douyin/model"
+	"github.com/warthecatalyst/douyin/rdb"
 	"github.com/warthecatalyst/douyin/service"
 	"net/http"
 	"strconv"
-	"sync/atomic"
 )
 
 func getUserId(c *gin.Context) (int64, error) {
@@ -70,76 +72,90 @@ type UserResponse struct {
 func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
-
-	token := username + password
-
-	if _, exist := usersLoginInfo[token]; exist {
+	if username == "" || password == "" {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: api.Response{StatusCode: 1, StatusMsg: "User already exist"},
+			Response: api.Response{
+				StatusCode: 1,
+				StatusMsg:  "用户名和密码不能为空，请重新输入",
+			},
 		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
-		newUser := api.User{
-			Id:   userIdSequence,
-			Name: username,
-		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: api.Response{StatusCode: 0},
-			UserId:   userIdSequence,
-			Token:    username + password,
-		})
+		return
 	}
+
+	userInfo := db.GetUserInfoByUserName(username)
+	if userInfo != nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: api.Response{StatusCode: 1, StatusMsg: "用户已经存在，请重新输入"},
+		})
+		return
+	}
+	userInfo, token := service.CreateUser(username, password)
+	if userInfo == nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: api.Response{StatusCode: 1, StatusMsg: "create userInfo error"},
+		})
+		return
+	}
+	//logrus.Infof("[Register] userId=%+v, token=%+v", userInfo.UserId, token)
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: api.Response{StatusCode: 0},
+		UserId:   userInfo.UserId,
+		Token:    token,
+	})
+	return
 }
 
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
-
-	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
+	if username == "" || password == "" {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: api.Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
-	}
-}
-
-func UserInfo(c *gin.Context) {
-	token := c.Query("token")
-	userId, err := strconv.ParseInt(token, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: api.Response{StatusCode: 2, StatusMsg: "Can't get UserId from token"},
+			Response: api.Response{StatusCode: 1, StatusMsg: "用户名和密码不能为空，请重新输入"},
 		})
 		return
 	}
 
-	if user, err := service.NewUserServiceInstance().GetUserFromUserId(userId); err != nil {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: api.Response{StatusCode: 1, StatusMsg: "Something goes wrong"},
+	userInfo := db.GetUserInfoByPassword(userName, password)
+	if userInfo == nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: api.Response{StatusCode: 1, StatusMsg: "用户不存在，请重新输入"},
 		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: api.Response{StatusCode: 0},
-			User:     *user,
+		return
+	}
+	token := rdb.GetToken(userInfo.UserId)
+	logrus.Infof("[Login] userId=%+v, token=%+v", userInfo.UserId, token)
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: api.Response{StatusCode: 0},
+		UserId:   userInfo.UserId,
+		Token:    token,
+	})
+	return
+}
+
+func UserInfo(c *gin.Context) {
+	userId, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	token := c.Query("token")
+	userIdFromToken, _ := service.ParseToken(token)
+	if userIdFromToken != userId {
+		c.JSON(http.StatusOK, model.Response{
+			StatusCode: 1,
+			StatusMsg:  "check token failed",
 		})
+		return
 	}
 
-	//if user, exist := usersLoginInfo[token]; exist {
-	//	c.JSON(http.StatusOK, UserResponse{
-	//		Response: api.Response{StatusCode: 0},
-	//		User:     user,
-	//	})
-	//} else {
-	//	c.JSON(http.StatusOK, UserResponse{
-	//		Response: api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-	//	})
-	//}
+	user := service.GetUser(userId, userId)
+	if user == nil {
+		c.JSON(http.StatusOK, model.Response{
+			StatusCode: 1,
+			StatusMsg:  "用户不存在",
+		})
+		return
+	}
+	logrus.Infof("[UserInfo] user=%+v", *user)
+	c.JSON(http.StatusOK, UserResponse{
+		Response: api.Response{StatusCode: 0},
+		//User:     *user,
+	})
+	return
 }
