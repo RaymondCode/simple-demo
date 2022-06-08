@@ -3,8 +3,8 @@ package dao
 import (
 	"fmt"
 	"github.com/warthecatalyst/douyin/config"
+	"github.com/warthecatalyst/douyin/logx"
 	"github.com/warthecatalyst/douyin/model"
-	"log"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -37,12 +37,12 @@ func InitDB() {
 	})
 
 	if err != nil {
-		log.Println("数据库连接失败,err:", err)
+		logx.DyLogger.Panicf("数据库连接失败，错误：%s", err)
 	}
 
 	err = db.AutoMigrate(&model.Video{}, &model.User{}, &model.Follow{}, &model.Comment{}, &model.Favourite{}) //TODO 数据库自动迁移
 	if err != nil {
-		log.Println("数据库自动迁移失败，err:", err)
+		logx.DyLogger.Panicf("数据库自动迁移失败，错误：%s", err)
 	}
 	sqlDb, _ := db.DB()
 

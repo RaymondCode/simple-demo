@@ -3,16 +3,16 @@ package rdb
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"github.com/sirupsen/logrus"
 	"github.com/warthecatalyst/douyin/common"
 	"github.com/warthecatalyst/douyin/config"
+	"github.com/warthecatalyst/douyin/logx"
 	"github.com/warthecatalyst/douyin/util"
 )
 
 var rdb *redis.Client
 
 func InitRdb() {
-	logrus.Infof("start init redis...")
+	logx.DyLogger.Infof("start init redis...")
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:6379", config.DbHost),
 		Password: "",
@@ -22,7 +22,7 @@ func InitRdb() {
 
 	_, err := rdb.Ping().Result()
 	if err != nil {
-		logrus.Panicf("[InitRdb] connect redis error, err=%+v", err)
+		logx.DyLogger.Panicf("[InitRdb] connect redis error, err=%+v", err)
 	}
 
 	setSalts()
@@ -32,12 +32,12 @@ func InitRdb() {
 func setSalts() {
 	salts := rdb.SMembers(common.KeySalt).Val()
 	if len(salts) != 0 {
-		logrus.Infof("[setSalts] salts = %v", salts)
+		logx.DyLogger.Infof("[setSalts] salts = %v", salts)
 		return
 	}
 	err := rdb.SAdd(common.KeySalt, util.CreateRandomString(10)).Err()
 	if err != nil {
-		logrus.Panicf("[setSalts] set salts error, err=%+v", err)
+		logx.DyLogger.Panicf("[setSalts] set salts error, err=%+v", err)
 	}
 	return
 }

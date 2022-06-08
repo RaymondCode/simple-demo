@@ -18,25 +18,7 @@ type CommentActionResponse struct {
 
 // CommentAction no practical effect, just check if token is valid
 func CommentAction(c *gin.Context) {
-	token := c.Query("token")
-	actionType := c.Query("action_type")
-
-	if user, exist := usersLoginInfo[token]; exist {
-		if actionType == "1" {
-			text := c.Query("comment_text")
-			c.JSON(http.StatusOK, CommentActionResponse{Response: api.Response{StatusCode: 0},
-				Comment: api.Comment{
-					Id:         1,
-					User:       user,
-					Content:    text,
-					CreateDate: "05-01",
-				}})
-			return
-		}
-		c.JSON(http.StatusOK, api.Response{StatusCode: 0})
-	} else {
-		c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-	}
+	// TODO: ?
 }
 
 // CommentList all videos have same demo common list
