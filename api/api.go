@@ -35,4 +35,6 @@ const (
 	UnFavoriteAction = 2
 	FollowAction     = 1
 	UnfollowAction   = 2
+	CommentAction    = 1
+	UnCommentAction  = 2
 )
