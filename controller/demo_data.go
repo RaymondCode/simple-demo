@@ -1,6 +1,10 @@
 package controller
 
-var DemoVideos = []Video{
+import (
+	"github.com/warthecatalyst/douyin/api"
+)
+
+var DemoVideos = []api.Video{
 	{
 		Id:            1,
 		Author:        DemoUser,
@@ -12,7 +16,7 @@ var DemoVideos = []Video{
 	},
 }
 
-var DemoComments = []Comment{
+var DemoComments = []api.Comment{
 	{
 		Id:         1,
 		User:       DemoUser,
@@ -21,7 +25,7 @@ var DemoComments = []Comment{
 	},
 }
 
-var DemoUser = User{
+var DemoUser = api.User{
 	Id:            1,
 	Name:          "TestUser",
 	FollowCount:   0,
