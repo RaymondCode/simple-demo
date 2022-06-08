@@ -2,22 +2,36 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/warthecatalyst/douyin/api"
+	"github.com/warthecatalyst/douyin/service"
 	"net/http"
+	"strconv"
 	"time"
 )
 
-type FeedResponse struct {
-	api.Response
-	VideoList []api.Video `json:"video_list,omitempty"`
-	NextTime  int64       `json:"next_time,omitempty"`
+
+
+
+// Feed 推送视频流
+func  Feed(c *gin.Context) {
+	latestTime := toTimeString(c.Query("latest_time"))
+	resp, err := service.Feed(latestTime)
+	if err != nil {
+		c.JSON(http.StatusOK, resp.Response)
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
 }
 
-// Feed same demo video list for every request
-func Feed(c *gin.Context) {
-	c.JSON(http.StatusOK, FeedResponse{
-		Response:  api.Response{StatusCode: 0},
-		VideoList: DemoVideos,
-		NextTime:  time.Now().Unix(),
-	})
+
+func toTimeString(sec string) string {
+	if len(sec) == 0 {
+		return time.Now().Format("2022-05-22 14:01:05")
+	}
+	t, err := strconv.ParseInt(sec, 10, 64)
+	if err != nil {
+		return time.Now().Format("2022-05-22 14:01:05")
+	}
+
+	return time.Unix(t/1000, 0).Format("2022-05-22 14:01:05")
 }

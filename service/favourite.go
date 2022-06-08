@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/warthecatalyst/douyin/api"
 	"github.com/warthecatalyst/douyin/dao"
+	"github.com/warthecatalyst/douyin/global"
 )
 
 // FavoriteActionInfo service层添加或者删除一条点赞记录
@@ -64,10 +65,10 @@ func (f *FavoriteActionInfoFlow) DelRecord() error {
 	return nil
 }
 
-type VideoList []api.Video
-
+//type VideoList []api.Video
+//-------------------------------------------------------------------------------------
 // FavoriteListInfo 获得用户点赞后的视频列表
-func FavoriteListInfo(userId int64) (*VideoList, error) {
+func FavoriteListInfo(userId int64) (api.FavoriteList, error) {
 	return newFavoriteListInfoFlow(userId).Do()
 }
 
@@ -81,32 +82,44 @@ type FavoriteListInfoFlow struct {
 	userId int64
 }
 
-func (f *FavoriteListInfoFlow) Do() (*VideoList, error) {
+func (f *FavoriteListInfoFlow) Do() (api.FavoriteList, error) {
 	return f.getFavoriteList()
 }
 
-func (f *FavoriteListInfoFlow) getFavoriteList() (*VideoList, error) {
+func (f *FavoriteListInfoFlow) getFavoriteList() (api.FavoriteList, error) {
 	videoIds, err := dao.NewFavoriteDaoInstance().VideoIDListByUserID(f.userId)
 	if err != nil {
-		return nil, err
+		global.DyLogger.Print(err)
 	}
-	var videolist VideoList
-	for _, videoId := range videoIds {
-		user, err := videoService.getUserFromVideoId(videoId)
-		if err != nil {
-			return nil, err
-		}
-		video, err := dao.NewVideoDaoInstance().GetVideoFromId(videoId)
 
-		videolist = append(videolist, api.Video{
-			Id:            videoId,
-			Author:        *user,
-			PlayUrl:       video.PlayURL,
-			CoverUrl:      video.CoverURL,
-			FavoriteCount: int64(video.FavoriteCount),
-			CommentCount:  int64(video.CommentCount),
-			IsFavorite:    false,
-		})
+	videos, err := dao.NewVideoDaoInstance().GetVideosByID(videoIds, "video_id", "play_url", "cover_url", "author_id", "favorite_count", "comment_count")
+
+	v := newVideoList(videos)
+	for i, _ := range v {
+		resp, _ := UserInfo(videos[i].UserID)
+		v[i].Author = resp.User
+		v[i].IsFavorite = true
 	}
-	return &videolist, nil
+	return api.FavoriteList{Response: api.OK, VideoLists: v}, nil
+
+
+	//var videolist api.FavoriteList
+	//for _, videoId := range videoIds {
+	//	user, err := videoService.getUserFromVideoId(videoId)
+	//	if err != nil {
+	//		global.DyLogger.Print(err)
+	//	}
+	//	video, err := dao.NewVideoDaoInstance().GetVideoFromId(videoId)
+	//
+	//	videolist = append(videolist, api.Video{
+	//		Id:            videoId,
+	//		Author:        *user,
+	//		PlayUrl:       video.PlayURL,
+	//		CoverUrl:      video.CoverURL,
+	//		FavoriteCount: int64(video.FavoriteCount),
+	//		CommentCount:  int64(video.CommentCount),
+	//		IsFavorite:    false,
+	//	})
+	//}
+	//return &videolist, nil
 }

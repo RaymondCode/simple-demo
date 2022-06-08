@@ -50,10 +50,5 @@ func FavoriteList(c *gin.Context) {
 		c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "Can't get videoList from userId"})
 		return
 	}
-	c.JSON(http.StatusOK, VideoListResponse{
-		Response: api.Response{
-			StatusCode: 0,
-		},
-		VideoList: *videoList,
-	})
+	c.JSON(http.StatusOK,  videoList)
 }

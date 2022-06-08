@@ -4,57 +4,47 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/warthecatalyst/douyin/api"
+	"github.com/warthecatalyst/douyin/service"
+	"log"
 	"net/http"
-	"path/filepath"
 )
 
-type VideoListResponse struct {
-	api.Response
-	VideoList []api.Video `json:"video_list"`
-}
 
-// Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
 	token := c.PostForm("token")
 
 	if _, exist := usersLoginInfo[token]; !exist {
-		c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+		c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "用户不存在"})
 		return
 	}
-
-	data, err := c.FormFile("data")
-	if err != nil {
-		c.JSON(http.StatusOK, api.Response{
-			StatusCode: 1,
-			StatusMsg:  err.Error(),
-		})
-		return
-	}
-
-	filename := filepath.Base(data.Filename)
+	header,err:= c.FormFile("data")
 	user := usersLoginInfo[token]
-	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-	saveFile := filepath.Join("./public/", finalName)
-	if err := c.SaveUploadedFile(data, saveFile); err != nil {
-		c.JSON(http.StatusOK, api.Response{
-			StatusCode: 1,
-			StatusMsg:  err.Error(),
-		})
-		return
+	userid := user.Id
+	if err != nil {
+		log.Print(err)
 	}
+	responses,err := service.PublishVideo(header,userid,c)
+	if err != nil {
+		fmt.Print("上传失败")
+	}
+	c.JSON(http.StatusOK,responses)
 
-	c.JSON(http.StatusOK, api.Response{
-		StatusCode: 0,
-		StatusMsg:  finalName + " uploaded successfully",
-	})
 }
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
-	c.JSON(http.StatusOK, VideoListResponse{
+	token := c.PostForm("token")
+	user := usersLoginInfo[token]
+	userid := user.Id
+	videoList ,err := service.PublishList(userid)
+	videoLists := videoList.VideoLists
+	if err != nil {
+
+	}
+	c.JSON(http.StatusOK, api.PublishList{
 		Response: api.Response{
 			StatusCode: 0,
 		},
-		VideoList: DemoVideos,
+		VideoLists: videoLists,
 	})
 }
