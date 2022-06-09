@@ -1,8 +1,12 @@
 package service
 
 import (
-	"github.com/RaymondCode/simple-demo/db"
+	"context"
+	"fmt"
 	"testing"
+
+	"github.com/BaiZe1998/douyin-simple-demo/db"
+	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 )
 
 func TestFollow(t *testing.T) {

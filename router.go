@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/controller"
-	"github.com/RaymondCode/simple-demo/util"
+	"github.com/BaiZe1998/douyin-simple-demo/controller"
+	"github.com/BaiZe1998/douyin-simple-demo/util"
 	"github.com/gin-gonic/gin"
 )
 
