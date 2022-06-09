@@ -11,7 +11,7 @@ var DB *gorm.DB
 // Init init DB
 func Init() {
 	var err error
-	DB, err = gorm.Open(mysql.Open(constants.MySQLLocalDSN),
+	DB, err = gorm.Open(mysql.Open(constants.MySQLDefaultDSN),
 		&gorm.Config{
 			PrepareStmt:            true, // executes the given query in cached statement
 			SkipDefaultTransaction: true, // disable default transaction

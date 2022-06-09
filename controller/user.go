@@ -7,6 +7,7 @@ import (
 	"github.com/BaiZe1998/douyin-simple-demo/pkg/util"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -48,7 +49,8 @@ func Register(c *gin.Context) {
 	user, _ := model.QueryUserByName(context.Background(), username)
 
 	//judege user exit or not
-	if user != nil {
+	if user.Name != "" {
+		log.Printf(user.Name, user.ID)
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})

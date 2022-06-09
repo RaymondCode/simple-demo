@@ -23,11 +23,12 @@ func TestUser(t *testing.T) {
 	//	fmt.Println("index=", index, "value=", value)
 	//}
 	//fmt.Println(*re[0])
-	userModel := &model.User{
-		Name:     "nyf123456",
-		PassWord: "12345678",
-	}
-	model.CreateUser(context.Background(), userModel)
-	res, _ := model.QueryUserById(context.Background(), 1)
+	//userModel := &model.User{
+	//	Name:     "nyf123456",
+	//	PassWord: "12345678",
+	//}
+	//model.CreateUser(context.Background(), userModel)
+	res, m := model.QueryUserByName(context.Background(), "nyf")
 	fmt.Println(res)
+	fmt.Println(m)
 }
