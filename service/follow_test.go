@@ -20,4 +20,13 @@ func TestFollow(t *testing.T) {
 	//	fmt.Println("index=", index, "value=", value)
 	//}
 	//fmt.Println(*re[0])
+
+	followModel := &model.Follow{
+		UserId:       1,
+		FollowedUser: 7,
+		Status:       1,
+	}
+	model.CreateFollow(context.Background(), followModel)
+	res, total, _ := model.QueryFollow(context.Background(), 1, 1, 10, 0)
+	fmt.Println(len(res), total)
 }

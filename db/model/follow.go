@@ -45,9 +45,9 @@ func QueryFollow(ctx context.Context, userID int64, status, limit, offset int) (
 	var res []*Follow
 	var conn *gorm.DB
 	if status == 1 {
-		conn = DB.Table("follow").WithContext(ctx).Model(&Follow{}).Where("user_id = ?", userID)
+		conn = DB.Table("follow").WithContext(ctx).Model(&Follow{}).Where("user_id = ? and status = 1", userID)
 	} else { // query for followers
-		conn = DB.Table("follow").WithContext(ctx).Model(&Follow{}).Where("followed_user = ?", userID)
+		conn = DB.Table("follow").WithContext(ctx).Model(&Follow{}).Where("followed_user = ? and status = 1", userID)
 	}
 	if err := conn.Count(&total).Error; err != nil {
 		return res, total, err
