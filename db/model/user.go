@@ -8,7 +8,7 @@ import (
 type User struct {
 	ID            int64 `gorm:"primarykey"`
 	Name          string
-	PassWord      string
+	Password      string
 	FollowCount   int64
 	FollowerCount int64
 	CreatedAt     time.Time
