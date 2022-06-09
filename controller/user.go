@@ -57,7 +57,7 @@ func Register(c *gin.Context) {
 	} else {
 		newUser := &model.User{
 			Name:     username,
-			PassWord: password,
+			Password: password,
 		}
 		//userinfo register
 		model.CreateUser(context.Background(), newUser)
@@ -84,7 +84,7 @@ func Login(c *gin.Context) {
 
 	if user != nil {
 		//judge password
-		if service.ComparePasswords(user.PassWord, password) {
+		if service.ComparePasswords(user.Password, password) {
 			c.JSON(http.StatusOK, UserLoginResponse{
 				Response: Response{StatusCode: 0},
 				UserId:   user.ID,
