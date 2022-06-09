@@ -21,7 +21,7 @@ func RelationAction(c *gin.Context) {
 	to_user_id, _ := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 	action_type, _ := strconv.ParseInt(c.Query("action_type"), 10, 64)
 
-	err := service.FollowAction(c, uint(user_id), uint(to_user_id), int(action_type))
+	err := service.FollowAction(c, user_id, to_user_id, int(action_type))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, Response{

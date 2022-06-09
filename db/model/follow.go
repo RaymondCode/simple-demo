@@ -25,7 +25,7 @@ func CreateFollow(ctx context.Context, follow *Follow) error {
 }
 
 // UpdateFollow update follow info
-func UpdateFollow(ctx context.Context, userID, followedUser uint, status *int) error {
+func UpdateFollow(ctx context.Context, userID, followedUser int64, status *int) error {
 	params := map[string]interface{}{}
 	if status != nil {
 		params["status"] = *status
@@ -35,7 +35,7 @@ func UpdateFollow(ctx context.Context, userID, followedUser uint, status *int) e
 }
 
 // DeleteFollow delete follow info
-func DeleteFollow(ctx context.Context, userID uint, followedUser uint) error {
+func DeleteFollow(ctx context.Context, userID int64, followedUser int64) error {
 	return DB.Table("follow").WithContext(ctx).Where("user_id = ? and followed_user = ? ", userID, followedUser).Delete(&Follow{}).Error
 }
 

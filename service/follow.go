@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func IsFollow(ctx context.Context, userID uint, followedUser uint) (bool, bool) {
+func IsFollow(ctx context.Context, userID int64, followedUser int64) (bool, bool) {
 	var relation model.Follow
 
 	if err := model.DB.Table("follow").WithContext(ctx).Where("user_id = ? and followed_user = ? ", userID, followedUser).First(relation, 1).Error; err == nil {
@@ -21,7 +21,7 @@ func IsFollow(ctx context.Context, userID uint, followedUser uint) (bool, bool) 
 	}
 }
 
-func FollowCountAction(ctx context.Context, userID uint, followedUser uint, action_type int) error {
+func FollowCountAction(ctx context.Context, userID int64, followedUser int64, action_type int) error {
 	if action_type == 1 {
 		// 关注操作
 		// user_id 关注数+1， to_user_id 被关注数+1
@@ -36,7 +36,7 @@ func FollowCountAction(ctx context.Context, userID uint, followedUser uint, acti
 	return nil
 }
 
-func FollowAction(ctx context.Context, user_id uint, to_user_id uint, action_type int) error {
+func FollowAction(ctx context.Context, user_id int64, to_user_id int64, action_type int) error {
 	is_exist, is_follow := IsFollow(ctx, user_id, to_user_id)
 
 	if !is_exist {

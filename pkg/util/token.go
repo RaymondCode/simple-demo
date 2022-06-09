@@ -1,12 +1,13 @@
 package util
 
 import (
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 )
 
 //用户信息类，作为生成token的参数
 type UserClaims struct {
-	ID       string `json:"userId"`
+	ID       int64  `json:"userId"`
 	Name     string `json:"name"`
 	PassWord string `json:"passWord"`
 	//jwt-go提供的标准claim
@@ -19,7 +20,7 @@ var (
 )
 
 // 生成token
-func GenerateToken(claims *UserClaims) string {
+func GenerateToken(claims *UserClaims) (string, error) {
 	//生成token
 	sign, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(secret)
 	if err != nil {
@@ -27,21 +28,21 @@ func GenerateToken(claims *UserClaims) string {
 		//接入统一异常可参考 https://blog.csdn.net/u014155085/article/details/106733391
 		panic(err)
 	}
-	return sign
+	return sign, nil
 }
 
 // 解析Token
-func ParseToken(tokenString string) *UserClaims {
+func ParseToken(tokenString string) (*UserClaims, error) {
 	//解析token
 	token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return secret, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	claims, ok := token.Claims.(*UserClaims)
 	if !ok {
-		panic("token is valid")
+		return nil, errors.New("token is invalid")
 	}
-	return claims
+	return claims, nil
 }
