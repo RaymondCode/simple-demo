@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/RaymondCode/simple-demo/pkg/constants"
+	"github.com/BaiZe1998/douyin-simple-demo/pkg/constants"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

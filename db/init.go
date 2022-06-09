@@ -1,8 +1,6 @@
 package db
 
-import (
-	"github.com/RaymondCode/simple-demo/db/model"
-)
+import "github.com/BaiZe1998/douyin-simple-demo/db/model"
 
 // Init init db
 func Init() {

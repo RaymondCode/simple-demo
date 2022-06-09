@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/RaymondCode/simple-demo/db"
-	"github.com/RaymondCode/simple-demo/db/model"
 	"testing"
+
+	"github.com/BaiZe1998/douyin-simple-demo/db"
+	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 )
 
 func TestFollow(t *testing.T) {

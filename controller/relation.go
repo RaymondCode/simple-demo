@@ -1,8 +1,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
+
+	"github.com/BaiZe1998/douyin-simple-demo/service"
+	"github.com/gin-gonic/gin"
 )
 
 type UserListResponse struct {
@@ -12,12 +15,24 @@ type UserListResponse struct {
 
 // RelationAction no practical effect, just check if token is valid
 func RelationAction(c *gin.Context) {
-	token := c.Query("token")
+	// token := c.Query("token")
 
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
+	user_id, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	to_user_id, _ := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
+	action_type, _ := strconv.ParseInt(c.Query("action_type"), 10, 64)
+
+	err := service.FollowAction(c, uint(user_id), uint(to_user_id), int(action_type))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
 	} else {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+		c.JSON(http.StatusAccepted, Response{
+			StatusCode: 1,
+			StatusMsg:  "操作成功",
+		})
 	}
 }
 
