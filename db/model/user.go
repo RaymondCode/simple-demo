@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	ID            string `gorm:"primarykey"`
+	ID            int64 `gorm:"primarykey"`
 	Name          string
 	PassWord      string
 	FollowCount   int64
@@ -23,18 +23,18 @@ func CreateUser(ctx context.Context, user *User) error {
 }
 
 //QueryUser Quert User By Name
-func QueryUser(ctx context.Context, username string) ([]*User, error) {
-	var userinfo []*User
-	if err := DB.Table("user").WithContext(ctx).Where("name=?", username).Find(&userinfo).Error; err != nil {
-		return userinfo, err
+func QueryUserByName(ctx context.Context, username string) (*User, error) {
+	var userInfo *User
+	if err := DB.Table("user").WithContext(ctx).Where("name=?", username).Find(&userInfo).Error; err != nil {
+		return userInfo, err
 	}
-	return userinfo, nil
+	return userInfo, nil
 }
 
-func QueryUserById(ctx context.Context, id string) ([]*User, error) {
-	var userinfo []*User
-	if err := DB.Table("user").WithContext(ctx).Where("id=?", id).Find(&userinfo).Error; err != nil {
-		return userinfo, err
+func QueryUserById(ctx context.Context, id int64) (*User, error) {
+	var userInfo *User
+	if err := DB.Table("user").WithContext(ctx).Where("id=?", id).Find(&userInfo).Error; err != nil {
+		return userInfo, err
 	}
-	return userinfo, nil
+	return userInfo, nil
 }

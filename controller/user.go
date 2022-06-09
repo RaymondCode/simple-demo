@@ -2,9 +2,10 @@ package controller
 
 import (
 	"context"
-	"github.com/RaymondCode/simple-demo/db/model"
-	"github.com/RaymondCode/simple-demo/service"
-	"github.com/RaymondCode/simple-demo/util"
+	"github.com/BaiZe1998/douyin-simple-demo/db/model"
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
+	"github.com/BaiZe1998/douyin-simple-demo/pkg/util"
+	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -26,13 +27,13 @@ var userIdSequence = int64(1)
 
 type UserLoginResponse struct {
 	Response
-	UserId string `json:"user_id,omitempty"`
+	UserId int64  `json:"user_id,omitempty"`
 	Token  string `json:"token"`
 }
 
 type UserResponse struct {
 	Response
-	User User `json:"user"`
+	User dto.User `json:"user"`
 }
 
 func Register(c *gin.Context) {
@@ -44,10 +45,10 @@ func Register(c *gin.Context) {
 	password, _ = service.Encryption(password)
 
 	//QueryUser QueryUser By Name for judged user is exit or not
-	user, _ := model.QueryUser(context.Background(), username)
+	user, _ := model.QueryUserByName(context.Background(), username)
 
 	//judege user exit or not
-	if exist := len(user) > 0; exist {
+	if user != nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
@@ -59,13 +60,12 @@ func Register(c *gin.Context) {
 		//userinfo register
 		model.CreateUser(context.Background(), newUser)
 		//Query Userinfo for get id
-		userinfo, _ := model.QueryUser(context.Background(), username)
-		userid := userinfo[0].ID
+		userInfo, _ := model.QueryUserByName(context.Background(), username)
 		//token
-		token := util.GenerateToken(&util.UserClaims{ID: userid, Name: username, PassWord: password})
+		token, _ := util.GenerateToken(&util.UserClaims{ID: userInfo.ID, Name: username, PassWord: password})
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
-			UserId:   userid,
+			UserId:   userInfo.ID,
 			Token:    token,
 		})
 	}
@@ -77,15 +77,15 @@ func Login(c *gin.Context) {
 	//Password encrypted with salt
 	encryptionPassWord, _ := service.Encryption(password)
 
-	user, _ := model.QueryUser(context.Background(), username)
-	token := util.GenerateToken(&util.UserClaims{ID: user[0].ID, Name: username, PassWord: encryptionPassWord})
+	user, _ := model.QueryUserByName(context.Background(), username)
+	token, _ := util.GenerateToken(&util.UserClaims{ID: user.ID, Name: username, PassWord: encryptionPassWord})
 
-	if exist := len(user) > 0; exist {
+	if user != nil {
 		//judge password
-		if service.ComparePasswords(user[0].PassWord, password) {
+		if service.ComparePasswords(user.PassWord, password) {
 			c.JSON(http.StatusOK, UserLoginResponse{
 				Response: Response{StatusCode: 0},
-				UserId:   user[0].ID,
+				UserId:   user.ID,
 				Token:    token,
 			})
 		} else {
@@ -103,16 +103,16 @@ func Login(c *gin.Context) {
 func UserInfo(c *gin.Context) {
 	token := c.Query("token")
 
-	userinfo := util.ParseToken(token)
-	users, _ := model.QueryUserById(context.Background(), userinfo.ID)
-	user1 := users[0]
+	userClaims, _ := util.ParseToken(token)
+	userModel, _ := model.QueryUserById(context.Background(), userClaims.ID)
 
-	user := User{
-		Id:            userinfo.ID,
-		Name:          userinfo.Name,
-		FollowCount:   user1.FollowCount,
-		FollowerCount: user1.FollowerCount,
-		IsFollow:      false}
+	user := dto.User{
+		Id:            userModel.ID,
+		Name:          userModel.Name,
+		FollowCount:   userModel.FollowCount,
+		FollowerCount: userModel.FollowerCount,
+		IsFollow:      false,
+	}
 	c.JSON(http.StatusOK, UserResponse{
 		Response: Response{StatusCode: 0},
 		User:     user,
