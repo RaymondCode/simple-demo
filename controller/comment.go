@@ -23,30 +23,11 @@ type CommentActionResponse struct {
 // CommentAction no practical effect, just check if token is valid
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
-	// actionType := c.Query("action_type")
-
 	userId, err := strconv.ParseInt(token, 10, 64) //used for test
-
-	// if user, exist := usersLoginInfo[token]; exist {
-	// 	if actionType == "1" {
-	// 		text := c.Query("comment_text")
-	// 		c.JSON(http.StatusOK, CommentActionResponse{Response: api.Response{StatusCode: 0},
-	// 			Comment: api.Comment{
-	// 				Id:         1,
-	// 				User:       user,
-	// 				Content:    text,
-	// 				CreateDate: "05-01",
-	// 			}})
-	// 		return
-	// 	}
-	// 	c.JSON(http.StatusOK, api.Response{StatusCode: 0})
-	// } else {
-	// 	c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-	// }
 
 	if err != nil {
 		global.DyLogger.Print("Can't get userId from token")
-		c.JSON(http.StatusOK, api.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
+		c.JSON(http.StatusOK, api.Response{StatusCode: api.TokenInvalidErr, StatusMsg: api.ErrorCodeToMsg[api.TokenInvalidErr]})
 		return
 	}
 	vId := c.Query("video_id")
@@ -62,7 +43,7 @@ func CommentAction(c *gin.Context) {
 	if err == nil {
 		c.JSON(http.StatusOK, api.Response{StatusCode: 0})
 	} else {
-		c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "Something goes wrong"})
+		c.JSON(http.StatusOK, api.Response{StatusCode: api.InnerErr, StatusMsg: api.ErrorCodeToMsg[api.InnerErr] + err.Error()})
 	}
 }
 
@@ -79,7 +60,7 @@ func CommentList(c *gin.Context) {
 	_, err := strconv.ParseInt(token, 10, 64) //used for test
 	if err != nil {
 		global.DyLogger.Print("Can't get userId from token")
-		c.JSON(http.StatusOK, api.Response{StatusCode: 2, StatusMsg: "Can't get userId from token"})
+		c.JSON(http.StatusOK, api.Response{StatusCode: api.TokenInvalidErr, StatusMsg: api.ErrorCodeToMsg[api.TokenInvalidErr]})
 		return
 	}
 	vId := c.Query("video_id")
@@ -89,7 +70,7 @@ func CommentList(c *gin.Context) {
 
 	if err != nil {
 		global.DyLogger.Print("Can't get CommentList from videoId")
-		c.JSON(http.StatusOK, api.Response{StatusCode: 1, StatusMsg: "Can't get CommentList from videoId"})
+		c.JSON(http.StatusOK, api.Response{StatusCode: api.RecordNotExistErr, StatusMsg: api.ErrorCodeToMsg[api.RecordNotExistErr]})
 		return
 	}
 	c.JSON(http.StatusOK, CommentListResponse{

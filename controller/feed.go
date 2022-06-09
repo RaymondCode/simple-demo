@@ -13,7 +13,7 @@ type FeedResponse struct {
 	NextTime  int64       `json:"next_time,omitempty"`
 }
 
-// Feed same demo video list for every request
+// Feed 推送视频流
 func Feed(c *gin.Context) {
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  api.Response{StatusCode: 0},

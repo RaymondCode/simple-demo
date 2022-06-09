@@ -38,14 +38,14 @@ func (f *FavoriteActionInfoFlow) Do() error {
 			return err
 		}
 	} else {
-		return errors.New("actionType must be 1 or 2")
+		return errors.New("actionType Error")
 	}
 	return nil
 }
 
 func (f *FavoriteActionInfoFlow) checkRecord() error {
 	if flag := dao.NewFavoriteDaoInstance().IsFavourite(f.userId, f.videoId); !flag {
-		return errors.New("there's no such record")
+		return errors.New("no Such Record")
 	}
 	return nil
 }
@@ -105,7 +105,7 @@ func (f *FavoriteListInfoFlow) getFavoriteList() (*VideoList, error) {
 			CoverUrl:      video.CoverURL,
 			FavoriteCount: int64(video.FavoriteCount),
 			CommentCount:  int64(video.CommentCount),
-			IsFavorite:    false,
+			IsFavorite:    true, //被videolist返回的肯定点赞过了
 		})
 	}
 	return &videolist, nil

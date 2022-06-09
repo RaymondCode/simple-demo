@@ -75,7 +75,7 @@ func FollowerList(c *gin.Context) {
 	users, err := service.GetFollowerList(userId)
 	if err != nil {
 		c.JSON(http.StatusOK, api.Response{
-			StatusCode: api.InnerErr,
+			StatusCode: api.RecordNotExistErr,
 			StatusMsg:  fmt.Sprintf("service.GetFollowerList error: %s", err)})
 		return
 	}
