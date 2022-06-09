@@ -38,12 +38,12 @@ func DeleteFollow(ctx context.Context, userID uint, followedUser uint) error {
 	return DB.Table("follow").WithContext(ctx).Where("user_id = ? and followed_user = ? ", userID, followedUser).Delete(&Follow{}).Error
 }
 
+//First
 // QueryFollow query list of note info
 func QueryFollow(ctx context.Context, userID int64, status, limit, offset int) ([]*Follow, int64, error) {
 	var total int64
 	var res []*Follow
 	var conn *gorm.DB
-	// query for followed users
 	if status == 1 {
 		conn = DB.Table("follow").WithContext(ctx).Model(&Follow{}).Where("user_id = ? and status = 1", userID)
 	} else { // query for followers
