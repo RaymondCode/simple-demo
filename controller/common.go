@@ -23,7 +23,7 @@ type Comment struct {
 }
 
 type User struct {
-	Id            int64  `json:"id,omitempty"`
+	Id            string `json:"id,omitempty"`
 	Name          string `json:"name,omitempty"`
 	FollowCount   int64  `json:"follow_count,omitempty"`
 	FollowerCount int64  `json:"follower_count,omitempty"`
