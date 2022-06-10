@@ -1,10 +1,17 @@
 package main
 
 import (
+	"github.com/BaiZe1998/douyin-simple-demo/db"
 	"github.com/gin-gonic/gin"
 )
 
+func Init() {
+	db.Init()
+}
+
 func main() {
+	Init()
+
 	r := gin.Default()
 
 	initRouter(r)

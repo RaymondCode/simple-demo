@@ -20,3 +20,8 @@ go build && ./simple-demo
 ### 测试数据
 
 测试数据写在 demo_data.go 中，用于列表接口的 mock 测试
+
+### 目录结构说明
+
+- document: 项目相关的一些文档记录
+- model: gorm模型
