@@ -17,7 +17,8 @@ type UserListResponse struct {
 func RelationAction(c *gin.Context) {
 	// token := c.Query("token")
 
-	user_id, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	user_id_from_c, _ := c.Get("user_id")
+	user_id, _ := user_id_from_c.(int64)
 	to_user_id, _ := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 	action_type, _ := strconv.ParseInt(c.Query("action_type"), 10, 64)
 

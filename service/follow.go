@@ -39,8 +39,8 @@ func FollowCountAction(ctx context.Context, userID int64, followedUser int64, ac
 		model.DB.Table("user").WithContext(ctx).Where("id = ?", followedUser).Update("follower_count", gorm.Expr("follower_count+?", 1))
 	} else {
 		// 取关操作
-		model.DB.Table("user").WithContext(ctx).Where("id = ?", userID).Update("follow_count", gorm.Expr("follow_count+?", -1))
-		model.DB.Table("user").WithContext(ctx).Where("id = ?", followedUser).Update("follower_count", gorm.Expr("follower_count+?", -1))
+		model.DB.Table("user").WithContext(ctx).Where("id = ?", userID).Update("follow_count", gorm.Expr("follow_count-?", 1))
+		model.DB.Table("user").WithContext(ctx).Where("id = ?", followedUser).Update("follower_count", gorm.Expr("follower_count-?", 1))
 	}
 
 	return nil
@@ -96,7 +96,7 @@ func GetFollowList(ctx context.Context, userId int64, actionType uint) ([]Follow
 		// 操作类型为获取粉丝列表
 		if err := model.DB.Table("user").WithContext(ctx).Joins("left join follow on user.id = follow.user_id").
 			Select("user.id", "user.name", "user.follow_count", "user.follower_count").
-			Where("follow.followed_user = ?", userId).Select("user.id", "user.name", "user.follow_count", "user.follower_count").Scan(&followList).Error; err != nil {
+			Where("follow.followed_user = ?", userId).Scan(&followList).Error; err != nil {
 			return followList, nil
 		}
 	} else {

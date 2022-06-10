@@ -2,14 +2,15 @@ package util
 
 import (
 	"errors"
+
 	"github.com/dgrijalva/jwt-go"
 )
 
 //用户信息类，作为生成token的参数
 type UserClaims struct {
-	ID       int64  `json:"userId"`
+	ID       int64  `json:"user_id"`
 	Name     string `json:"name"`
-	PassWord string `json:"passWord"`
+	PassWord string `json:"password"`
 	//jwt-go提供的标准claim
 	jwt.StandardClaims
 }
