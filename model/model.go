@@ -1,8 +1,9 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Response struct {
@@ -60,4 +61,24 @@ type Follow struct {
 	Model
 	FromUserID int64 `gorm:"type:BIGINT;not null;index:idx_user_id;common:粉丝用户ID" json:"from_user_id" validate:""`
 	ToUserID   int64 `gorm:"type:BIGINT;not null;index:idx_to_user_id;common:被关注用户ID" json:"to_user_id" validate:""`
+}
+
+// VideoQuery 主要提供给查询操作使用
+type VideoQuery struct {
+	VideoID       int64     `json:"id,omitempty"`
+	Author        UserQuery `json:"author,omitempty"`
+	FavoriteCount int32     `json:"favorite_count"`
+	CommentCount  int32     `json:"comment_count"`
+	PlayURL       string    `json:"play_url"`
+	CoverURL      string    `json:"cover_url"`
+	IsFavorite    bool      `json:"is_favorite"`
+}
+
+// UserQuery 主要提供给接口使用
+type UserQuery struct {
+	ID            int64  `json:"id"`
+	Name          string `json:"name"`
+	FollowCount   int64  `json:"follow_count"`
+	FollowerCount int64  `json:"follower_count"`
+	IsFollow      bool   `json:"is_follow"`
 }
