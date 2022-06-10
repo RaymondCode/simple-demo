@@ -10,7 +10,7 @@ import (
 
 type UserListResponse struct {
 	Response
-	UserList []User `json:"user_list"`
+	UserList []service.Follower `json:"user_list"`
 }
 
 // RelationAction no practical effect, just check if token is valid
@@ -38,20 +38,50 @@ func RelationAction(c *gin.Context) {
 
 // FollowList all users have same follow list
 func FollowList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	userId, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
+
+	followList, err := service.GetFollowList(c, userId, 1)
+
+	if err == nil {
+		c.JSON(http.StatusAccepted, UserListResponse{
+			Response: Response{
+				StatusCode: 0,
+				StatusMsg:  "查找成功",
+			},
+			UserList: followList,
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, UserListResponse{
+			Response: Response{
+				StatusCode: 1,
+				StatusMsg:  "查找失败",
+			},
+			UserList: nil,
+		})
+	}
 }
 
 // FollowerList all users have same follower list
 func FollowerList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{
-		Response: Response{
-			StatusCode: 0,
-		},
-		UserList: []User{DemoUser},
-	})
+	toUserId, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
+
+	followerList, err := service.GetFollowList(c, toUserId, 2)
+
+	if err == nil {
+		c.JSON(http.StatusAccepted, UserListResponse{
+			Response: Response{
+				StatusCode: 0,
+				StatusMsg:  "查找成功",
+			},
+			UserList: followerList,
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, UserListResponse{
+			Response: Response{
+				StatusCode: 1,
+				StatusMsg:  "查找失败",
+			},
+			UserList: nil,
+		})
+	}
 }
