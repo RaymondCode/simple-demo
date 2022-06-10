@@ -13,6 +13,7 @@ func AddComment(text string, users dto.User, videoId int64) *dto.ResponeComment 
 		VideoId: videoId,
 		UserId:  users.Id,
 		Content: text,
+		Status:  1,
 	}
 	//comment commit
 	model.CreateComment(context.Background(), newComment)
