@@ -19,13 +19,6 @@ type Comment struct {
 	// UpdatedAt time.Time
 }
 
-type ResponeComment struct {
-	ID        int64     `json:"id,omitempty"`
-	User      dto.User  `json:"user,omitempty"`
-	Content   string    `json:"content,omitempty"`
-	CreatedAt time.Time `json:"create_date,omitempty"`
-}
-
 // CreateComment Comment info
 func CreateComment(ctx context.Context, comment *Comment) error {
 	if err := DB.Table("comment").WithContext(ctx).Create(comment).Error; err != nil {
@@ -35,11 +28,11 @@ func CreateComment(ctx context.Context, comment *Comment) error {
 }
 
 // QueryComment query list of Comment info
-func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*ResponeComment, int64, error) {
+func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto.ResponeComment, int64, error) {
 	var total int64
 	var res []*Comment
 	var conn *gorm.DB
-	var responeComment []*ResponeComment
+	var responeComment []*dto.ResponeComment
 	i := 0
 	conn = DB.Table("comment").WithContext(ctx).Model(&Comment{}).Where("video_id = ? ", videoId)
 	if err := conn.Count(&total).Error; err != nil {
@@ -48,7 +41,7 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*Res
 	if err := conn.Limit(limit).Offset(offset).Find(&res).Error; err != nil {
 		return responeComment, total, err
 	}
-	responeComment = make([]*ResponeComment, len(res))
+	responeComment = make([]*dto.ResponeComment, len(res))
 	for _, v := range res {
 		userInfo, _ := QueryUserById(context.Background(), v.UserId)
 		fmt.Println("user:", userInfo.Name)
@@ -59,7 +52,7 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*Res
 			FollowerCount: userInfo.FollowerCount,
 			IsFollow:      false,
 		}
-		responeComment[i] = &ResponeComment{
+		responeComment[i] = &dto.ResponeComment{
 			ID:        v.ID,
 			User:      users,
 			Content:   v.Content,

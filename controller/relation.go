@@ -1,17 +1,13 @@
 package controller
 
 import (
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"net/http"
 	"strconv"
 
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
 )
-
-type UserListResponse struct {
-	Response
-	UserList []service.Follower `json:"user_list"`
-}
 
 // RelationAction no practical effect, just check if token is valid
 func RelationAction(c *gin.Context) {
@@ -25,12 +21,12 @@ func RelationAction(c *gin.Context) {
 	err := service.FollowAction(c, user_id, to_user_id, int(action_type))
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, Response{
+		c.JSON(http.StatusBadRequest, dto.Response{
 			StatusCode: 1,
 			StatusMsg:  err.Error(),
 		})
 	} else {
-		c.JSON(http.StatusAccepted, Response{
+		c.JSON(http.StatusAccepted, dto.Response{
 			StatusCode: 1,
 			StatusMsg:  "操作成功",
 		})
@@ -44,16 +40,16 @@ func FollowList(c *gin.Context) {
 	followList, err := service.GetFollowList(c, userId, 1)
 
 	if err == nil {
-		c.JSON(http.StatusAccepted, UserListResponse{
-			Response: Response{
+		c.JSON(http.StatusAccepted, dto.UserListResponse{
+			Response: dto.Response{
 				StatusCode: 0,
 				StatusMsg:  "查找成功",
 			},
 			UserList: followList,
 		})
 	} else {
-		c.JSON(http.StatusBadRequest, UserListResponse{
-			Response: Response{
+		c.JSON(http.StatusBadRequest, dto.UserListResponse{
+			Response: dto.Response{
 				StatusCode: 1,
 				StatusMsg:  "查找失败",
 			},
@@ -69,16 +65,16 @@ func FollowerList(c *gin.Context) {
 	followerList, err := service.GetFollowList(c, toUserId, 2)
 
 	if err == nil {
-		c.JSON(http.StatusAccepted, UserListResponse{
-			Response: Response{
+		c.JSON(http.StatusAccepted, dto.UserListResponse{
+			Response: dto.Response{
 				StatusCode: 0,
 				StatusMsg:  "查找成功",
 			},
 			UserList: followerList,
 		})
 	} else {
-		c.JSON(http.StatusBadRequest, UserListResponse{
-			Response: Response{
+		c.JSON(http.StatusBadRequest, dto.UserListResponse{
+			Response: dto.Response{
 				StatusCode: 1,
 				StatusMsg:  "查找失败",
 			},

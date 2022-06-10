@@ -13,16 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CommentListResponse struct {
-	Response
-	CommentList []*model.ResponeComment `json:"comment_list,omitempty"`
-}
-
-type CommentActionResponse struct {
-	Response
-	Comment *model.ResponeComment `json:"comment,omitempty"`
-}
-
 // CommentAction no practical effect, just check if token is valid
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
@@ -44,8 +34,8 @@ func CommentAction(c *gin.Context) {
 			//comment addcomment
 			responseComment := service.AddComment(text, users, videoId)
 			c.JSON(http.StatusOK,
-				CommentActionResponse{
-					Response: Response{StatusCode: 0},
+				dto.CommentActionResponse{
+					Response: dto.Response{StatusCode: 0},
 					Comment:  responseComment,
 				})
 		} else {
@@ -63,8 +53,8 @@ func CommentAction(c *gin.Context) {
 func CommentList(c *gin.Context) {
 	videoId, _ := strconv.ParseInt(c.Query("video_id"), 10, 64)
 	res, total, _ := model.QueryComment(context.Background(), videoId, 10, 0)
-	c.JSON(http.StatusOK, CommentListResponse{
-		Response:    Response{StatusCode: 0, StatusMsg: ""},
+	c.JSON(http.StatusOK, dto.CommentListResponse{
+		Response:    dto.Response{StatusCode: 0, StatusMsg: ""},
 		CommentList: res,
 	})
 	fmt.Println(total)

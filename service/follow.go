@@ -4,18 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 	"gorm.io/gorm"
 )
-
-type Follower struct {
-	Id            int64  `json:"id"`
-	Name          string `json:"name"`
-	FollowCount   int64  `json:"follow_count"`
-	FollowerCount int64  `json:"follower_count"`
-	IsFollow      bool   `json:"is_follow"`
-}
 
 func IsFollow(ctx context.Context, userID int64, followedUser int64) (bool, bool) {
 	var relation model.Follow
@@ -80,8 +73,8 @@ func FollowAction(ctx context.Context, user_id int64, to_user_id int64, action_t
 	return nil
 }
 
-func GetFollowList(ctx context.Context, userId int64, actionType uint) ([]Follower, error) {
-	var followList []Follower
+func GetFollowList(ctx context.Context, userId int64, actionType uint) ([]dto.User, error) {
+	var followList []dto.User
 
 	if actionType == 1 {
 		// 操作类型为获取关注列表

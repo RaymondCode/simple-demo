@@ -26,17 +26,6 @@ var usersLoginInfo = map[string]User{
 
 var userIdSequence = int64(1)
 
-type UserLoginResponse struct {
-	Response
-	UserId int64  `json:"user_id,omitempty"`
-	Token  string `json:"token"`
-}
-
-type UserResponse struct {
-	Response
-	User dto.User `json:"user"`
-}
-
 func Register(c *gin.Context) {
 
 	username := c.Query("username")
@@ -51,8 +40,8 @@ func Register(c *gin.Context) {
 	//judege user exit or not
 	if user.Name != "" {
 		log.Printf(user.Name, user.ID)
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
+		c.JSON(http.StatusOK, dto.UserLoginResponse{
+			Response: dto.Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
 	} else {
 		newUser := &model.User{
@@ -65,8 +54,8 @@ func Register(c *gin.Context) {
 		userInfo, _ := model.QueryUserByName(context.Background(), username)
 		//token
 		token, _ := util.GenerateToken(&util.UserClaims{ID: userInfo.ID, Name: username, PassWord: password})
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
+		c.JSON(http.StatusOK, dto.UserLoginResponse{
+			Response: dto.Response{StatusCode: 0},
 			UserId:   userInfo.ID,
 			Token:    token,
 		})
@@ -85,19 +74,19 @@ func Login(c *gin.Context) {
 	if user != nil {
 		//judge password
 		if service.ComparePasswords(user.Password, password) {
-			c.JSON(http.StatusOK, UserLoginResponse{
-				Response: Response{StatusCode: 0},
+			c.JSON(http.StatusOK, dto.UserLoginResponse{
+				Response: dto.Response{StatusCode: 0},
 				UserId:   user.ID,
 				Token:    token,
 			})
 		} else {
-			c.JSON(http.StatusOK, UserLoginResponse{
-				Response: Response{StatusCode: 1, StatusMsg: "password wrong"},
+			c.JSON(http.StatusOK, dto.UserLoginResponse{
+				Response: dto.Response{StatusCode: 1, StatusMsg: "password wrong"},
 			})
 		}
 	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+		c.JSON(http.StatusOK, dto.UserLoginResponse{
+			Response: dto.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	}
 }
@@ -115,8 +104,8 @@ func UserInfo(c *gin.Context) {
 		FollowerCount: userModel.FollowerCount,
 		IsFollow:      false,
 	}
-	c.JSON(http.StatusOK, UserResponse{
-		Response: Response{StatusCode: 0},
+	c.JSON(http.StatusOK, dto.UserResponse{
+		Response: dto.Response{StatusCode: 0},
 		User:     user,
 	})
 
