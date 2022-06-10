@@ -2,10 +2,34 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/warthecatalyst/douyin/api"
 	"github.com/warthecatalyst/douyin/controller"
 	"github.com/warthecatalyst/douyin/dao"
-	"github.com/warthecatalyst/douyin/global"
+	"github.com/warthecatalyst/douyin/service"
+	"github.com/warthecatalyst/douyin/tokenx"
+	"net/http"
 )
+
+func CheckLogin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.Query("token")
+		userId, username := tokenx.ParseToken(token)
+		if username == "" {
+			// TODO: 端上应该重定向到登录界面
+			c.AbortWithStatusJSON(http.StatusOK, api.Response{StatusCode: api.LogicErr, StatusMsg: "非法token"})
+			return
+		}
+		if user, err := service.NewUserServiceInstance().GetUserByUserId(userId); err != nil {
+			c.AbortWithStatusJSON(http.StatusOK, api.Response{StatusCode: api.LogicErr, StatusMsg: "内部错误"})
+			return
+		} else if user == nil {
+			c.AbortWithStatusJSON(http.StatusOK, api.Response{StatusCode: api.LogicErr, StatusMsg: "非法用户"})
+			return
+		}
+		c.Set("user_id", userId)
+		c.Next()
+	}
+}
 
 func initRouter(r *gin.Engine) {
 	// public directory is used to serve static resources
@@ -15,26 +39,27 @@ func initRouter(r *gin.Engine) {
 
 	// basic apis
 	apiRouter.GET("/feed/", controller.Feed)
-	apiRouter.GET("/user/", controller.UserInfo)
-	apiRouter.POST("/user/register/", global.CheckLogin(), controller.Register)
+	apiRouter.GET("/user/", CheckLogin(), controller.UserInfo)
+	apiRouter.POST("/user/register/", controller.Register)
 	apiRouter.POST("/user/login/", controller.Login)
-	apiRouter.POST("/publish/action/", controller.Publish)
-	apiRouter.GET("/publish/list/", global.CheckLogin(), controller.PublishList)
 
+	apiRouter.POST("/publish/action/", controller.Publish)
+	apiRouter.GET("/publish/list/", controller.PublishList)
 	// extra apis - I
-	apiRouter.POST("/favorite/action/", global.CheckLogin(), controller.FavoriteAction)
-	apiRouter.GET("/favorite/list/", global.CheckLogin(), controller.FavoriteList)
-	apiRouter.POST("/comment/action/", global.CheckLogin(), controller.CommentAction)
-	apiRouter.GET("/comment/list/", global.CheckLogin(), controller.CommentList)
+	apiRouter.POST("/favorite/action/", CheckLogin(), controller.FavoriteAction)
+	apiRouter.GET("/favorite/list/", CheckLogin(), controller.FavoriteList)
+	apiRouter.POST("/comment/action/", CheckLogin(), controller.CommentAction)
+	apiRouter.GET("/comment/list/", CheckLogin(), controller.CommentList)
 
 	// extra apis - II
-	apiRouter.POST("/relation/action/", global.CheckLogin(), controller.RelationAction)
-	apiRouter.GET("/relation/follow/list/", global.CheckLogin(), controller.FollowList)
-	apiRouter.GET("/relation/follower/list/", global.CheckLogin(), controller.FollowerList)
+	apiRouter.POST("/relation/action/", CheckLogin(), controller.RelationAction)
+	apiRouter.GET("/relation/follow/list/", CheckLogin(), controller.FollowList)
+	apiRouter.GET("/relation/follower/list/", CheckLogin(), controller.FollowerList)
 }
 
 func initAll() {
 	dao.InitDB()
+	//rdb.InitRdb()
 }
 
 func main() {

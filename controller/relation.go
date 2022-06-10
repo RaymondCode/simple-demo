@@ -23,7 +23,7 @@ func RelationAction(c *gin.Context) {
 	actTypInt, err := strconv.Atoi(actTyp)
 	if err != nil {
 		c.JSON(http.StatusOK, api.Response{
-			StatusCode: api.InnerErr,
+			StatusCode: api.InputFormatCheckErr,
 			StatusMsg:  fmt.Sprintf("strconv.Atoi error: %s", err)})
 		return
 	}
@@ -31,13 +31,13 @@ func RelationAction(c *gin.Context) {
 	toUserId, err := strconv.Atoi(toUserIdStr)
 	if err != nil {
 		c.JSON(http.StatusOK, api.Response{
-			StatusCode: api.InnerErr,
+			StatusCode: api.InputFormatCheckErr,
 			StatusMsg:  fmt.Sprintf("strconv.Atoi error: %s", err)})
 		return
 	}
 	if err := service.FollowAction(userId, int64(toUserId), actTypInt); err != nil {
 		c.JSON(http.StatusOK, api.Response{
-			StatusCode: api.InnerErr,
+			StatusCode: api.LogicErr,
 			StatusMsg:  fmt.Sprintf("service.FollowAction error: %s", err)})
 		return
 	}
@@ -55,7 +55,7 @@ func FollowList(c *gin.Context) {
 	users, err := service.GetFollowList(userId)
 	if err != nil {
 		c.JSON(http.StatusOK, api.Response{
-			StatusCode: api.InnerErr,
+			StatusCode: api.LogicErr,
 			StatusMsg:  fmt.Sprintf("service.GetFollowList error: %s", err)})
 		return
 	}
@@ -75,7 +75,7 @@ func FollowerList(c *gin.Context) {
 	users, err := service.GetFollowerList(userId)
 	if err != nil {
 		c.JSON(http.StatusOK, api.Response{
-			StatusCode: api.RecordNotExistErr,
+			StatusCode: api.LogicErr,
 			StatusMsg:  fmt.Sprintf("service.GetFollowerList error: %s", err)})
 		return
 	}

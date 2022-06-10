@@ -1,4 +1,4 @@
-package global
+package logx
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var DyLogger = NewLogger(os.Stdout, "[douyin]", log.Lshortfile|log.Llongfile)
+var DyLogger = NewLogger(os.Stdout, "[douyin]", log.Llongfile)
 
 type Level int8
 
@@ -49,10 +49,6 @@ type Logger struct {
 	ctx       context.Context
 	fields    Fields
 	callers   []string
-}
-
-func (l *Logger) Print(v ...interface{}) {
-	l.Info(v)
 }
 
 func NewLogger(w io.Writer, prefix string, flag int) *Logger {
@@ -190,5 +186,7 @@ func (l *Logger) Panic(v ...interface{}) {
 }
 
 func (l *Logger) Panicf(format string, v ...interface{}) {
-	l.Output(LevelPanic, fmt.Sprintf(format, v...))
+	s := fmt.Sprintf(format, v...)
+	l.Output(LevelPanic, s)
+	panic(s)
 }

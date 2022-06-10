@@ -1,0 +1,5 @@
+INSERT INTO `t_douyin_users` (`id`, `create_at`, `update_at`, `user_id`, `user_name`, `pass_word`, `follow_count`, `follower_count`) VALUES (1, '2002-10-16 04:13:34', '2006-01-19 12:10:19', 569, 'Diana Watson', 'moOtFZphRr', 0, 0);
+INSERT INTO `t_douyin_users` (`id`, `create_at`, `update_at`, `user_id`, `user_name`, `pass_word`, `follow_count`, `follower_count`) VALUES (2, '2011-10-01 00:47:40', '2008-11-18 01:09:59', 616, 'Fung Ka Man', 'LcwYC1obsp', 0, 0);
+INSERT INTO `t_douyin_users` (`id`, `create_at`, `update_at`, `user_id`, `user_name`, `pass_word`, `follow_count`, `follower_count`) VALUES (3, '2016-02-20 15:26:02', '2018-11-12 01:27:49', 178, 'Zhang Zhennan', 'MgYspFhfaJ', 0, 0);
+INSERT INTO `t_douyin_users` (`id`, `create_at`, `update_at`, `user_id`, `user_name`, `pass_word`, `follow_count`, `follower_count`) VALUES (4, '2003-09-15 04:46:03', '2016-09-10 21:23:03', 304, 'Ono Hazuki', 'VSxG4c2Vhm', 0, 0);
+INSERT INTO `t_douyin_users` (`id`, `create_at`, `update_at`, `user_id`, `user_name`, `pass_word`, `follow_count`, `follower_count`) VALUES (5, '2012-02-19 12:13:32', '2000-03-02 15:12:05', 454, 'Sugawara Riku', 'L1saMVu6Ui', 0, 0);

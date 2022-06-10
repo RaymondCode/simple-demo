@@ -5,9 +5,14 @@ import (
 	"time"
 )
 
+type Response struct {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg,omitempty"`
+}
+
 // Model 数据库关系实体的基类
 type Model struct {
-	ID       uint64    `gorm:"comment:自增主键"`
+	ID       uint64    `gorm:"common:自增主键"`
 	CreateAt time.Time `gorm:"type:timestamp;not null;default:current_timestamp()"`
 	UpdateAt time.Time `gorm:"type:timestamp;not null;default:current_timestamp()"`
 }
@@ -39,20 +44,20 @@ type User struct {
 type Comment struct {
 	Model
 	UserID  int64  `gorm:"type:BIGINT;not null;index:idx_user_id;评论用户ID" json:"user_id"`
-	VideoID int64  `gorm:"type:BIGINT;not null;index:idx_video_id;comment:被评论视频ID" json:"video_id" validate:""`
-	Content string `gorm:"type:varchar(300);not null;comment:评论内容" json:"content"`
+	VideoID int64  `gorm:"type:BIGINT;not null;index:idx_video_id;common:被评论视频ID" json:"video_id" validate:""`
+	Content string `gorm:"type:varchar(300);not null;common:评论内容" json:"content"`
 }
 
 // Favourite 点赞：数据库实体
 type Favourite struct {
 	Model
-	UserID  int64 `gorm:"type:BIGINT;not nul;index:idx_user_id;comment:点赞用户ID" json:"user_id"`
-	VideoID int64 `gorm:"type:BIGINT;not null;index:idx_video_id;comment:被点赞视频ID" json:"video_id" `
+	UserID  int64 `gorm:"type:BIGINT;not nul;index:idx_user_id;common:点赞用户ID" json:"user_id"`
+	VideoID int64 `gorm:"type:BIGINT;not null;index:idx_video_id;common:被点赞视频ID" json:"video_id" `
 }
 
 // Follow 关注：数据库实体
 type Follow struct {
 	Model
-	FromUserID int64 `gorm:"type:BIGINT;not null;index:idx_user_id;comment:粉丝用户ID" json:"from_user_id" validate:""`
-	ToUserID   int64 `gorm:"type:BIGINT;not null;index:idx_to_user_id;comment:被关注用户ID" json:"to_user_id" validate:""`
+	FromUserID int64 `gorm:"type:BIGINT;not null;index:idx_user_id;common:粉丝用户ID" json:"from_user_id" validate:""`
+	ToUserID   int64 `gorm:"type:BIGINT;not null;index:idx_to_user_id;common:被关注用户ID" json:"to_user_id" validate:""`
 }

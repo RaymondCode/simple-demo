@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/warthecatalyst/douyin/api"
 	"github.com/warthecatalyst/douyin/dao"
+	"github.com/warthecatalyst/douyin/model"
 )
 
 func FollowAction(userId, toUserId int64, actTyp int) error {
@@ -34,6 +35,17 @@ func (f *FollowActionFlow) Do() error {
 func (f *FollowActionFlow) checkParam() error {
 	if f.ActionType != api.FollowAction && f.ActionType != api.UnfollowAction {
 		return errors.New("未知关注相关操作类型！")
+	}
+	var follows []model.Follow
+	follows, err := dao.NewFollowDaoInstance().FindFollow(f.FromUserId, f.ToUserId)
+	if err != nil {
+		return err
+	}
+	if f.ActionType == api.FollowAction && len(follows) > 0 {
+		return errors.New("当前已存在关注关系！")
+	}
+	if f.ActionType == api.UnfollowAction && len(follows) == 0 {
+		return errors.New("当前无关注关系！")
 	}
 
 	return nil

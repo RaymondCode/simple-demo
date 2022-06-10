@@ -1,24 +1,25 @@
 package config
 
 import (
-	"fmt"
 	"gopkg.in/ini.v1"
+	"gorm.io/gorm"
 	"log"
 	"strconv"
 )
 
 // 解析配置文件
 var (
-	AppMode         string // 服务器启动模式默认 debug 模式
-	Port            string //服务启动端口
-	Dbtype          string //数据库类型
-	DbHost          string //数据库服务器主机
-	DbPort          string //数据服务器端口
-	DbUser          string //数据库用户
-	DbPassWord      string //数据库密码
-	BcryptCost      int    //bcrypt 生成密码时的cost
-	TokenEncryptKey string //token加密时需要的密钥
-	DbName          string //数据库名
+	AppMode    string // 服务器启动模式默认 debug 模式
+	Port       string //服务启动端口
+	Dbtype     string //数据库类型
+	DbHost     string //数据库服务器主机
+	DbPort     string //数据服务器端口
+	DbUser     string //数据库用户
+	DbPassWord string //数据库密码
+	BcryptCost int    //bcrypt 生成密码时的cost
+	DbName     string //数据库名
+
+	//HostIp string
 )
 
 func init() {
@@ -33,8 +34,6 @@ func init() {
 	if err != nil {
 		log.Fatal("BcryptCost 加载失败")
 	}
-	TokenEncryptKey = f.Section("password").Key("tokenEncryptKey").Value()
-	fmt.Println(TokenEncryptKey)
 }
 
 // loadServer 加载服务器配置
@@ -42,7 +41,6 @@ func loadServer(file *ini.File) {
 	s := file.Section("server")
 	AppMode = s.Key("AppMode").MustString("debug")
 	Port = s.Key("Port").MustString("8080")
-
 }
 
 // loadDb 加载数据库相关配置
@@ -54,4 +52,10 @@ func loadDb(file *ini.File) {
 	DbHost = s.Key("DbHost").MustString("DbHost")
 	DbUser = s.Key("DbUser").MustString("root")
 	DbPassWord = s.Key("DbPassWord").MustString("123456")
+}
+
+var Db *gorm.DB
+
+func GetDB() *gorm.DB {
+	return Db
 }
