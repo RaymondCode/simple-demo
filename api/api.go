@@ -1,5 +1,9 @@
 package api
 
+import (
+	"github.com/warthecatalyst/douyin/model"
+)
+
 type Response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,omitempty"`
@@ -38,3 +42,20 @@ const (
 	CommentAction    = 1
 	UnCommentAction  = 2
 )
+
+// Feed Feed流返回的结果
+type Feed struct {
+	Response
+	NextTime   int64              `json:"next_time"`
+	VideoLists []model.VideoQuery `json:"video_list"`
+}
+
+var OK = Response{
+	StatusCode: 0,
+	StatusMsg:  "success",
+}
+
+type UserInfo struct {
+	Response
+	User model.UserQuery
+}

@@ -2,16 +2,22 @@ package api
 
 //不同的error对应的errorCode，以及对应的message(可选)
 const (
-	InnerErr            = 10001
-	TokenInvalidErr     = 10002
-	UserNotExistErr     = 10003
-	UserIdNotMatchErr   = 10004
-	UnKnownActionType   = 10005
-	RecordNotExistErr   = 10006
-	UploadFailErr       = 10007
-	InputFormatCheckErr = 10008
-	LogicErr            = 10009
-	InputVideoCheckErr  = 10010
+	//视频保存、上传、截取等错误
+	UploadFailErr      = 10001
+	SavingFailErr      = 10002
+	InputVideoCheckErr = 10003
+
+	//数据库和用户错误
+	InnerErr          = 10101
+	TokenInvalidErr   = 10102
+	UserNotExistErr   = 10103
+	UserIdNotMatchErr = 10104
+	UnKnownActionType = 10105
+	RecordNotExistErr = 10106
+
+	//输入逻辑错误
+	InputFormatCheckErr = 10208
+	LogicErr            = 10209
 )
 
 var ErrorCodeToMsg = map[int]string{

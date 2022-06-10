@@ -1,17 +1,17 @@
 [server]
-AppMode =
-Port =
+AppMode = debug
+Port = :8080
 
 
 [database]
-Dbtype =
-DbHost =
-DbPort =
-DbUser =
-DbPassWord =
-DbName =
+Dbtype = mysql
+DbHost = 127.0.0.1
+DbPort = 3306
+DbUser = root
+DbPassWord = 123456
+DbName = douyin
 
 
 [password]
-bcryptCost =
+bcryptCost = 10
 tokenEncryptKey =
