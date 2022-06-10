@@ -7,7 +7,7 @@ import (
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 )
 
-func AddComment(text string, users dto.User, videoId int64) *model.ResponeComment {
+func AddComment(text string, users dto.User, videoId int64) *dto.ResponeComment {
 
 	newComment := &model.Comment{
 		VideoId: videoId,
@@ -16,7 +16,7 @@ func AddComment(text string, users dto.User, videoId int64) *model.ResponeCommen
 	}
 	//comment commit
 	model.CreateComment(context.Background(), newComment)
-	responseComment := &model.ResponeComment{
+	responseComment := &dto.ResponeComment{
 		ID:        newComment.ID,
 		User:      users,
 		Content:   text,
