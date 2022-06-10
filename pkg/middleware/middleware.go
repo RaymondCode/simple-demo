@@ -2,10 +2,11 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/BaiZe1998/douyin-simple-demo/pkg/util"
-	"github.com/gin-gonic/gin"
 	"net/url"
 	"strings"
+
+	"github.com/BaiZe1998/douyin-simple-demo/pkg/util"
+	"github.com/gin-gonic/gin"
 )
 
 func whiteList() map[string]string {
@@ -55,6 +56,7 @@ func Authorize() gin.HandlerFunc {
 				return
 			}
 			c.Set("token", userClaims)
+			c.Set("user_id", userClaims.ID)
 		}
 		c.Next()
 	}
