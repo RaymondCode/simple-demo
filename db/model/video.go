@@ -17,7 +17,7 @@ type Video struct {
 
 // CreateVideo create video info
 func CreateVideo(ctx context.Context, video *Video) error {
-	if err := DB.Table("follow").WithContext(ctx).Create(video).Error; err != nil {
+	if err := DB.Table("video").WithContext(ctx).Create(video).Error; err != nil {
 		return err
 	}
 	return nil
