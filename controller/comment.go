@@ -28,7 +28,7 @@ func CommentAction(c *gin.Context) {
 		IsFollow:      false,
 	}
 
-	if userModel.ID <= 0 {
+	if userModel.ID > 0 {
 		if actionType == "1" {
 			text := c.Query("comment_text")
 			//comment addcomment

@@ -16,7 +16,7 @@ type Comment struct {
 	Content   string
 	Status    int
 	CreatedAt time.Time
-	// UpdatedAt time.Time
+	UpdatedAt time.Time
 }
 
 // CreateComment Comment info
