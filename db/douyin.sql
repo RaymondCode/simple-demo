@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL COMMENT '用户id',
-  `video_id` datetime DEFAULT NULL COMMENT '视频id',
+  `video_id` int DEFAULT NULL COMMENT '视频id',
   `status` tinyint DEFAULT NULL COMMENT '评论状态',
   `content` text CHARACTER SET utf8mb3 COLLATE utf8_general_ci COMMENT '内容',
   `created_at` datetime DEFAULT NULL COMMENT '创建时间',

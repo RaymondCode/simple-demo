@@ -10,13 +10,13 @@ import (
 )
 
 type Comment struct {
-	ID      int64 `gorm:"primarykey"`
-	UserId  int64
-	VideoId int64
-	Content string
-	// Status    int
+	ID        int64 `gorm:"primarykey"`
+	UserId    int64
+	VideoId   int64
+	Content   string
+	Status    int
 	CreatedAt time.Time
-	// UpdatedAt time.Time
+	UpdatedAt time.Time
 }
 
 // CreateComment Comment info
@@ -34,7 +34,7 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto
 	var conn *gorm.DB
 	var responeComment []*dto.ResponeComment
 	i := 0
-	conn = DB.Table("comment").WithContext(ctx).Model(&Comment{}).Where("video_id = ? ", videoId)
+	conn = DB.Table("comment").WithContext(ctx).Model(&Comment{}).Where("video_id = ? and status = 1 ", videoId)
 	if err := conn.Count(&total).Error; err != nil {
 		return responeComment, total, err
 	}
@@ -65,5 +65,5 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto
 
 // DeleteComment delete comment info
 func DeleteCommnet(ctx context.Context, commentId int64) error {
-	return DB.Table("comment").WithContext(ctx).Where("id = ?  ", commentId).Delete(&Comment{}).Error
+	return DB.Table("comment").WithContext(ctx).Where("id = ?  ", commentId).Update("status", 2).Error
 }
