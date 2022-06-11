@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 )
@@ -28,6 +29,7 @@ func QueryFeedResponse(useId int64) []dto.Video {
 		} else {
 			isFollow = false
 		}
+		fmt.Println(isFollow, isFavorite)
 		videoList[index] = dto.Video{
 			Id: value.ID,
 			Author: dto.User{

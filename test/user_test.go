@@ -31,7 +31,7 @@ func TestUser(t *testing.T) {
 	//	PassWord: "12345678",
 	//}
 	//model.CreateUser(context.Background(), userModel)
-	res, m := model.QueryUserByName(context.Background(), "nyf")
+	res, m := model.QueryUserByName(context.Background(), "nyf12")
 	fmt.Println(res)
 	fmt.Println(m)
 }

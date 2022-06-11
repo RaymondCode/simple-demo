@@ -58,7 +58,7 @@ func InitConfig() error {
 	base := util.GetCurrentAbPath()
 	base = strings.Replace(base, "/dto", "", 1)
 
-	file, err := ioutil.ReadFile(base + "/config/config.yml")
+	file, err := ioutil.ReadFile("config/config.yml")
 
 	if err != nil {
 		return err
