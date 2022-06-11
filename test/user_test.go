@@ -3,12 +3,15 @@ package service
 import (
 	"context"
 	"fmt"
+	"testing"
+
 	"github.com/BaiZe1998/douyin-simple-demo/db"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
-	"testing"
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 )
 
 func TestUser(t *testing.T) {
+	dto.InitConfig()
 	db.Init()
 	//followModel := &model.User{
 	//	ID:       "223",
