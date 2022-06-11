@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"gorm.io/driver/mysql"
@@ -19,8 +19,8 @@ type User struct {
 	CreatedAt ModeTime `gorm:"column:created_at"`
 	UpdatedAt ModeTime `gorm:"column:updated_at"`
 }
-
-func testUserCreate(){
+// 建表
+func TestUserCreate(){
 	db, _ := gorm.Open(mysql.New(mysql.Config{
 		DSN: "root:123456@tcp(127.0.0.1:3306)/simple_demo?charset=utf8mb4&parseTime=True&loc=Local",
 	}), &gorm.Config{
