@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"fmt"
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
