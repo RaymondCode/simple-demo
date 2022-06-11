@@ -3,6 +3,9 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"simple-demo/helper"
+	"simple-demo/model"
+	"simple-demo/service"
 	"sync/atomic"
 )
 
@@ -23,8 +26,9 @@ var userIdSequence = int64(1)
 
 type UserLoginResponse struct {
 	Response
-	UserId int64  `json:"user_id,omitempty"`
-	Token  string `json:"token"`
+	UserId   int64  `json:"user_id,omitempty"`
+	Token    string `json:"token"`
+	Username string `json:"username"`
 }
 
 type UserResponse struct {
@@ -35,6 +39,9 @@ type UserResponse struct {
 func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
+
+	//userInfo := model.User{UserName: username, Password: password}
+	//service.CreateUser(&userInfo)
 
 	token := username + password
 
@@ -58,16 +65,41 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
+	//username := c.Query("username")
+	//password := c.Query("password")
+	//
+	////userInfo := model.User{UserName: username, Password: password}
+	////userid, err := service.UserLogin(userInfo)
+	//
+	//token := username + password
+	//
+	//if user, exist := usersLoginInfo[token]; exist {
+	//	c.JSON(http.StatusOK, UserLoginResponse{
+	//		Response: Response{StatusCode: 0},
+	//		UserId:   user.Id,
+	//		Token:    token,
+	//	})
+	//} else {
+	//	c.JSON(http.StatusOK, UserLoginResponse{
+	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	//	})
+	//}
+
 	username := c.Query("username")
 	password := c.Query("password")
 
-	token := username + password
+	userInfo := model.User{UserName: username, Password: password}
+	userid, err := service.UserLogin(userInfo)
 
-	if user, exist := usersLoginInfo[token]; exist {
+	password = helper.GetMd5(password)
+	token, _ := helper.GenerateToken(userInfo.UserName, userInfo.Password)
+
+	if err == nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
+			Response: Response{StatusCode: 0, StatusMsg: "User exist"},
+			UserId:   userid,
 			Token:    token,
+			Username: username,
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
