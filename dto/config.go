@@ -53,7 +53,7 @@ func GetConfig() *Config {
 func InitConfig() error {
 	var config Config
 
-	file, err := ioutil.ReadFile("config/config.yml")
+	file, err := ioutil.ReadFile("../config/config.yml")
 
 	if err != nil {
 		return err

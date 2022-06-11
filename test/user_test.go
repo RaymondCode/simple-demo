@@ -7,9 +7,11 @@ import (
 
 	"github.com/BaiZe1998/douyin-simple-demo/db"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 )
 
 func TestUser(t *testing.T) {
+	dto.InitConfig()
 	db.Init()
 	//followModel := &model.User{
 	//	ID:       "223",
