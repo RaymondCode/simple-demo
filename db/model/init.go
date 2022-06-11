@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -14,19 +12,15 @@ var DB *gorm.DB
 func Init() {
 	var err error
 
-	cfg := dto.GetConfig()
-
-	fmt.Println(cfg)
-
-	if cfg.Env.IsDebug {
+	if dto.Conf.Env.IsDebug {
 		// 开发环境
 		DB, err = gorm.Open(
 			mysql.Open(
-				cfg.MySQL.Local.Username+":"+
-					cfg.MySQL.Local.Password+"@tcp("+
-					cfg.MySQL.Local.Host+":"+
-					cfg.MySQL.Local.Port+")/"+
-					cfg.MySQL.Local.Database+"?charset=utf8&parseTime=True&loc=Local"),
+				dto.Conf.MySQL.Local.Username+":"+
+					dto.Conf.MySQL.Local.Password+"@tcp("+
+					dto.Conf.MySQL.Local.Host+":"+
+					dto.Conf.MySQL.Local.Port+")/"+
+					dto.Conf.MySQL.Local.Database+"?charset=utf8&parseTime=True&loc=Local"),
 			&gorm.Config{
 				PrepareStmt:            true,
 				SkipDefaultTransaction: true,
@@ -36,11 +30,11 @@ func Init() {
 		// 生产环境
 		DB, err = gorm.Open(
 			mysql.Open(
-				cfg.MySQL.Default.Username+":"+
-					cfg.MySQL.Default.Password+"@tcp("+
-					cfg.MySQL.Default.Host+":"+
-					cfg.MySQL.Default.Port+")/"+
-					cfg.MySQL.Default.Database+"?charset=utf8&parseTime=True&loc=Local"),
+				dto.Conf.MySQL.Default.Username+":"+
+					dto.Conf.MySQL.Default.Password+"@tcp("+
+					dto.Conf.MySQL.Default.Host+":"+
+					dto.Conf.MySQL.Default.Port+")/"+
+					dto.Conf.MySQL.Default.Database+"?charset=utf8&parseTime=True&loc=Local"),
 			&gorm.Config{
 				PrepareStmt:            true,
 				SkipDefaultTransaction: true,

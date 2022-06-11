@@ -11,22 +11,20 @@ import (
 var RedisCaches map[string]*redis.Client
 
 func InitRedisPools() error {
-	cfg := dto.GetConfig()
-
 	var RedisDSN string
 	var RedisPWD string
-	if cfg.Env.IsDebug {
+	if dto.Conf.Env.IsDebug {
 		// 开发环境
-		RedisDSN = cfg.Redis.Local.Host + ":" + cfg.Redis.Local.Port
-		RedisPWD = cfg.Redis.Local.Password
+		RedisDSN = dto.Conf.Redis.Local.Host + ":" + dto.Conf.Redis.Local.Port
+		RedisPWD = dto.Conf.Redis.Local.Password
 	} else {
 		// 生产环境
-		RedisDSN = cfg.Redis.Default.Host + ":" + cfg.Redis.Default.Port
-		RedisPWD = cfg.Redis.Default.Password
+		RedisDSN = dto.Conf.Redis.Default.Host + ":" + dto.Conf.Redis.Default.Port
+		RedisPWD = dto.Conf.Redis.Default.Password
 	}
 
 	RedisCaches := make(map[string]*redis.Client)
-	for k, v := range cfg.Redis.Databases {
+	for k, v := range dto.Conf.Redis.Databases {
 		RedisCaches[k] = redis.NewClient(&redis.Options{
 			Addr:     RedisDSN,
 			Password: RedisPWD,

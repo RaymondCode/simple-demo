@@ -44,10 +44,10 @@ type Config struct {
 	} `yaml:"redis"`
 }
 
-var cfg *Config
+var Conf *Config
 
 func GetConfig() *Config {
-	return cfg
+	return Conf
 }
 
 func InitConfig() error {
@@ -63,6 +63,6 @@ func InitConfig() error {
 		return err
 	}
 
-	cfg = &config
+	Conf = &config
 	return nil
 }

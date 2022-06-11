@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 	"fmt"
+	"testing"
+
 	"github.com/BaiZe1998/douyin-simple-demo/db"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
-	"testing"
 )
 
 func TestUser(t *testing.T) {
