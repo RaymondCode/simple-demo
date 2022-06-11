@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"fmt"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,7 @@ import (
 
 type VideoListResponse struct {
 	Response
-	VideoList []Video `json:"video_list"`
+	VideoList []dto.Video `json:"video_list"`
 }
 
 // Publish check token then save upload file to public directory

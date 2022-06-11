@@ -9,3 +9,10 @@ type Video struct {
 	CommentCount  int64  `json:"comment_count,omitempty"`
 	IsFavorite    bool   `json:"is_favorite,omitempty"`
 }
+
+type FeedResponse struct {
+	Response
+	VideoList    []Video `json:"video_list,omitempty"`
+	NextTime     int64   `json:"next_time,omitempty"`
+	CommentCount int64   `json:"comment_count,omitempty"`
+}
