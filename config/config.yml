@@ -1,0 +1,28 @@
+env:
+    debug: true
+server:
+    port: "8080"
+mysql:
+    local:
+        host: "127.0.0.1"
+        port: "3306"
+        database: "douyin"
+        username: "root"
+        password: "root"
+    default:
+        host: "xinzf0520.top"
+        port: "20607"
+        database: "douyin"
+        username: "dyweadmin"
+        password: "JXU2MTNGJXU5NzUyJXU5Rjk5JXU2MzA3JXU1RjE1JXU0RjYw"
+redis:
+    local:
+        host: "127.0.0.1"
+        port: "6379"
+        password: ""
+    default:
+        host: "xinzf0520.top"
+        port: "20606"
+        password: ""
+    databases:
+        default: 0
