@@ -36,6 +36,9 @@ func Register(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
+	//userInfo := model.User{UserName: username, Password: password}
+	//service.CreateUser(&userInfo)
+
 	token := username + password
 
 	if _, exist := usersLoginInfo[token]; exist {
@@ -60,6 +63,9 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
+
+	//userInfo := model.User{UserName: username, Password: password}
+	//service.UserLogin(userInfo)
 
 	token := username + password
 
