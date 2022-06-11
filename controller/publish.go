@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -13,7 +14,13 @@ type VideoListResponse struct {
 
 // Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
-	//token := c.PostForm("token")
+	token := c.PostForm("token")
+	c.JSON(http.StatusOK, Response{
+		StatusCode: 0,
+		StatusMsg:  "success",
+	})
+
+	log.Printf(token)
 	//
 	//if _, exist := usersLoginInfo[token]; !exist {
 	//	c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
