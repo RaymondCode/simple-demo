@@ -2,7 +2,7 @@ package controller
 
 import "github.com/BaiZe1998/douyin-simple-demo/dto"
 
-var DemoVideos = []Video{
+var DemoVideos = []dto.Video{
 	{
 		Id:            1,
 		Author:        DemoUser1,
