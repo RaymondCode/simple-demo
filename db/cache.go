@@ -4,18 +4,32 @@ import (
 	"context"
 	"time"
 
-	"github.com/BaiZe1998/douyin-simple-demo/pkg/constants"
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"github.com/go-redis/redis/v8"
 )
 
 var RedisCaches map[string]*redis.Client
 
 func InitRedisPools() error {
+	cfg := dto.GetConfig()
+
+	var RedisDSN string
+	var RedisPWD string
+	if cfg.Env.IsDebug {
+		// 开发环境
+		RedisDSN = cfg.Redis.Local.Host + ":" + cfg.Redis.Local.Port
+		RedisPWD = cfg.Redis.Local.Password
+	} else {
+		// 生产环境
+		RedisDSN = cfg.Redis.Default.Host + ":" + cfg.Redis.Default.Port
+		RedisPWD = cfg.Redis.Default.Password
+	}
+
 	RedisCaches := make(map[string]*redis.Client)
-	for k, v := range constants.RedisDBList {
+	for k, v := range cfg.Redis.Databases {
 		RedisCaches[k] = redis.NewClient(&redis.Options{
-			Addr:     constants.RedisDefaultDSN,
-			Password: constants.RedisDefaultPWD,
+			Addr:     RedisDSN,
+			Password: RedisPWD,
 			DB:       v,
 			PoolSize: 0,
 		})
