@@ -2,7 +2,6 @@ package dto
 
 import (
 	"io/ioutil"
-	"strings"
 
 	"github.com/BaiZe1998/douyin-simple-demo/pkg/util"
 	"gopkg.in/yaml.v2"
@@ -55,10 +54,8 @@ func GetConfig() *Config {
 func InitConfig() error {
 	var config Config
 
-	base := util.GetCurrentAbPath()
-	base = strings.Replace(base, "/dto", "", 1)
-
-	file, err := ioutil.ReadFile(base + "/config/config.yml")
+	configFilePath := util.GetConfigPath()
+	file, err := ioutil.ReadFile(configFilePath)
 
 	if err != nil {
 		return err
