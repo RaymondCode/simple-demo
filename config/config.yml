@@ -23,6 +23,6 @@ redis:
     default:
         host: "xinzf0520.top"
         port: "20606"
-        password: ""
+        password: "JXU2MTNGJXU5NzUyJXU5Rjk5JXU2MzA3JXU1RjE1JXU0RjYw"
     databases:
         default: 0
