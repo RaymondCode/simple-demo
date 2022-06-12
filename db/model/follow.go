@@ -58,3 +58,22 @@ func QueryFollow(ctx context.Context, userID int64, status, limit, offset int) (
 	}
 	return res, total, nil
 }
+
+//QueryIsFollow query is follow or not
+func QueryIsFollow(ctx context.Context, userID int64, followedUser int64) (Follow, error) {
+	var res Follow
+	tx := DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return Follow{}, err
+	}
+	if err := tx.Table("follow").WithContext(ctx).Where("user_id=?andfollowed_user=?", userID, followedUser).Find(&res).Error; err != nil {
+		tx.Rollback()
+		return res, err
+	}
+	return res, nil
+}

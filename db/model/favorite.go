@@ -62,3 +62,22 @@ func QueryFavorites(ctx context.Context, userID int64, limit, offset int) ([]Vid
 	}
 	return videoList, total, nil
 }
+
+//QueryIsFavoritequerytheuserisornotfavoritethevideo
+func QueryIsFavorite(ctx context.Context, userId int64, videoId int64) (Favorite, error) {
+	var res Favorite
+	tx := DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return Favorite{}, err
+	}
+	if err := DB.Table("favorite").WithContext(ctx).Where("user_id=? AND video_id=?", userId, videoId).Find(&res).Error; err != nil {
+		tx.Rollback()
+		return res, err
+	}
+	return res, nil
+}

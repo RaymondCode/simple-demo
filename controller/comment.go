@@ -41,7 +41,7 @@ func CommentAction(c *gin.Context) {
 		} else {
 			commentId, _ := strconv.ParseInt(c.Query("comment_id"), 10, 64)
 			//comment delete
-			model.DeleteCommnet(context.Background(), commentId)
+			model.DeleteCommnet(context.Background(), videoId, commentId)
 			c.JSON(http.StatusOK, Response{StatusCode: 0})
 		}
 	} else {
