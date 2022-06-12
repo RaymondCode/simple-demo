@@ -52,3 +52,11 @@ func UpdateVideoFavorite(ctx context.Context, videoID int64, action int) error {
 	}
 	return tx.Commit().Error
 }
+
+func QueryPublishList(ctx context.Context, userId string) (error, []Video) {
+	var videoList []Video
+	if err := DB.Table("video").WithContext(ctx).Where("author_id = " + userId).Order("video.created_at desc").Limit(10).Find(&videoList).Error; err != nil {
+		return err, videoList
+	}
+	return nil, videoList
+}
