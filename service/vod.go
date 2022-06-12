@@ -41,13 +41,14 @@ func UploadVideoAliyun(file *multipart.FileHeader, token string, title string, u
 	UploadLocalFile(ossClient, uploadAddressDTO, open)
 	//MultipartUploadFile(ossClient, uploadAddressDTO, localFile)
 	fmt.Println("Succeed, VideoId:", videoId)
-	//https://video.liufei.fun/sv/5e7aac4c-18156267da8/5e7aac4c-18156267da8.mp4
-	//https://oss-cn-shanghai.aliyuncs.com/sv/5e7aac4c-18156267da8/5e7aac4c-18156267da8.mp4
+	//https://video.liufei.fun/sv/2eaa675f-1815638c4ce/2eaa675f-1815638c4ce.mp4
+	//https://video.liufei.fun/553d29da2b3844c3bc930e5888f4c5d4/snapshots/216c32eac6064241ada9704637c88101-00002.jpg
 	var playurl = "https://video.liufei.fun" + "/" + uploadAddressDTO.FileName
+	cover := playurl + "?x-oss-process=video/snapshot,t_30000,f_jpg,w_0,h_0,m_fast,ar_auto"
 	video := &model.Video{
 		AuthorID:      userid,
 		PlayUrl:       playurl,
-		CoverUrl:      request.CoverURL,
+		CoverUrl:      cover,
 		FavoriteCount: 0,
 		CommentCount:  0,
 		CreatedAt:     time.Time{},
