@@ -43,6 +43,13 @@ type Config struct {
 		} `yaml:"default"`
 		Databases map[string]int `yaml:"databases"`
 	} `yaml:"redis"`
+	Log struct {
+		Level      string `yaml:"level"`
+		Filename   string `yaml:"filename"`
+		MaxSize    int    `yaml:"max_size"`
+		MaxAge     int    `yaml:"max_age"`
+		MaxBackups int    `yaml:"max_backups"`
+	} `yaml:"log"`
 }
 
 var Conf *Config

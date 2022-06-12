@@ -26,3 +26,9 @@ redis:
         password: "JXU2MTNGJXU5NzUyJXU5Rjk5JXU2MzA3JXU1RjE1JXU0RjYw"
     databases:
         default: 0
+log:
+    level: "debug"
+    filename: "./log/log.log"
+    max_size: 200
+    max_age: 7
+    max_backups: 10
