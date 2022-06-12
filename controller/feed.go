@@ -5,6 +5,7 @@ import (
 	"github.com/BaiZe1998/douyin-simple-demo/pkg/util"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -14,6 +15,7 @@ func Feed(c *gin.Context) {
 	token := c.Query("token")
 	userInfo, _ := util.ParseToken(token)
 	videoList, reTime := service.QueryFeedResponse(userInfo.ID, lastTime)
+	log.Println(reTime.Unix())
 	c.JSON(http.StatusOK, dto.FeedResponse{
 		Response: dto.Response{StatusCode: 0,
 			StatusMsg: "",
