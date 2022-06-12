@@ -9,15 +9,15 @@ type Comment struct {
 
 type CommentListResponse struct {
 	Response
-	CommentList []*ResponeComment `json:"comment_list,omitempty"`
+	CommentList []ResponseComment `json:"comment_list,omitempty"`
 }
 
 type CommentActionResponse struct {
 	Response
-	Comment *ResponeComment `json:"comment,omitempty"`
+	Comment ResponseComment `json:"comment,omitempty"`
 }
 
-type ResponeComment struct {
+type ResponseComment struct {
 	ID        int64  `json:"id,omitempty"`
 	User      User   `json:"user,omitempty"`
 	Content   string `json:"content,omitempty"`
