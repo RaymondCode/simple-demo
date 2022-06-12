@@ -3,10 +3,9 @@ package model
 import (
 	"context"
 	"fmt"
-	"time"
-
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Comment struct {
