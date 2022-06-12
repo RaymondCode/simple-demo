@@ -16,7 +16,12 @@ func main() {
 
 	cfg := dto.GetConfig()
 
+	if err := dto.InitLogger(); err != nil {
+		return
+	}
+
 	r := gin.Default()
+	r.Use(dto.GinLogger(), dto.GinRecovery(true))
 
 	initRouter(r)
 

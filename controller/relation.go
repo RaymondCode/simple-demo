@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"net/http"
 	"strconv"
+
+	"github.com/BaiZe1998/douyin-simple-demo/dto"
 
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
@@ -36,7 +37,6 @@ func RelationAction(c *gin.Context) {
 // FollowList all users have same follow list
 func FollowList(c *gin.Context) {
 	userId, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
-
 	followList, err := service.GetFollowList(c, userId, 1)
 
 	if err == nil {
