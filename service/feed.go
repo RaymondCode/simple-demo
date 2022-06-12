@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
+	"log"
+	"strconv"
 	"time"
 )
 
@@ -12,18 +14,19 @@ func QueryFeedResponse(useId int64, lastTime string) ([]dto.Video, time.Time) {
 	var isFavorite bool
 	var isFollow bool
 	//query video list for feed
-	//if lastTime == "0" {
-	//	now := time.Now()
-	//	lastTime = now.Format("2006-01-02 15:04:05")
-	//} else {
-	//	parseInt, err := strconv.ParseInt(lastTime, 10, 64)
-	//	if err != nil {
-	//		return nil, time.Time{}
-	//	}
-	//	lastTime = time.Unix(parseInt, 0).Format("2006-01-02 15:04:05")
-	//}
-	now := time.Now()
-	lastTime = now.Format("2006-01-02 15:04:05")
+	if lastTime == "0" {
+		now := time.Now()
+		lastTime = now.Format("2006-01-02 15:04:05")
+	} else {
+		parseInt, err := strconv.ParseInt(lastTime, 10, 64)
+		parseInt = parseInt / 1000
+		log.Println(parseInt)
+		if err != nil {
+			return nil, time.Time{}
+		}
+		lastTime = time.Unix(parseInt, 0).Format("2006-01-02 15:04:05")
+		log.Println(lastTime)
+	}
 	_, res := model.QueryVideoList(context.Background(), lastTime)
 	at := res[len(res)-1].CreatedAt
 	//constitute FeedResponse struct ([]dto.video)

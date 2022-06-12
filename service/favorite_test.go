@@ -22,7 +22,7 @@ func TestFavorite(t *testing.T) {
 	videoList := make([]dto.Video, 0)
 	videoList = append(videoList, dto.Video{Id: 1})
 	videoList = append(videoList, dto.Video{Id: 2})
-	db.CacheSetList(context.Background(), "default", "video_list", videoList, time.Hour)
+	db.CacheSetList(context.Background(), "default", "video_list", videoList, time.Minute*20)
 	value, _ := db.CacheGetList(context.Background(), "default", "video_list", []dto.Video{})
 	fmt.Println("------------", value)
 }
