@@ -2,6 +2,8 @@ package controller
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
@@ -36,8 +38,8 @@ func Publish(c *gin.Context) {
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
-	userId := c.Query("user_id")
-	videoList := service.QueryPublishList(userId)
+	userId, _ := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	videoList := service.QueryPublishList1(userId)
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: Response{
 			StatusCode: 0,
