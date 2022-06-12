@@ -62,41 +62,15 @@ func Register(c *gin.Context) {
 			Token:    username + password,
 		})
 	}
+
 }
 
 func Login(c *gin.Context) {
-	//username := c.Query("username")
-	//password := c.Query("password")
-	//
-	////userInfo := model.User{UserName: username, Password: password}
-	////userid, err := service.UserLogin(userInfo)
-	//
-	//token := username + password
-	//
-	//if user, exist := usersLoginInfo[token]; exist {
-	//	c.JSON(http.StatusOK, UserLoginResponse{
-	//		Response: Response{StatusCode: 0},
-	//		UserId:   user.Id,
-	//		Token:    token,
-	//	})
-	//} else {
-	//	c.JSON(http.StatusOK, UserLoginResponse{
-	//		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-	//	})
-	//}
-
 	username := c.Query("username")
 	password := c.Query("password")
 
-<<<<<<< HEAD
 	userInfo := model.User{UserName: username, Password: password}
 	userid, err := service.UserLogin(userInfo)
-=======
-	//userInfo := model.User{UserName: username, Password: password}
-	//service.UserLogin(userInfo)
-
-	token := username + password
->>>>>>> origin/edison-develop
 
 	password = helper.GetMd5(password)
 	token, _ := helper.GenerateToken(userInfo.UserName, userInfo.Password)
