@@ -83,7 +83,7 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto
 			ID:        v.ID,
 			User:      users,
 			Content:   v.Content,
-			CreatedAt: v.CreatedAt,
+			CreatedAt: v.CreatedAt.Format("2006-01-02"),
 		}
 	}
 	return responeComment, total, nil
