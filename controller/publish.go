@@ -5,7 +5,6 @@ import (
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
