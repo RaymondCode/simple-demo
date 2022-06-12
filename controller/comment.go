@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"sync"
 
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
@@ -32,7 +33,6 @@ func CommentAction(c *gin.Context) {
 			text := c.Query("comment_text")
 			//comment addcomment
 			responseComment := service.AddComment(text, users, videoId)
-			service.UpdatCacheCommentList(context.Background(), videoId, 10, 0)
 			c.JSON(http.StatusOK,
 				dto.CommentActionResponse{
 					Response: dto.Response{StatusCode: 0},
@@ -42,9 +42,15 @@ func CommentAction(c *gin.Context) {
 			commentId, _ := strconv.ParseInt(c.Query("comment_id"), 10, 64)
 			//comment delete
 			model.DeleteCommnet(context.Background(), videoId, commentId)
-			service.UpdatCacheCommentList(context.Background(), videoId, 10, 0)
+
 			c.JSON(http.StatusOK, Response{StatusCode: 0})
 		}
+		var wg sync.WaitGroup
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			service.UpdatCacheCommentList(context.Background(), videoId, 10, 0)
+		}()
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
@@ -53,7 +59,7 @@ func CommentAction(c *gin.Context) {
 // CommentList all videos have same demo comment list
 func CommentList(c *gin.Context) {
 	videoId, _ := strconv.ParseInt(c.Query("video_id"), 10, 64)
-	res, total, _ := service.GetCommentList(context.Background(), videoId, 10, 0)
+	res, total, _ := service.GetCacheCommentList(context.Background(), videoId, 10, 0)
 	c.JSON(http.StatusOK, dto.CommentListResponse{
 		Response:    dto.Response{StatusCode: 0, StatusMsg: ""},
 		CommentList: res,

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/BaiZe1998/douyin-simple-demo/db"
@@ -30,22 +31,33 @@ func AddComment(text string, users dto.User, videoId int64) dto.ResponseComment 
 }
 
 func UpdatCacheCommentList(ctx context.Context, videoId int64, limit, offset int) {
-	res, total, _ := GetCommentList(ctx, videoId, limit, offset)
-	fmt.Printf("更新数据", total)
-	videoList_id := string(videoId) + "_comment_list"
-	db.CacheSetList(context.Background(), "default", videoList_id, res, time.Hour)
+	res, total := GetCommentList(ctx, videoId, limit, offset)
+	fmt.Println("更新数据", total)
+	videoList_id := strconv.FormatInt(videoId, 10) + "_comment_list"
+	db.CacheSetList(context.Background(), "default", videoList_id, res, time.Minute)
 }
 
-func GetCommentList(ctx context.Context, videoId int64, limit, offset int) ([]dto.ResponseComment, int64, error) {
-	var responseComment []dto.ResponseComment
-	videoList_id := string(videoId) + "_comment_list"
-	if value, err := db.CacheGetList(context.Background(), "default", videoList_id, []dto.ResponseComment{}); err != nil {
-		fmt.Printf("获取缓存数据", value)
+func GetCacheCommentList(ctx context.Context, videoId int64, limit, offset int) ([]dto.ResponseComment, int64, error) {
+
+	videoList_id := strconv.FormatInt(videoId, 10) + "_comment_list"
+
+	if value, err := db.CacheGetList(context.Background(), "default", videoList_id, []dto.ResponseComment{}); len(value) > 0 {
+		fmt.Println("获取缓存数据", value)
 		return value, int64(len(value)), err
+	} else {
+		fmt.Println(videoList_id)
+		fmt.Println(len(value))
 	}
-	res, total, _ := model.QueryComment(context.Background(), videoId, 10, 0)
+	responseComment, total := GetCommentList(ctx, videoId, 10, 0)
+	err := db.CacheSetList(context.Background(), "default", videoList_id, responseComment, time.Minute)
+	return responseComment, total, err
+}
+
+func GetCommentList(ctx context.Context, videoId int64, limit, offset int) ([]dto.ResponseComment, int64) {
+	var responseComment []dto.ResponseComment
+	res, total, _ := model.QueryComment(context.Background(), videoId, limit, offset)
 	responseComment = make([]dto.ResponseComment, len(res))
-	fmt.Printf("评论总数", total)
+	fmt.Println("评论总数", total)
 	for index, v := range res {
 		userInfo, _ := model.QueryUserById(context.Background(), v.UserId)
 		fmt.Println("user:", userInfo.Name)
@@ -63,6 +75,5 @@ func GetCommentList(ctx context.Context, videoId int64, limit, offset int) ([]dt
 			CreatedAt: v.CreatedAt.Format("2006-01-02"),
 		}
 	}
-	err := db.CacheSetList(context.Background(), "default", videoList_id, responseComment, time.Hour)
-	return responseComment, total, err
+	return responseComment, total
 }
