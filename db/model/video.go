@@ -2,7 +2,6 @@ package model
 
 import (
 	"context"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -26,9 +25,9 @@ func CreateVideo(ctx context.Context, video *Video) error {
 }
 
 //QueryVideoListqueryvideolist
-func QueryVideoList(ctx context.Context) (error, []Video) {
+func QueryVideoList(ctx context.Context, nextTime string) (error, []Video) {
 	var videoList []Video
-	if err := DB.Table("video").Order("video.created_at desc").Limit(3).Find(&videoList).Error; err != nil {
+	if err := DB.Table("video").WithContext(ctx).Where("created_at BETWEEN(\"2022-06-01 21:42:52\") and (\"" + nextTime + "\")").Order("video.created_at desc").Limit(50).Find(&videoList).Error; err != nil {
 		return err, videoList
 	}
 	return nil, videoList
