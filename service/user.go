@@ -24,9 +24,9 @@ func UserLogin(userInfo *model.User) (int64, error) {
 }
 
 //GetUserByID 需要通过用户ID查询用户信息
-func GetUserByID(ctx context.Context, userID int64) (*model.User, error) {
-	user := model.User{UserID: uint(userID)}
-	if err := model.DB.WithContext(ctx).First(&user).Error; err != nil {
+func GetUserByID(userID uint) (*model.User, error) {
+	user := model.User{UserID: userID}
+	if err := model.DB.First(&user).Error; err != nil {
 		return &user, err
 	}
 	return &user, nil
@@ -82,22 +82,22 @@ func GetFollowUser(ctx context.Context, fanID int64) ([]int64, error) {
 }
 
 //GetFanCount 传入用户ID 查询粉丝用户数量
-func GetFanCount(ctx context.Context, userID int64) (int64, error) {
+func GetFanCount(userID uint) (int64, error) {
 	user := model.User{UserID: uint(userID)}
-	return model.DB.WithContext(ctx).Model(&user).Association("Fans").Count(), nil
+	return model.DB.Model(&user).Association("Fans").Count(), nil
 }
 
 //GetFollowCount 传入用户ID 查询关注用户ID集合
-func GetFollowCount(ctx context.Context, fanID int64) (int64, error) {
+func GetFollowCount(fanID uint) (int64, error) {
 	var count int64
-	if err := model.DB.WithContext(ctx).Model(&model.Follow{}).Where("fan_id = ?", fanID).Count(&count).Error; err != nil {
+	if err := model.DB.Model(&model.Follow{}).Where("fan_id = ?", fanID).Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
 //IsFollow 根据传入两个用户ID 在follow表中查询用户A是否关注用户B
-func IsFollow(ctx context.Context, fanID, userID int64) (bool, error) {
+func IsFollow(fanID, userID uint) (bool, error) {
 	user := model.User{UserID: uint(userID)}
-	return model.DB.WithContext(ctx).Model(&user).Where("fan_id = ?", fanID).Association("Fans").Count() > 0, nil
+	return model.DB.Model(&user).Where("fan_id = ?", fanID).Association("Fans").Count() > 0, nil
 }
