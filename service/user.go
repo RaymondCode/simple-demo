@@ -15,8 +15,8 @@ func CreateUser(userInfo *model.User) (int64, error) {
 }
 
 // UserLogin 根据用户输入信息确认user,并返回用户ID
-func UserLogin(userInfo model.User) (int64, error) {
-	err := model.DB.Where("name = ? AND password = ? ", userInfo.UserName, userInfo.Password).Find(&userInfo).Error
+func UserLogin(userInfo *model.User) (int64, error) {
+	err := model.DB.Where("username = ? AND password = ? ", userInfo.UserName, userInfo.Password).Find(&userInfo).Error
 	if err != nil {
 		return 0, err
 	}
@@ -33,9 +33,9 @@ func GetUserByID(ctx context.Context, userID int64) (*model.User, error) {
 }
 
 // GetUserByName 需要通过用户名查询用户信息
-func GetUserByName(ctx context.Context, userName string) (*model.User, error) {
+func GetUserByName(userName string) (*model.User, error) {
 	var user model.User
-	if err := model.DB.WithContext(ctx).Where("username = ?", userName).First(&user).Error; err != nil {
+	if err := model.DB.Where("username = ?", userName).First(&user).Error; err != nil {
 		return &user, err
 	}
 	return &user, nil
