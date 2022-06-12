@@ -19,12 +19,13 @@ func IsFavorite(ctx context.Context, userID int64, videoID int64) (isExist bool,
 	return true, false
 }
 
-func FavoriteCountAction(ctx context.Context, userID int64, videoID int64, actionType int) error {
+func FavoriteCountAction(ctx context.Context, videoID int64, actionType int) error {
 	if actionType == 1 {
 		// 视频点赞数+1
-
+		model.UpdateVideoFavorite(ctx, videoID, 1)
 	} else {
 		// 视频点赞数-1
+		model.UpdateVideoFavorite(ctx, videoID, -1)
 	}
 	return nil
 }
@@ -43,14 +44,14 @@ func FavoriteAction(ctx context.Context, userID int64, videoID int64, actionType
 		if err := model.CreateFavorite(ctx, &favorite); err != nil {
 			return err
 		}
-		FavoriteCountAction(ctx, userID, videoID, actionType)
+		FavoriteCountAction(ctx, videoID, actionType)
 	} else {
 		// 存在的关系进行更新
 		if (actionType == 1 && !isFavorite) || (actionType == 2 && isFavorite) {
 			if err := model.UpdateFavorite(ctx, userID, videoID, &actionType); err != nil {
 				return err
 			}
-			FavoriteCountAction(ctx, userID, videoID, actionType)
+			FavoriteCountAction(ctx, videoID, actionType)
 		}
 	}
 	return nil
