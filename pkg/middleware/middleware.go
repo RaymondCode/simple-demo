@@ -11,9 +11,10 @@ import (
 
 func whiteList() map[string]string {
 	return map[string]string{
-		"/douyin/feed/":          "GET",
-		"/douyin/user/register/": "POST",
-		"/douyin/user/login/":    "POST",
+		"/douyin/feed/":           "GET",
+		"/douyin/user/register/":  "POST",
+		"/douyin/user/login/":     "POST",
+		"/douyin/publish/action/": "POST",
 	}
 }
 
