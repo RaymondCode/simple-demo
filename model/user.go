@@ -4,21 +4,21 @@ import "time"
 
 type ModeTime time.Time
 
-const (
-	timeFormat = "2022-06-09 17:04:05"
-	zone       = "Asia/Shanghai"
-)
-
 type User struct {
-	ID        uint     `gorm:"primaryKey;column:id"`
-	UserName  string   `gorm:"column:username;unique;not null"`
-	Password  string   `gorm:"column:password;not null"`
-	CreatedAt ModeTime `gorm:"column:created_at"`
-	UpdatedAt ModeTime `gorm:"column:updated_at"`
+	UserID    uint   `gorm:"primaryKey;column:id;"`
+	UserName  string `gorm:"column:username;unique;not null"`
+	Password  string `gorm:"column:password;not null"`
+	Videos    []*Video
+	Comments  []*Comment
+	Likes     []*Video  `gorm:"many2many:like;joinForeignKey:user_id;joinReferences:video_id;"`
+	Fans      []*User   `gorm:"many2many:follow;joinForeignKey:user_id;joinReferences:fan_id;"`
+	CreatedAt time.Time `gorm:"column:created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at"`
+	DeletedAt time.Time `gorm:"column:deleted_at"`
 }
 
 func (um User) TableName() string {
-	return "users"
+	return "user"
 }
 
 // UserFind 对外查询使用用户模型

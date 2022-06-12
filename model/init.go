@@ -17,3 +17,4 @@ func Init() *gorm.DB {
 	}
 	return db
 }
+
