@@ -26,9 +26,19 @@ func CreateVideo(ctx context.Context, video *Video) error {
 }
 
 //QueryVideoListqueryvideolist
-func QueryVideoList(ctx context.Context) (error, []Video) {
+func QueryVideoList(ctx context.Context, nextTime string) (error, []Video) {
 	var videoList []Video
-	if err := DB.Table("video").Order("video.created_at desc").Limit(3).Find(&videoList).Error; err != nil {
+	tx := DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err, nil
+	}
+	if err := tx.Table("video").WithContext(ctx).Where("created_at BETWEEN(\"2022-06-01 21:42:52\") and (\"" + nextTime + "\")").Order("video.created_at desc").Limit(50).Find(&videoList).Error; err != nil {
+		tx.Rollback()
 		return err, videoList
 	}
 	return nil, videoList
