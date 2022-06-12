@@ -5,14 +5,20 @@ import (
 	"fmt"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
+	"time"
 )
 
-func QueryFeedResponse(useId int64) []dto.Video {
+func QueryFeedResponse(useId int64, nextTime string) ([]dto.Video, time.Time) {
 	var videoList []dto.Video = make([]dto.Video, 50)
 	var isFavorite bool
 	var isFollow bool
 	//query video list for feed
-	_, res := model.QueryVideoList(context.Background())
+	if nextTime == "" {
+		now := time.Now()
+		nextTime = now.Format("2006-01-02 15:04:05")
+	}
+	_, res := model.QueryVideoList(context.Background(), nextTime)
+	at := res[len(res)-1].CreatedAt
 	//constitute FeedResponse struct ([]dto.video)
 	for index, value := range res {
 		//user is favorite
@@ -46,5 +52,5 @@ func QueryFeedResponse(useId int64) []dto.Video {
 			IsFavorite:    isFavorite,
 		}
 	}
-	return videoList
+	return videoList[0:len(res)], at
 }
