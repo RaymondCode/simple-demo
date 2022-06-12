@@ -70,6 +70,7 @@ func Login(c *gin.Context) {
 	userInfo := model.User{UserName: username, Password: password}
 	userid, err := service.UserLogin(&userInfo)
 
+
 	password = helper.GetMd5(password)
 	token, _ := helper.GenerateToken(userInfo.UserName, userInfo.Password)
 
