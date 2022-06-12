@@ -32,3 +32,12 @@ func QueryVideoList(ctx context.Context, nextTime string) (error, []Video) {
 	}
 	return nil, videoList
 }
+
+func UpdateVideoFavorite(ctx context.Context, videoID int64, action int) error {
+	tx := DB.Begin()
+	if err := tx.Table("video").WithContext(ctx).Where("id = ?", videoID).Update("favorite_count", gorm.Expr("favorite_count+?", action)).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
+}
