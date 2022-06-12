@@ -88,8 +88,15 @@ func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
+<<<<<<< HEAD
 	userInfo := model.User{UserName: username, Password: password}
 	userid, err := service.UserLogin(userInfo)
+=======
+	//userInfo := model.User{UserName: username, Password: password}
+	//service.UserLogin(userInfo)
+
+	token := username + password
+>>>>>>> origin/edison-develop
 
 	password = helper.GetMd5(password)
 	token, _ := helper.GenerateToken(userInfo.UserName, userInfo.Password)
