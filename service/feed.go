@@ -2,22 +2,21 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/BaiZe1998/douyin-simple-demo/db/model"
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"time"
 )
 
-func QueryFeedResponse(useId int64, nextTime string) ([]dto.Video, time.Time) {
+func QueryFeedResponse(useId int64, lastTime string) ([]dto.Video, time.Time) {
 	var videoList []dto.Video = make([]dto.Video, 50)
 	var isFavorite bool
 	var isFollow bool
 	//query video list for feed
-	if nextTime == "" {
+	if lastTime == "" {
 		now := time.Now()
-		nextTime = now.Format("2006-01-02 15:04:05")
+		lastTime = now.Format("2006-01-02 15:04:05")
 	}
-	_, res := model.QueryVideoList(context.Background(), nextTime)
+	_, res := model.QueryVideoList(context.Background(), lastTime)
 	at := res[len(res)-1].CreatedAt
 	//constitute FeedResponse struct ([]dto.video)
 	for index, value := range res {
@@ -35,7 +34,6 @@ func QueryFeedResponse(useId int64, nextTime string) ([]dto.Video, time.Time) {
 		} else {
 			isFollow = false
 		}
-		fmt.Println(isFollow, isFavorite)
 		videoList[index] = dto.Video{
 			Id: value.ID,
 			Author: dto.User{
@@ -50,6 +48,7 @@ func QueryFeedResponse(useId int64, nextTime string) ([]dto.Video, time.Time) {
 			FavoriteCount: value.FavoriteCount,
 			CommentCount:  value.CommentCount,
 			IsFavorite:    isFavorite,
+			Title:         value.Title,
 		}
 	}
 	return videoList[0:len(res)], at
