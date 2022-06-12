@@ -45,8 +45,8 @@ func InitRedisPools() error {
 	return nil
 }
 
-func CacheSet(ctx context.Context, dbName string, key string, value string, expire uint) error {
-	err := RedisCaches[dbName].Set(ctx, key, value, time.Duration(expire)).Err()
+func CacheSet(ctx context.Context, dbName string, key string, value string, expire time.Duration) error {
+	err := RedisCaches[dbName].Set(ctx, key, value, expire).Err()
 	return err
 }
 
@@ -55,7 +55,7 @@ func CacheGet(ctx context.Context, dbName string, key string) (string, error) {
 	return result, err
 }
 
-func CacheSetList(ctx context.Context, dbName string, key string, value interface{}, expire uint) error {
+func CacheSetList(ctx context.Context, dbName string, key string, value interface{}, expire time.Duration) error {
 	var valueJson []byte
 	valueJson, _ = json.Marshal(value)
 	if err := CacheSet(ctx, dbName, key, string(valueJson), expire); err != nil {

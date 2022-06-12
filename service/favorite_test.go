@@ -6,6 +6,7 @@ import (
 	"github.com/BaiZe1998/douyin-simple-demo/db"
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
 	"testing"
+	"time"
 )
 
 func TestFavorite(t *testing.T) {
@@ -21,7 +22,7 @@ func TestFavorite(t *testing.T) {
 	videoList := make([]dto.Video, 0)
 	videoList = append(videoList, dto.Video{Id: 1})
 	videoList = append(videoList, dto.Video{Id: 2})
-	db.CacheSetList(context.Background(), "default", "video_list", videoList, 0)
+	db.CacheSetList(context.Background(), "default", "video_list", videoList, time.Hour)
 	value, _ := db.CacheGetList(context.Background(), "default", "video_list", []dto.Video{})
 	fmt.Println("------------", value)
 }
