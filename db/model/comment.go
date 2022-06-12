@@ -30,13 +30,13 @@ func CreateComment(ctx context.Context, videoId int64, comment *Comment) error {
 	if err := tx.Error; err != nil {
 		return err
 	}
-	if err := DB.Table("comment").WithContext(ctx).Create(comment).Error; err != nil {
+	if err := tx.Table("comment").WithContext(ctx).Create(comment).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	//addVidelist commentcount
-	if err := DB.Table("video").WithContext(ctx).Where("id = ?", videoId).Update("comment_count", gorm.Expr("comment_count+?", 1)).Error; err != nil {
+	if err := tx.Table("video").WithContext(ctx).Where("id = ?", videoId).Update("comment_count", gorm.Expr("comment_count+?", 1)).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -58,7 +58,7 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto
 	if err := tx.Error; err != nil {
 		return responeComment, total, err
 	}
-	conn = DB.Table("comment").WithContext(ctx).Model(&Comment{}).Where("video_id = ? and status = 1 ", videoId)
+	conn = tx.Table("comment").WithContext(ctx).Model(&Comment{}).Where("video_id = ? and status = 1 ", videoId)
 
 	if err := conn.Count(&total).Error; err != nil {
 		tx.Rollback()
@@ -100,13 +100,13 @@ func DeleteCommnet(ctx context.Context, videoId int64, commentId int64) error {
 	if err := tx.Error; err != nil {
 		return err
 	}
-	if err := DB.Table("comment").WithContext(ctx).Where("id = ?  ", commentId).Update("status", 2).Error; err != nil {
+	if err := tx.Table("comment").WithContext(ctx).Where("id = ?  ", commentId).Update("status", 2).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	//addVidelist commentcount
-	if err := DB.Table("video").WithContext(ctx).Where("id = ?", videoId).Update("comment_count", gorm.Expr("comment_count-?", 1)).Error; err != nil {
+	if err := tx.Table("video").WithContext(ctx).Where("id = ?", videoId).Update("comment_count", gorm.Expr("comment_count-?", 1)).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
