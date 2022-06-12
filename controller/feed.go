@@ -10,10 +10,10 @@ import (
 
 // Feed same demo video list for every request
 func Feed(c *gin.Context) {
-	nextTime := c.Query("next_time")
+	lastTime := c.Query("latest_time")
 	token := c.Query("token")
 	userInfo, _ := util.ParseToken(token)
-	videoList, reTime := service.QueryFeedResponse(userInfo.ID, nextTime)
+	videoList, reTime := service.QueryFeedResponse(userInfo.ID, lastTime)
 	c.JSON(http.StatusOK, dto.FeedResponse{
 		Response: dto.Response{StatusCode: 0,
 			StatusMsg: "",
