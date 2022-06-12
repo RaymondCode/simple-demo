@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/BaiZe1998/douyin-simple-demo/dto"
+	"fmt"
+	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -14,44 +16,22 @@ type VideoListResponse struct {
 
 // Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
+	//需要指定最大上传尺寸，此处无法指定
+	fmt.Println("进入publish")
+	file, err := c.FormFile("data")
+	if err != nil {
+		return
+	}
 	token := c.PostForm("token")
+	title := c.PostForm("title")
+	//上传视频,并添加一个video到数据库
+	userIdFromC, _ := c.Get("user_id")
+	userId, _ := userIdFromC.(int64)
+	service.UploadVideoAliyun(file, token, title, userId)
 	c.JSON(http.StatusOK, Response{
 		StatusCode: 0,
-		StatusMsg:  "success",
+		StatusMsg:  "test" + " uploaded successfully",
 	})
-
-	log.Printf(token)
-	//
-	//if _, exist := usersLoginInfo[token]; !exist {
-	//	c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-	//	return
-	//}
-	//
-	//data, err := c.FormFile("data")
-	//if err != nil {
-	//	c.JSON(http.StatusOK, Response{
-	//		StatusCode: 1,
-	//		StatusMsg:  err.Error(),
-	//	})
-	//	return
-	//}
-	//
-	////filename := filepath.Base(data.Filename)
-	////user := usersLoginInfo[token]
-	//finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-	//saveFile := filepath.Join("./public/", finalName)
-	//if err := c.SaveUploadedFile(data, saveFile); err != nil {
-	//	c.JSON(http.StatusOK, Response{
-	//		StatusCode: 1,
-	//		StatusMsg:  err.Error(),
-	//	})
-	//	return
-	//}
-	//
-	//c.JSON(http.StatusOK, Response{
-	//	StatusCode: 0,
-	//	StatusMsg:  finalName + " uploaded successfully",
-	//})
 }
 
 // PublishList all users have same publish video list
