@@ -1,5 +1,5 @@
 env:
-    debug: true
+    debug: false
 server:
     port: "8080"
 mysql:
@@ -8,7 +8,7 @@ mysql:
         port: "3306"
         database: "douyin"
         username: "root"
-        password: "root"
+        password: "123456"
     default:
         host: "xinzf0520.top"
         port: "20607"

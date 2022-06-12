@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/BaiZe1998/douyin-simple-demo/service"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
