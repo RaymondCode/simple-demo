@@ -2,10 +2,9 @@ package model
 
 import (
 	"context"
-	"fmt"
-	"github.com/BaiZe1998/douyin-simple-demo/dto"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Comment struct {
@@ -29,6 +28,7 @@ func CreateComment(ctx context.Context, videoId int64, comment *Comment) error {
 	if err := tx.Error; err != nil {
 		return err
 	}
+
 	if err := tx.Table("comment").WithContext(ctx).Create(comment).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -43,11 +43,10 @@ func CreateComment(ctx context.Context, videoId int64, comment *Comment) error {
 }
 
 // QueryComment query list of Comment info
-func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto.ResponeComment, int64, error) {
+func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]Comment, int64, error) {
 	var total int64
-	var res []*Comment
+	var res []Comment
 	var conn *gorm.DB
-	var responeComment []*dto.ResponeComment
 	tx := DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -55,37 +54,21 @@ func QueryComment(ctx context.Context, videoId int64, limit, offset int) ([]*dto
 		}
 	}()
 	if err := tx.Error; err != nil {
-		return responeComment, total, err
+		return res, total, err
 	}
+
 	conn = tx.Table("comment").WithContext(ctx).Model(&Comment{}).Where("video_id = ? and status = 1 ", videoId)
 
 	if err := conn.Count(&total).Error; err != nil {
 		tx.Rollback()
-		return responeComment, total, err
+		return res, total, err
 	}
 	if err := conn.Limit(limit).Offset(offset).Find(&res).Error; err != nil {
 		tx.Rollback()
-		return responeComment, total, err
+		return res, total, err
 	}
-	responeComment = make([]*dto.ResponeComment, len(res))
-	for index, v := range res {
-		userInfo, _ := QueryUserById(context.Background(), v.UserId)
-		fmt.Println("user:", userInfo.Name)
-		users := dto.User{
-			Id:            userInfo.ID,
-			Name:          userInfo.Name,
-			FollowCount:   userInfo.FollowCount,
-			FollowerCount: userInfo.FollowerCount,
-			IsFollow:      false,
-		}
-		responeComment[index] = &dto.ResponeComment{
-			ID:        v.ID,
-			User:      users,
-			Content:   v.Content,
-			CreatedAt: v.CreatedAt.Format("2006-01-02"),
-		}
-	}
-	return responeComment, total, nil
+
+	return res, total, nil
 }
 
 // DeleteComment delete comment info
