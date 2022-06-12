@@ -10,11 +10,11 @@ import (
 var DB = Init()
 
 func Init() *gorm.DB {
-	//dsn := define.MysqlDNS + "/simple_demo?charset=utf8mb4&parseTime=True&loc=Local"
-	dsn := define.Edison + "/Tiktok_demo?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := define.MysqlDNS + "/simple_demo?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Println("gorm Init Error : ", err)
 	}
 	return db
 }
+
