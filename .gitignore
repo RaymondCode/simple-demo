@@ -21,3 +21,7 @@
 go.work
 
 .idea
+
+.vscode
+
+log
