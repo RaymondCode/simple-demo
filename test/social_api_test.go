@@ -56,3 +56,36 @@ func TestRelation(t *testing.T) {
 	}
 	assert.True(t, containTestUserA, "Follower test user failed")
 }
+
+func TestChat(t *testing.T) {
+	e := newExpect(t)
+
+	userIdA, tokenA := getTestUserToken(testUserA, e)
+	userIdB, tokenB := getTestUserToken(testUserB, e)
+
+	messageResp := e.POST("/douyin/message/action/").
+		WithQuery("token", tokenA).WithQuery("to_user_id", userIdB).WithQuery("action_type", 1).WithQuery("content", "Send to UserB").
+		WithFormField("token", tokenA).WithFormField("to_user_id", userIdB).WithFormField("action_type", 1).WithQuery("content", "Send to UserB").
+		Expect().
+		Status(http.StatusOK).
+		JSON().Object()
+	messageResp.Value("status_code").Number().Equal(0)
+
+	chatResp := e.GET("/douyin/message/chat/").
+		WithQuery("token", tokenA).WithQuery("to_user_id", userIdB).
+		WithFormField("token", tokenA).WithFormField("to_user_id", userIdB).
+		Expect().
+		Status(http.StatusOK).
+		JSON().Object()
+	chatResp.Value("status_code").Number().Equal(0)
+	chatResp.Value("message_list").Array().Length().Gt(0)
+
+	chatResp = e.GET("/douyin/message/chat/").
+		WithQuery("token", tokenB).WithQuery("to_user_id", userIdA).
+		WithFormField("token", tokenB).WithFormField("to_user_id", userIdA).
+		Expect().
+		Status(http.StatusOK).
+		JSON().Object()
+	chatResp.Value("status_code").Number().Equal(0)
+	chatResp.Value("message_list").Array().Length().Gt(0)
+}

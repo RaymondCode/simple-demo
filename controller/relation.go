@@ -40,3 +40,13 @@ func FollowerList(c *gin.Context) {
 		UserList: []User{DemoUser},
 	})
 }
+
+// FriendList all users have same friend list
+func FriendList(c *gin.Context) {
+	c.JSON(http.StatusOK, UserListResponse{
+		Response: Response{
+			StatusCode: 0,
+		},
+		UserList: []User{DemoUser},
+	})
+}
