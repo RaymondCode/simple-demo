@@ -21,3 +21,6 @@
 go.work
 
 .idea
+.vscode
+
+# More for security concerns
