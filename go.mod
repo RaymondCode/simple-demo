@@ -1,4 +1,4 @@
-module github.com/RaymondCode/simple-demo
+module BloodSid/Fomalhaut
 
 go 1.17
 

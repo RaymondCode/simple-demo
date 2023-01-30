@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/service"
+	"BloodSid/Fomalhaut/service"
 	"github.com/gin-gonic/gin"
 )
 
