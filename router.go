@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/controller"
+	"Momotok-Server/controller"
 	"github.com/gin-gonic/gin"
 )
 
