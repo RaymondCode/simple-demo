@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
-	"time"
 )
 
 const DatabaseAddress string = "root:shanwer666@tcp(localhost:3306)/momotok" //SQL address(1024)
@@ -60,12 +58,12 @@ func Register(c *gin.Context) {
 	}
 	id := int64(0)
 	err = db.QueryRow("SELECT ID FROM user WHERE username = ?", username).Scan(&id)
-	token := generateToken(username)
+	tokenString := generateToken(username)
 
 	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: Response{StatusCode: 0},
 		UserId:   id,
-		Token:    token,
+		Token:    tokenString,
 	})
 }
 
@@ -87,18 +85,18 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	token := generateToken(username)
+	tokenString := generateToken(username)
 	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: Response{StatusCode: 0},
 		UserId:   id,
-		Token:    token,
+		Token:    tokenString,
 	})
 }
 
 func UserInfo(c *gin.Context) {
 	token := c.Query("token")
 	//TODO:这里要改为从数据库查询
-	if user, exist := usersLoginInfo[token]; exist {
+	if user, exist := usersLoginInfo[token]; exist { //这里改为checkToken函数
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
@@ -117,19 +115,4 @@ func hashPassword(password string) (string, error) {
 		return "", err
 	}
 	return string(hashedPassword), nil
-}
-
-func generateToken(username string) string {
-	// create a token object
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	// set claims of the token
-	claims := token.Claims.(jwt.MapClaims)
-	claims["username"] = username
-	claims["exp"] = time.Now().Add(time.Hour * 48).Unix() // expired time is 48 hours
-
-	// generate toke string
-	tokenString, _ := token.SignedString([]byte("secret"))
-
-	return tokenString
 }
