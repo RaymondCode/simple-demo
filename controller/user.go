@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"Momotok-Server/rpc"
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
+	"io"
 	"net/http"
 	"strconv"
 )
@@ -53,8 +56,18 @@ func Register(c *gin.Context) {
 		fmt.Println("Database connected failed: ", err)
 	}
 	_, err = db.Exec("INSERT INTO user (username, ip, password) VALUES (?, ?, ?)", username, ip, hashedPassword)
-	if err != nil {
-		fmt.Println("Register failed：", err)
+	if err != nil { //duplicate username check
+		mysqlErr, ok := err.(*mysql.MySQLError)
+		if !ok {
+			fmt.Println("Register failed：", err)
+		}
+		if mysqlErr.Number == 1062 {
+			c.JSON(http.StatusOK, UserResponse{
+				Response: Response{StatusCode: 1, StatusMsg: "User:" + username + "already exists!"},
+			})
+		} else {
+			fmt.Println("Register failed：", err)
+		}
 		return
 	}
 	id := int64(0)
@@ -99,20 +112,32 @@ func UserInfo(c *gin.Context) {
 	if !checkToken(c.Query("token")) {
 		return
 	}
-	if uid == "" {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "user_id is empty"},
-		})
-		return
+
+	resp, _ := rpc.HttpRequest("GET", "https://v1.hitokoto.cn/?c=a&c=d&c=i&c=k&encode=text", nil)
+	if resp.Body != nil {
+		defer func(Body io.ReadCloser) {
+			err := Body.Close()
+			if err != nil {
+				fmt.Println(err)
+			}
+		}(resp.Body)
 	}
+	signature, _ := io.ReadAll(resp.Body)
+
 	id, _ := strconv.ParseInt(uid, 10, 64)
-	user := User{Id: id}
+	userInfo := User{
+		Id:              id,
+		Signature:       string(signature),
+		Avatar:          "https://acg.suyanw.cn/sjtx/random.php",
+		BackgroundImage: "https://acg.suyanw.cn/api.php",
+	}
+
 	db, err := sql.Open("mysql", DatabaseAddress)
 	if err != nil {
 		fmt.Println("Database connected failed: ", err)
 		return
 	}
-	err = db.QueryRow("SELECT username FROM user WHERE id = ?", uid).Scan(&user.Name)
+	err = db.QueryRow("SELECT username FROM user WHERE id = ?", uid).Scan(&userInfo.Name)
 	if err != nil {
 		println(err.Error())
 		c.JSON(http.StatusOK, UserLoginResponse{
@@ -120,10 +145,14 @@ func UserInfo(c *gin.Context) {
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status_code": 0,
 		"status_msg":  "Success",
-		"user":        user,
+		"user":        userInfo,
+		//"signature":   string(signature),
+		//"avatar":      avatar,
+		//"background_image": background_image,
 	})
 	return
 }
