@@ -27,7 +27,7 @@ func Feed(c *gin.Context) {
 
 func makeVideoList() []Video {
 	db, err := sql.Open("mysql", "Yana:root@tcp(127.0.0.1:3307)/videodata") //连接数据库
-	//数据库格式为id, author_id, play_url, cover_url, favorite_count, comment_count, is_favorite, title，具体类型见下述定义
+	//数据库表名为video，字段为id, author_id, play_url, cover_url, favorite_count, comment_count, is_favorite, title，具体类型见下述定义
 	if err != nil {
 		fmt.Println("Failed to connect to database:", err)
 	}
