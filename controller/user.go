@@ -5,14 +5,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strconv"
-	"time"
 )
 
- const DatabaseAddress string = "root:shanwer666@tcp(localhost:3306)/momotok" //SQL address(1024)
+const DatabaseAddress string = "root:shanwer666@tcp(localhost:3306)/momotok" //SQL address(1024)
 //const DatabaseAddress string = "root:root@tcp(localhost:3306)/momotok" //SQL address(1024)
 // sql statements of the table,database name:momotok
 // CREATE TABLE user (
@@ -98,14 +96,9 @@ func Login(c *gin.Context) {
 
 func UserInfo(c *gin.Context) {
 	uid := c.Query("user_id")
-	/*token := c.Query("token")
-	username, err := parseToken(token)
-	if len(username) == 0 {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "token is useless"},
-		})
+	if !checkToken(c.Query("token")) {
 		return
-	}*/
+	}
 	if uid == "" {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "user_id is empty"},
@@ -120,7 +113,6 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 	err = db.QueryRow("SELECT username FROM user WHERE id = ?", uid).Scan(&user.Name)
-	println("SELECT username FROM user WHERE id = ", uid)
 	if err != nil {
 		println(err.Error())
 		c.JSON(http.StatusOK, UserLoginResponse{
