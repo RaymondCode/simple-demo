@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
+	"strconv"
+	"time"
 )
 
-const DatabaseAddress string = "root:shanwer666@tcp(localhost:3306)/momotok" //SQL address(1024)
-
+ const DatabaseAddress string = "root:shanwer666@tcp(localhost:3306)/momotok" //SQL address(1024)
+//const DatabaseAddress string = "root:root@tcp(localhost:3306)/momotok" //SQL address(1024)
 // sql statements of the table,database name:momotok
 // CREATE TABLE user (
 //	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,12 +61,12 @@ func Register(c *gin.Context) {
 	}
 	id := int64(0)
 	err = db.QueryRow("SELECT ID FROM user WHERE username = ?", username).Scan(&id)
-	tokenString := generateToken(username)
+	token := generateToken(username)
 
 	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: Response{StatusCode: 0},
 		UserId:   id,
-		Token:    tokenString,
+		Token:    token,
 	})
 }
 
@@ -85,27 +88,52 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	tokenString := generateToken(username)
+	token := generateToken(username)
 	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: Response{StatusCode: 0},
 		UserId:   id,
-		Token:    tokenString,
+		Token:    token,
 	})
 }
 
 func UserInfo(c *gin.Context) {
-	token := c.Query("token")
-	//TODO:这里要改为从数据库查询
-	if user, exist := usersLoginInfo[token]; exist { //这里改为checkToken函数
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 0},
-			User:     user,
+	uid := c.Query("user_id")
+	/*token := c.Query("token")
+	username, err := parseToken(token)
+	if len(username) == 0 {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "token is useless"},
 		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+		return
+	}*/
+	if uid == "" {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "user_id is empty"},
 		})
+		return
 	}
+	id, _ := strconv.ParseInt(uid, 10, 64)
+	user := User{Id: id}
+	db, err := sql.Open("mysql", DatabaseAddress)
+	if err != nil {
+		fmt.Println("Database connected failed: ", err)
+		return
+	}
+	err = db.QueryRow("SELECT username FROM user WHERE id = ?", uid).Scan(&user.Name)
+	println("SELECT username FROM user WHERE id = ", uid)
+	if err != nil {
+		println(err.Error())
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "user not found"},
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status_code": 0,
+		"status_msg":  "Success",
+		"user":        user,
+	})
+	return
 }
 
 // generate hashed password
@@ -115,4 +143,45 @@ func hashPassword(password string) (string, error) {
 		return "", err
 	}
 	return string(hashedPassword), nil
+}
+
+func generateToken(username string) string {
+	// create a token object
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	// set claims of the token
+	claims := token.Claims.(jwt.MapClaims)
+	claims["username"] = username
+	claims["exp"] = time.Now().Add(time.Hour * 48).Unix() // expired time is 48 hours
+
+	// generate toke string
+	tokenString, _ := token.SignedString([]byte("secret"))
+
+	return tokenString
+}
+
+func parseToken(tokenString string) (string, error) {
+	// 解析token
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// 检查签名方法是否为HS256
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		// 返回签名密钥
+		return []byte("secret"), nil
+	})
+
+	// 检查解析是否成功
+	if err != nil {
+		return "", err
+	}
+
+	// 检查token是否有效
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		// 提取username
+		username := claims["username"].(string)
+		return username, nil
+	} else {
+		return "", fmt.Errorf("Invalid token")
+	}
 }
