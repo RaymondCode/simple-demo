@@ -25,6 +25,8 @@ func Feed(c *gin.Context) {
 	})
 }
 
+var currentPage = 1 //全局变量记录当前page
+
 func makeVideoList() []Video {
 	db, err := sql.Open("mysql", "Yana:root@tcp(127.0.0.1:3307)/videodata") //连接数据库
 	//数据库表名为video，字段为id, author_id, play_url, cover_url, favorite_count, comment_count, is_favorite, title，具体类型见下述定义
@@ -32,8 +34,8 @@ func makeVideoList() []Video {
 		fmt.Println("Failed to connect to database:", err)
 	}
 	defer db.Close()
-	perPage := 30 //设置最大加载数
-	page := 1     //设置页数           //TODO:页面检测
+	perPage := 30       //设置最大加载数
+	page := currentPage //设置页数
 	if err != nil {
 		fmt.Println("Failed to execute query:", err)
 		return nil
@@ -73,5 +75,6 @@ func makeVideoList() []Video {
 		}
 		videos = append(videos, video) //视频切片加入视频列表
 	}
+	currentPage++
 	return videos //返回视频列表
 }
