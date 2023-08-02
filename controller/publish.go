@@ -1,10 +1,11 @@
 package controller
 
 import (
+	"database/sql"
 	"fmt"
+	//"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"path/filepath"
 )
 
 type VideoListResponse struct {
@@ -14,14 +15,15 @@ type VideoListResponse struct {
 
 // Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
-	token := c.PostForm("token")
-
-	if _, exist := usersLoginInfo[token]; !exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-		return
+	//token := c.PostForm("token")
+	//验证token
+	title := c.PostForm("title")
+	const DatabaseAddress string = "root:root@tcp(localhost:3306)/momotok"
+	db, err := sql.Open("mysql", DatabaseAddress)
+	if err != nil {
+		fmt.Println("Database connected failed: ", err)
 	}
-
-	data, err := c.FormFile("data")
+	file, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
@@ -29,23 +31,20 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
-
-	filename := filepath.Base(data.Filename)
-	user := usersLoginInfo[token]
-	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-	saveFile := filepath.Join("./public/", finalName)
-	if err := c.SaveUploadedFile(data, saveFile); err != nil {
+	c.SaveUploadedFile(file, "./data/"+file.Filename)
+	_, err = db.Exec("INSERT INTO video (author_id,title) VALUES (?,?)", 1, title) //从token里面获取之后更新
+	if err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
 			StatusMsg:  err.Error(),
 		})
 		return
 	}
-
 	c.JSON(http.StatusOK, Response{
 		StatusCode: 0,
-		StatusMsg:  finalName + " uploaded successfully",
+		StatusMsg:  "success",
 	})
+	return
 }
 
 // PublishList all users have same publish video list
