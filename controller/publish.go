@@ -24,7 +24,6 @@ func Publish(c *gin.Context) {
 
 	ischeak := checkToken(token)
 	uid, err := getUID(token)
-	println(uid)
 	if !ischeak {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
