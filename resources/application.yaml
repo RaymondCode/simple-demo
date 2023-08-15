@@ -1,0 +1,6 @@
+mysql:
+  url: 127.0.0.1
+  port: 3306
+  userName: #your_mysql_userName
+  password: #your_mysql_passWord
+  dbname: titok
