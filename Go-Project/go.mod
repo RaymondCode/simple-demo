@@ -1,8 +1,9 @@
-module github.com/RaymondCode/simple-demo
+module github.com/life-studied/douyin-simple
 
 go 1.17
 
 require (
+	github.com/RaymondCode/simple-demo v0.0.0-20230221080337-89b8c9434e04
 	github.com/gavv/httpexpect/v2 v2.8.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/stretchr/testify v1.7.0

@@ -1,3 +1,5 @@
+github.com/RaymondCode/simple-demo v0.0.0-20230221080337-89b8c9434e04 h1:wAAJBgu81T41+EKxp43/nqljufNg55rh7QVrxOa2l14=
+github.com/RaymondCode/simple-demo v0.0.0-20230221080337-89b8c9434e04/go.mod h1:XMO1NCRwu+8CnhAGPnCR+YgZPzl1kHER/d69V564Af0=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/andybalholm/brotli v1.0.2/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
