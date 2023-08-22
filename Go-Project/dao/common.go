@@ -40,7 +40,7 @@ type Comment struct {
 	CreateDate time.Time `gorm:"column:create_date;not null;comment:'创建日期'" json:"create_date"`
 
 	// Foreign key references
-	User  User  `gorm:"foreignkey:UserID" json:"-"`
+	User  User  `json:"user" gorm:"foreignKey:user_id;references:id;"`
 	Video Video `gorm:"foreignkey:VideoID" json:"-"`
 }
 
@@ -50,6 +50,6 @@ type Like struct {
 	VideoID int64 `gorm:"column:video_id;not null;comment:'视频ID'" json:"video_id"`
 
 	// Foreign key references
-	User  User  `gorm:"foreignkey:UserID" json:"-"`
+	User  User  `gorm:"foreignkey:UserID" json:"user"`
 	Video Video `gorm:"foreignkey:VideoID" json:"-"`
 }
