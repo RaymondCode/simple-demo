@@ -10,7 +10,6 @@ require (
 
 require (
 	github.com/go-playground/validator/v10 v10.11.0 // indirect
-	github.com/jinzhu/gorm v1.9.16
 	github.com/spf13/viper v1.16.0
 	github.com/ugorji/go v1.2.7 // indirect
 	gorm.io/driver/mysql v1.5.1
