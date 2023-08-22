@@ -18,6 +18,8 @@
 # vendor/
 
 # Go workspace file
-go.work
+**/go.work
+**/go.sum
 
-.idea
+# goland IDE file
+**/.idea/
