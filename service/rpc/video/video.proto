@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package video;
+option go_package = "./video";
+
+message Empty {}
+
+// 视频信息结构体
+message VideoInfo {
+  int64 Id = 1;
+  int64 AuthorId = 2;
+  string Title = 3;
+  string PlayUrl = 4;
+  string CoverUrl = 5;
+  int64 FavoriteCount = 6;
+  int64 CommentCount = 7;
+  int64 CreateTime = 8;
+}
+
+// 评论信息结构体
+message Comment {
+  int64 Id = 1;
+  int64 AuthorId = 3;
+  int64 CreateTime = 4;
+  string Content = 5;
+}
+
+service Video {
+  rpc GetVideoList(GetVideoListRequest) returns (GetVideoListResponse);
+  rpc PublishVideo(PublishVideoRequest) returns (Empty);
+  rpc UpdateVideo(UpdateVideoRequest) returns (Empty);
+  rpc GetVideoListByAuthor(GetVideoListByAuthorRequest) returns (GetVideoListByAuthorResponse);
+
+  rpc FavoriteVideo(FavoriteVideoRequest) returns (Empty);
+  rpc UnFavoriteVideo(UnFavoriteVideoRequest) returns (Empty);
+  rpc GetFavoriteVideoList(GetFavoriteVideoListRequest) returns (GetFavoriteVideoListResponse);
+  rpc IsFavoriteVideo(IsFavoriteVideoRequest) returns (IsFavoriteVideoResponse);
+
+  rpc CommentVideo(CommentVideoRequest) returns (CommentVideoResponse);
+  rpc GetCommentList(GetCommentListRequest) returns (GetCommentListResponse);
+  rpc DeleteVideoComment(DeleteVideoCommentRequest) returns(Empty);
+  rpc GetCommentInfo(GetCommentInfoRequest) returns (GetCommentInfoResponse);
+}
+//获取视频列表
+message GetVideoListRequest {
+  int64 Num = 1;
+  int64 LatestTime = 2;
+}
+
+message GetVideoListResponse {
+  repeated VideoInfo VideoList = 1;
+}
+//发布视频
+message PublishVideoRequest {
+  VideoInfo Video = 1;
+}
+//上传视频
+message UpdateVideoRequest{
+  VideoInfo Video = 1;
+}
+//通过作者ID查询视频列表
+message GetVideoListByAuthorRequest{
+  int64 AuthorId = 1;
+}
+message GetVideoListByAuthorResponse{
+  VideoInfo video = 1;
+}
+//实现点击喜欢视频
+message FavoriteVideoRequest{
+  int64 UserId = 1;
+  int64 VideoId = 2;
+}
+//实现点击取消喜欢视频
+message UnFavoriteVideoRequest{
+  int64 UserId = 1;
+  int64 VideoId = 2;
+}
+//获取喜欢的视频列表
+message GetFavoriteVideoListRequest{
+  int64 UserId = 1;
+}
+message GetFavoriteVideoListResponse {
+  repeated VideoInfo VideoList = 1;
+}
+//是否为喜欢的视频
+message IsFavoriteVideoRequest {
+  int64 UserId = 1;
+  int64 VideoId = 2;
+}
+message IsFavoriteVideoResponse {
+  bool IsFavorite = 1;
+}
+//用户在视频下的评论
+message CommentVideoRequest {
+  int64 UserId = 1;
+  int64 VideoId = 2;
+  string Content = 3;
+}
+message CommentVideoResponse {
+  int64 Id = 1;
+  int64 UserId = 2;
+  string Content = 3;
+  int64 CreatedTime = 4;
+}
+//获取视频下的所有评论
+message GetCommentListRequest {
+  int64 VideoId = 1;
+}
+message GetCommentListResponse {
+  repeated Comment CommentList = 1;
+}
+//删除评论
+message DeleteVideoCommentRequest {
+  int64 CommentId = 1;
+}
+//获取评论详细信息
+message GetCommentInfoRequest {
+  int64 CommentId = 1;
+}
+message GetCommentInfoResponse {
+  int64 Id = 1;
+  int64 UserId = 2;
+  string Content = 3;
+  int64 CreatedTime = 4;
+}
