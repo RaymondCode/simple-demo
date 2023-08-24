@@ -1,9 +1,9 @@
 mysql:
-  path: 127.0.0.1
+  path: 47.113.185.186
   port: 3306
   config: charset=utf8&parseTime=True&loc=Local
   db-name: douyin_simple
   username: root
-  password: asdasd123
+  password: 11LvmIa1wz2tMI5P
   max-idle-conns: 10
   max-open-conns: 100
