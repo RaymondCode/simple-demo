@@ -12,13 +12,13 @@ import (
 // user data will be cleared every time the server starts
 // test data: username=zhanglei, password=douyin
 var usersLoginInfo = map[string]User{
-	"zhangleidouyin": {
-		Id:            1,
-		Name:          "zhanglei",
-		FollowCount:   10,
-		FollowerCount: 5,
-		IsFollow:      true,
-	},
+	// "zhangleidouyin": {
+	// 	Id:            6,
+	// 	Name:          "zhanglei",
+	// 	FollowCount:   10,
+	// 	FollowerCount: 5,
+	// 	IsFollow:      true,
+	// },
 }
 
 var userIdSequence = int64(0)
@@ -89,7 +89,7 @@ func Register(c *gin.Context) {
 	usersLoginInfo[enToken] = newUser
 
 	//存入数据库
-	err = service.CreatInfo(userIdSequence, username, password, enToken)
+	err = service.CreateInfo(userIdSequence, username, password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, UserListResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "存储用户信息失败"},

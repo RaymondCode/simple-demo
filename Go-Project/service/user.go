@@ -49,8 +49,8 @@ func IsUsernameExists(username string) bool {
 }
 
 // 创建用户并存入数据库
-func CreatInfo(id int64, username string, password string, token string) error {
-	err := dao.AddUserInfo(id, username, password, token)
+func CreateInfo(id int64, username string, password string) error {
+	err := dao.AddUserInfo(id, username, password)
 	if err != nil {
 		return err
 	}
