@@ -1,4 +1,4 @@
-module github.com/ZhouXiinlei/tiktok_startup
+module tiktok_startup
 
 go 1.17
 

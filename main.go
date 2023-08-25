@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/ZhouXiinlei/tiktok_startup/service"
 	"github.com/gin-gonic/gin"
+	"tiktok_startup/service"
 )
 
 func main() {

@@ -2,12 +2,12 @@ package logic
 
 import (
 	"context"
-	"github.com/ZhouXiinlei/tiktok_startup/common/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"tiktok_startup/common/model"
 
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/svc"
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/video"
+	"tiktok_startup/service/rpc/video/internal/svc"
+	"tiktok_startup/service/rpc/video/video"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

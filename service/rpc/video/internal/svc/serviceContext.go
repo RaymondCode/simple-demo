@@ -2,11 +2,11 @@ package svc
 
 import (
 	"fmt"
-	"github.com/ZhouXiinlei/tiktok_startup/common/model"
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"tiktok_startup/common/model"
+	"tiktok_startup/service/rpc/video/internal/config"
 )
 
 type ServiceContext struct {

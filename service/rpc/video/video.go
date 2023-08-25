@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/config"
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/server"
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/svc"
-	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/video"
+	"tiktok_startup/service/rpc/video/internal/config"
+	"tiktok_startup/service/rpc/video/internal/server"
+	"tiktok_startup/service/rpc/video/internal/svc"
+	"tiktok_startup/service/rpc/video/video"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

@@ -3,10 +3,10 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ZhouXiinlei/tiktok_startup/controller"
 	"io"
 	"net"
 	"sync"
+	"tiktok_startup/controller"
 )
 
 var chatConnMap = sync.Map{}
