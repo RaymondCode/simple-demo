@@ -1,9 +1,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"sync/atomic"
+
+	"github.com/gin-gonic/gin"
+	"github.com/life-studied/douyin-simple/service"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -60,21 +62,24 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
+	var enToken string 
 
-	token := username + password
-
-	if user, exist := usersLoginInfo[token]; exist {
+	enToken = service.Encryption(user.Name, user.Password)
+	
+	//判断用户能否登录成功
+	flag := service.IsTokenExists(Token)
+	if flag {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
+			Response: Response{StatusCode: 1, StatusMsg: "登录失败！请检查用户名和密码。"},
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: Response{StatusCode: 0},
+			UserId:   user.Id,
+			Token:    enToken,
 		})
+		return
 	}
-}
 
 func UserInfo(c *gin.Context) {
 	token := c.Query("token")
