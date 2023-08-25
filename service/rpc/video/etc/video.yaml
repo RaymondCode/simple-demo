@@ -1,9 +1,9 @@
 Name: video.rpc
 ListenOn: 0.0.0.0:8080
-
+Mode: dev
 Mysql:
   Address: ts.dn11.top:33066
   Username: root
   Password: "SXFsvsxegJ4PtI84MR"
-  DBName: tiktok-video
+  DBName: tiktok_startup
   TablePrefix: ""
