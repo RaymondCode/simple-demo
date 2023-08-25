@@ -1,4 +1,4 @@
-module github.com/RaymondCode/simple-demo
+module github.com/ZhouXiinlei/tiktok_startup
 
 go 1.17
 

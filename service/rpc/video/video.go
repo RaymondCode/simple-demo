@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/config"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/server"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/svc"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/video"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/config"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/server"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/svc"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/video"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

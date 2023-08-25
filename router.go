@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/RaymondCode/simple-demo/controller"
+	"github.com/ZhouXiinlei/tiktok_startup/controller"
 	"github.com/gin-gonic/gin"
 )
 

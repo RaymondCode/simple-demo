@@ -2,8 +2,8 @@ package svc
 
 import (
 	"fmt"
-	"github.com/RaymondCode/simple-demo/common/model"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/config"
+	"github.com/ZhouXiinlei/tiktok_startup/common/model"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -27,7 +27,6 @@ func initMysql(c config.Config) *gorm.DB {
 		c.Mysql.Address,
 		c.Mysql.DBName,
 	)
-	//root:SXFsvsxegJ4PtI84MR@tcp(ts.dn11.top:33066)/tiktok-video?charset=utf8mb4&parseTime=True&loc=Local
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   c.Mysql.TablePrefix, // 表名前缀

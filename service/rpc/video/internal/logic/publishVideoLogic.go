@@ -2,9 +2,9 @@ package logic
 
 import (
 	"context"
-	"github.com/RaymondCode/simple-demo/common/model"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/svc"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/video"
+	"github.com/ZhouXiinlei/tiktok_startup/common/model"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/svc"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/video"
 	"google.golang.org/grpc/status"
 
 	"github.com/zeromicro/go-zero/core/logx"

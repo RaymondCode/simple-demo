@@ -2,9 +2,8 @@ package logic
 
 import (
 	"context"
-
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/svc"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/video"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/svc"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/video"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,6 +24,5 @@ func NewUnFavoriteVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *U
 
 func (l *UnFavoriteVideoLogic) UnFavoriteVideo(in *video.UnFavoriteVideoRequest) (*video.Empty, error) {
 	// todo: add your logic here and delete this line
-
 	return &video.Empty{}, nil
 }

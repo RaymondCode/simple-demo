@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/logic"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/internal/svc"
-	"github.com/RaymondCode/simple-demo/service/rpc/video/video"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/logic"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/internal/svc"
+	"github.com/ZhouXiinlei/tiktok_startup/service/rpc/video/video"
 )
 
 type VideoServer struct {
