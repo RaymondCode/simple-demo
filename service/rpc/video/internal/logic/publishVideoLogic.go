@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"google.golang.org/grpc/status"
-	"tiktok_startup/common/model"
+	"tiktok_startup/service/rpc/video/common/model"
 	"tiktok_startup/service/rpc/video/internal/svc"
 	"tiktok_startup/service/rpc/video/video"
 

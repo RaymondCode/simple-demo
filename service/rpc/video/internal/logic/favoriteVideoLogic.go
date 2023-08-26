@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+	"tiktok_startup/service/rpc/video/common/model"
 
 	"tiktok_startup/service/rpc/video/internal/svc"
 	"tiktok_startup/service/rpc/video/video"
@@ -24,7 +27,37 @@ func NewFavoriteVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Fav
 }
 
 func (l *FavoriteVideoLogic) FavoriteVideo(in *video.FavoriteVideoRequest) (*video.Empty, error) {
-	// todo: add your logic here and delete this line
-
+	err := l.svcCtx.Mysql.Transaction(func(tx *gorm.DB) error {
+		NewFavorite := model.Favorite{}
+		err := tx.
+			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("user_id = ? AND video_id = ?", in.UserId, in.VideoId).
+			First(&NewFavorite).
+			Error
+		if err == nil {
+			return nil
+		}
+		if err != gorm.ErrRecordNotFound {
+			return err
+		}
+		NewFavorite.VideoId = in.VideoId
+		NewFavorite.UserId = in.UserId
+		err = tx.Create(&NewFavorite).Error
+		if err != nil {
+			return err
+		}
+		err = tx.Model(&model.Video{}).
+			Where("id = ?", in.VideoId).
+			Clauses(clause.Locking{Strength: "UPDATE"}).
+			UpdateColumn("favorite_count", gorm.Expr("favorite_count + ?", 1)).
+			Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
 	return &video.Empty{}, nil
 }
