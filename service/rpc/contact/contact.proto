@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package contact;
+
+option go_package = "./contact";
+
+// 空消息
+message Empty {}
+
+// 消息结构体
+message Message {
+  int64 Id = 1;
+  string Content = 2;
+  int64 CreateTime = 3;
+  int64 FromId = 4;
+  int64 ToId = 5;
+}
+
+service Contact {
+  rpc CreateMessage (CreateMessageRequest) returns (Empty);
+  rpc GetLatestMessage (GetLatestMessageRequest) returns (GetLatestMessageResponse);
+  rpc GetMessageList (GetMessageListRequest) returns (GetMessageListResponse);
+  rpc MakeFriends (MakeFriendsRequest) returns (Empty);
+  rpc LoseFriends (LoseFriendsRequest) returns (Empty);
+  rpc GetFriendsList (GetFriendsListRequest) returns (GetFriendsListResponse);
+}
+
+message GetLatestMessageRequest {
+  int64 UserAId = 1;
+  int64 UserBId = 2;
+}
+
+message GetLatestMessageResponse {
+  Message Message = 1;
+}
+
+message CreateMessageRequest {
+  int64 FromId = 1;
+  int64 ToId = 2;
+  string content = 3;
+}
+
+message GetMessageListRequest {
+  int64 FromId = 1;
+  int64 ToId = 2;
+}
+
+message GetMessageListResponse {
+  repeated Message Messages = 1;
+}
+
+message MakeFriendsRequest {
+  int64 UserAId = 1;
+  int64 UserBId = 2;
+}
+
+message LoseFriendsRequest {
+  int64 UserAId = 1;
+  int64 UserBId = 2;
+}
+
+message GetFriendsListRequest {
+  int64 UserId = 1;
+}
+
+message GetFriendsListResponse {
+  repeated int64 FriendsId = 1;
+}
