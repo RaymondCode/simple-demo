@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"tiktok_startup/common/model"
 
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/svc"
@@ -24,7 +25,20 @@ func NewGetFriendsListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetFriendsListLogic) GetFriendsList(in *contact.GetFriendsListRequest) (*contact.GetFriendsListResponse, error) {
-	// todo: add your logic here and delete this line
+	var result []model.Friend
 
-	return &contact.GetFriendsListResponse{}, nil
+	err := l.svcCtx.Mysql.Where("user_id = ?", in.UserId).Select("friend_id").Find(&result).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &contact.GetFriendsListResponse{
+		FriendsId: func() []int64 {
+			var friendsId []int64
+			for _, v := range result {
+				friendsId = append(friendsId, v.FriendId)
+			}
+			return friendsId
+		}(),
+	}, nil
 }

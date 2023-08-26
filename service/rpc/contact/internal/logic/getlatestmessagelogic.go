@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"tiktok_startup/common/model"
 
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/svc"
@@ -24,7 +25,23 @@ func NewGetLatestMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *GetLatestMessageLogic) GetLatestMessage(in *contact.GetLatestMessageRequest) (*contact.GetLatestMessageResponse, error) {
-	// todo: add your logic here and delete this line
+	result := model.Message{}
 
-	return &contact.GetLatestMessageResponse{}, nil
+	l.svcCtx.Mysql.
+		Where("from_id = ? and to_user_id = ?", in.UserAId, in.UserBId).
+		Or("from_id = ? and to_user_id = ?", in.UserBId, in.UserAId).
+		Order("created_at desc").
+		First(&result)
+
+	l.Logger.Info("GetLatestMessage", result)
+
+	return &contact.GetLatestMessageResponse{
+		Message: &contact.Message{
+			Id:         int64(result.ID),
+			Content:    result.Content,
+			CreateTime: result.CreatedAt.Unix(),
+			FromId:     result.FromId,
+			ToId:       result.ToUserId,
+		},
+	}, nil
 }

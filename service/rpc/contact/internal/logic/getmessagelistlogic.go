@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"tiktok_startup/common/model"
 
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/svc"
@@ -24,7 +25,23 @@ func NewGetMessageListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetMessageListLogic) GetMessageList(in *contact.GetMessageListRequest) (*contact.GetMessageListResponse, error) {
-	// todo: add your logic here and delete this line
+	var messages []model.Message
+	err := l.svcCtx.Mysql.Where("from_id = ?", in.FromId).Where("to_user_id = ?", in.ToId).Find(&messages).Error
+	if err != nil {
+		return nil, err
+	}
 
-	return &contact.GetMessageListResponse{}, nil
+	var messageList []*contact.Message
+	for _, message := range messages {
+		messageList = append(messageList, &contact.Message{
+			Id:         int64(message.ID),
+			Content:    message.Content,
+			CreateTime: message.CreatedAt.Unix(),
+			FromId:     message.FromId,
+			ToId:       message.ToUserId,
+		})
+	}
+	return &contact.GetMessageListResponse{
+		Messages: messageList,
+	}, nil
 }

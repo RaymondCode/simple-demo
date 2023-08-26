@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"gorm.io/gorm"
+	"tiktok_startup/common/model"
 
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/svc"
@@ -24,7 +26,27 @@ func NewMakeFriendsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *MakeF
 }
 
 func (l *MakeFriendsLogic) MakeFriends(in *contact.MakeFriendsRequest) (*contact.Empty, error) {
-	// todo: add your logic here and delete this line
+	err := l.svcCtx.Mysql.Transaction(func(tx *gorm.DB) error {
+		newFriendsA := model.Friend{
+			UserId:   in.UserAId,
+			FriendId: in.UserBId,
+		}
 
+		newFriendsB := model.Friend{
+			UserId:   in.UserBId,
+			FriendId: in.UserAId,
+		}
+		if err := tx.Create(&newFriendsA).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Create(&newFriendsB).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
 	return &contact.Empty{}, nil
 }

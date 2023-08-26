@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/config"
 	"tiktok_startup/service/rpc/contact/internal/server"
@@ -33,7 +32,6 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

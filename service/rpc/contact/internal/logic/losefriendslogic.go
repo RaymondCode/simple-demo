@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"tiktok_startup/common/model"
 
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/svc"
@@ -24,7 +25,19 @@ func NewLoseFriendsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoseF
 }
 
 func (l *LoseFriendsLogic) LoseFriends(in *contact.LoseFriendsRequest) (*contact.Empty, error) {
-	// todo: add your logic here and delete this line
+	tx := l.svcCtx.Mysql.Begin()
+
+	if err := tx.Where("user_id = ? AND friend_id = ?", in.UserAId, in.UserBId).Delete(&model.Friend{}).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := tx.Where("user_id = ? AND friend_id = ?", in.UserBId, in.UserAId).Delete(&model.Friend{}).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
 
 	return &contact.Empty{}, nil
 }
