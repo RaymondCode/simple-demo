@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
-
+	"github.com/zeromicro/go-zero/core/logx"
+	"google.golang.org/grpc/status"
+	"tiktok_startup/common/model"
 	"tiktok_startup/service/rpc/contact/contact"
 	"tiktok_startup/service/rpc/contact/internal/svc"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CreateMessageLogic struct {
@@ -24,7 +24,15 @@ func NewCreateMessageLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cre
 }
 
 func (l *CreateMessageLogic) CreateMessage(in *contact.CreateMessageRequest) (*contact.Empty, error) {
-	// todo: add your logic here and delete this line
-
+	db := l.svcCtx.Mysql
+	//创建并增加消息记录
+	message := model.Message{
+		FromId:   in.FromId,
+		ToUserId: in.ToId,
+		Content:  in.Content,
+	}
+	if err := db.Create(message).Error; err != nil {
+		return nil, status.Error(1000, err.Error())
+	}
 	return &contact.Empty{}, nil
 }

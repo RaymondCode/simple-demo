@@ -1,6 +1,9 @@
 Name: contact.rpc
 ListenOn: 0.0.0.0:8080
-Etcd:
-  Hosts:
-  - 127.0.0.1:2379
-  Key: contact.rpc
+Mode: dev
+Mysql:
+  Address: ts.dn11.top:33066
+  Username: root
+  Password: "SXFsvsxegJ4PtI84MR"
+  DBName: tiktok_startup
+  TablePrefix: ""
