@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"tiktok_startup/common/model"
+	"tiktok_startup/service/rpc/video/common/model"
 	"tiktok_startup/service/rpc/video/internal/config"
 )
 
