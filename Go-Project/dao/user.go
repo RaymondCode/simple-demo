@@ -55,11 +55,11 @@ func GetAllUsers() ([]User, error) {
 
 }
 
-//查询Token是否存在
-func QueryToken（token string）bool{
-	var tokens []Token
+// 查询Token是否存在
+func QueryToken(token string) bool {
+	var tokens []string
 	result := global.DB.Where("token=?", token).First(&tokens)
-	
+
 	// 检查查询结果和错误
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -70,6 +70,6 @@ func QueryToken（token string）bool{
 			panic(result.Error)
 		}
 	}
-	
+
 	return false
 }

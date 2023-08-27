@@ -67,7 +67,7 @@ func RequireAllUser() ([]dao.User, error) {
 	return users, nil
 }
 
-//查询Token是否存在
+// 查询Token是否存在
 func IsTokenExists(token string) bool {
-	return dao.QueryToken（token）
+	return dao.QueryToken(token)
 }

@@ -121,7 +121,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
 			UserId:   user.Id,
-			Token:    Token,
+			Token:    token,
 		})
 		return
 	}
