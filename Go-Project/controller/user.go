@@ -1,10 +1,14 @@
 package controller
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 	"sync/atomic"
 
 	"github.com/gin-gonic/gin"
+	"github.com/life-studied/douyin-simple/dao"
 	"github.com/life-studied/douyin-simple/service"
 )
 
@@ -31,7 +35,7 @@ type UserLoginResponse struct {
 
 type UserResponse struct {
 	Response
-	User User `json:"user"`
+	User dao.User `json:"user"`
 }
 
 func Register(c *gin.Context) {
@@ -126,16 +130,22 @@ func Login(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
+	userId := c.Query("user_id")
+	id, _ := strconv.ParseInt(userId, 10, 64)
 	token := c.Query("token")
 
-	if user, exist := usersLoginInfo[token]; exist {
+	log.Printf("id = %v, token = %v", id, token)
+
+	if user, exist := dao.GetUserByUserId(id); exist != nil {
+
+		c.JSON(http.StatusOK, UserResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+		})
+	} else {
+		fmt.Println("User = ", service.MapToJson(user))
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	}
 }
