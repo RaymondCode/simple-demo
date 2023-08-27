@@ -57,8 +57,8 @@ func GetAllUsers() ([]User, error) {
 
 // 查询Token是否存在
 func QueryToken(token string) bool {
-	var tokens []string
-	result := global.DB.Where("token=?", token).First(&tokens)
+	var users []User
+	result := global.DB.Where("token=?", token).First(&users)
 
 	// 检查查询结果和错误
 	if result.Error != nil {
