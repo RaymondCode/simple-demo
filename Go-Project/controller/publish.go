@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"time"
 )
 
 type VideoListResponse struct {
@@ -35,7 +36,7 @@ func Publish(c *gin.Context) {
 
 	filename := filepath.Base(data.Filename)
 	user := usersLoginInfo[token]
-	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
+	finalName := fmt.Sprintf("%d_%d_%s", user.Id, time.Now().Unix(), filename)
 	saveFilePath := filepath.Join("./public/", finalName)
 	if err := c.SaveUploadedFile(data, saveFilePath); err != nil {
 		c.JSON(http.StatusOK, Response{
@@ -65,12 +66,13 @@ func Publish(c *gin.Context) {
 		CommentCount:  0,
 		IsFavorite:    false,
 	})
-
+	title := c.PostForm("title")
 	err = service.SaveVideo(service.Video{
+		ID:       int64(newId),
 		AuthorID: user.Id,
 		PlayURL:  playUrl,
 		CoverURL: "",
-		Title:    c.Query("title"),
+		Title:    title,
 	})
 	if err != nil {
 		c.JSON(http.StatusOK, Response{
@@ -101,7 +103,7 @@ func PublishList(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, VideoListResponse{
-		Response:  Response{0, "reponse successfully"},
+		Response:  Response{0, "response successfully"},
 		VideoList: userPublishVideos,
 	})
 }

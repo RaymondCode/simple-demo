@@ -6,7 +6,9 @@
 // -------------------------------------------
 package dao
 
-import "github.com/life-studied/douyin-simple/global"
+import (
+	"github.com/life-studied/douyin-simple/global"
+)
 
 func SaveVideoToMysql(newVideo Video) error {
 	err := global.DB.Create(&newVideo).Error

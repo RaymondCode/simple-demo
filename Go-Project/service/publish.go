@@ -12,6 +12,7 @@ import (
 )
 
 type Video struct {
+	ID       int64  `gorm:"primary_key;column:id;comment:'视频ID'" json:"id"`
 	AuthorID int64  `gorm:"column:author_id;not null;comment:'作者ID'" json:"author_id"`
 	PlayURL  string `gorm:"column:play_url;not null;comment:'播放链接'" json:"play_url"`
 	CoverURL string `gorm:"column:cover_url;not null;comment:'封面链接'" json:"cover_url"`
@@ -20,6 +21,7 @@ type Video struct {
 
 func SaveVideo(video Video) error {
 	err := dao.SaveVideoToMysql(dao.Video{
+		ID:          video.ID,
 		AuthorID:    video.AuthorID,
 		PlayURL:     video.PlayURL,
 		CoverURL:    video.CoverURL,

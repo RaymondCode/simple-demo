@@ -16,51 +16,7 @@ import (
 // usersLoginInfo use map to store user info, and key is username+password for demo
 // user data will be cleared every time the server starts
 // test data: username=zhanglei, password=douyin
-var usersLoginInfo = map[string]User{
-	// "zhangleidouyin": {
-	// 	Id:            6,
-	// 	Name:          "zhanglei",
-	// 	FollowCount:   10,
-	// 	FollowerCount: 5,
-	// 	IsFollow:      true,
-	// },
-
-	"user_1password_1": {
-		Id:            1,
-		Name:          "user_1",
-		FollowCount:   0,
-		FollowerCount: 0,
-		IsFollow:      false,
-	},
-	"user_2password_2": {
-		Id:            1,
-		Name:          "user_2",
-		FollowCount:   0,
-		FollowerCount: 0,
-		IsFollow:      false,
-	},
-	"user_3password_3": {
-		Id:            1,
-		Name:          "user_3",
-		FollowCount:   0,
-		FollowerCount: 0,
-		IsFollow:      false,
-	},
-	"user_4password_4": {
-		Id:            1,
-		Name:          "user_4",
-		FollowCount:   0,
-		FollowerCount: 0,
-		IsFollow:      false,
-	},
-	"user_5password_5": {
-		Id:            1,
-		Name:          "user_5",
-		FollowCount:   0,
-		FollowerCount: 0,
-		IsFollow:      false,
-	},
-}
+var usersLoginInfo = map[string]User{}
 
 var userIdSequence = int64(0)
 
