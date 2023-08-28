@@ -1,10 +1,20 @@
 package controller
 
 import (
+<<<<<<< HEAD
+=======
+	"fmt"
+	"log"
+>>>>>>> 49754dc5339808f2ef36374020a58f2058075b9e
 	"net/http"
+	"strconv"
 	"sync/atomic"
 
 	"github.com/gin-gonic/gin"
+<<<<<<< HEAD
+=======
+	"github.com/life-studied/douyin-simple/dao"
+>>>>>>> 49754dc5339808f2ef36374020a58f2058075b9e
 	"github.com/life-studied/douyin-simple/service"
 )
 
@@ -19,6 +29,7 @@ var usersLoginInfo = map[string]User{
 	// 	FollowerCount: 5,
 	// 	IsFollow:      true,
 	// },
+<<<<<<< HEAD
 	"user_1password_1": {
 		Id:            1,
 		Name:          "user_1",
@@ -54,6 +65,8 @@ var usersLoginInfo = map[string]User{
 		FollowerCount: 0,
 		IsFollow:      false,
 	},
+=======
+>>>>>>> 49754dc5339808f2ef36374020a58f2058075b9e
 }
 
 var userIdSequence = int64(0)
@@ -66,7 +79,7 @@ type UserLoginResponse struct {
 
 type UserResponse struct {
 	Response
-	User User `json:"user"`
+	User dao.User `json:"user"`
 }
 
 func Register(c *gin.Context) {
@@ -163,16 +176,22 @@ func Login(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
+	userId := c.Query("user_id")
+	id, _ := strconv.ParseInt(userId, 10, 64)
 	token := c.Query("token")
 
-	if user, exist := usersLoginInfo[token]; exist {
+	log.Printf("id = %v, token = %v", id, token)
+
+	if user, exist := dao.GetUserByUserId(id); exist != nil {
+
+		c.JSON(http.StatusOK, UserResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+		})
+	} else {
+		fmt.Println("User = ", service.MapToJson(user))
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	}
 }

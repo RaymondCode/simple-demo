@@ -66,6 +66,7 @@ func RequireAllUser() ([]dao.User, error) {
 	}
 	return users, nil
 }
+<<<<<<< HEAD
 
 // 查询用户名和密码
 func LoginUser(username, password string) (dao.User, error) {
@@ -75,3 +76,5 @@ func LoginUser(username, password string) (dao.User, error) {
 	}
 	return user, nil
 }
+=======
+>>>>>>> 49754dc5339808f2ef36374020a58f2058075b9e
