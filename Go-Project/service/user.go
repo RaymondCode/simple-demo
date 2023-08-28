@@ -67,7 +67,11 @@ func RequireAllUser() ([]dao.User, error) {
 	return users, nil
 }
 
-// 查询Token是否存在
-func IsTokenExists(token string) bool {
-	return dao.QueryToken(token)
+// 查询用户名和密码
+func LoginUser(username, password string) (dao.User, error) {
+	user, err := dao.GetUserByUsernameAndPassword(username, password)
+	if err != nil {
+		return dao.User{}, err
+	}
+	return user, nil
 }

@@ -19,6 +19,41 @@ var usersLoginInfo = map[string]User{
 	// 	FollowerCount: 5,
 	// 	IsFollow:      true,
 	// },
+	"user_1password_1": {
+		Id:            1,
+		Name:          "user_1",
+		FollowCount:   0,
+		FollowerCount: 0,
+		IsFollow:      false,
+	},
+	"user_2password_2": {
+		Id:            1,
+		Name:          "user_2",
+		FollowCount:   0,
+		FollowerCount: 0,
+		IsFollow:      false,
+	},
+	"user_3password_3": {
+		Id:            1,
+		Name:          "user_3",
+		FollowCount:   0,
+		FollowerCount: 0,
+		IsFollow:      false,
+	},
+	"user_4password_4": {
+		Id:            1,
+		Name:          "user_4",
+		FollowCount:   0,
+		FollowerCount: 0,
+		IsFollow:      false,
+	},
+	"user_5password_5": {
+		Id:            1,
+		Name:          "user_5",
+		FollowCount:   0,
+		FollowerCount: 0,
+		IsFollow:      false,
+	},
 }
 
 var userIdSequence = int64(0)
@@ -112,7 +147,7 @@ func Login(c *gin.Context) {
 
 	token := username + password
 
-	user, err := service.IsUserLegal(username, password)
+	user, err := service.LoginUser(username, password)
 	if err != nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "登录失败！请检查用户名和密码。"},
@@ -120,19 +155,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	flag := service.IsTokenExists(token)
-	if flag {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "登录失败！请检查用户名和密码。"},
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
-		})
-		return
-	}
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: Response{StatusCode: 0},
+		UserId:   user.ID,
+		Token:    token,
+	})
 }
 
 func UserInfo(c *gin.Context) {

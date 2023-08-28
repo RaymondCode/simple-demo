@@ -55,21 +55,15 @@ func GetAllUsers() ([]User, error) {
 
 }
 
-// 查询Token是否存在
-func QueryToken(token string) bool {
+// 查询用户名和密码
+func GetUserByUsernameAndPassword(username, password string) (User, error) {
 	var users []User
-	result := global.DB.Where("token=?", token).First(&users)
-
-	// 检查查询结果和错误
+	result := global.DB.Where("name = ? AND password = ?", username, password).First(&users)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			if result.RowsAffected == 0 {
-				return true
-			}
-		} else {
-			panic(result.Error)
+			return User{}, errors.New("User not found")
 		}
+		return User{}, result.Error
 	}
-
-	return false
+	return User{}, nil
 }
