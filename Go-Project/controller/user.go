@@ -3,12 +3,13 @@ package controller
 import (
 	"fmt"
 	"log"
+
+	"github.com/gin-gonic/gin"
+	"github.com/life-studied/douyin-simple/dao"
 	"net/http"
 	"strconv"
 	"sync/atomic"
 
-	"github.com/gin-gonic/gin"
-	"github.com/life-studied/douyin-simple/dao"
 	"github.com/life-studied/douyin-simple/service"
 )
 
@@ -23,6 +24,7 @@ var usersLoginInfo = map[string]User{
 	// 	FollowerCount: 5,
 	// 	IsFollow:      true,
 	// },
+
 	"user_1password_1": {
 		Id:            1,
 		Name:          "user_1",

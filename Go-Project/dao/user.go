@@ -54,7 +54,6 @@ func GetAllUsers() ([]User, error) {
 	return users, nil
 
 }
-
 // 查询用户名和密码
 func GetUserByUsernameAndPassword(username, password string) (User, error) {
 	var users []User
