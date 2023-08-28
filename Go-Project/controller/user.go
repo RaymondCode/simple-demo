@@ -112,6 +112,14 @@ func Login(c *gin.Context) {
 
 	token := username + password
 
+	user, err := service.IsUserLegal(username, password)
+	if err != nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "登录失败！请检查用户名和密码。"},
+		})
+		return
+	}
+
 	flag := service.IsTokenExists(token)
 	if flag {
 		c.JSON(http.StatusOK, UserLoginResponse{
