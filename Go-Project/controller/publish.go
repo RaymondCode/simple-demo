@@ -88,7 +88,8 @@ func Publish(c *gin.Context) {
 }
 
 func PublishList(c *gin.Context) {
-	userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	strUserId := c.Query("user_id")
+	userId, err := strconv.ParseInt(strUserId, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, VideoListResponse{
 			Response:  Response{1, err.Error()},
