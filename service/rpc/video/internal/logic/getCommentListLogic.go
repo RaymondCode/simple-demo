@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"tiktok_startup/service/rpc/video/common/model"
 
 	"tiktok_startup/service/rpc/video/internal/svc"
 	"tiktok_startup/service/rpc/video/video"
@@ -24,7 +25,26 @@ func NewGetCommentListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ge
 }
 
 func (l *GetCommentListLogic) GetCommentList(in *video.GetCommentListRequest) (*video.GetCommentListResponse, error) {
-	// todo: add your logic here and delete this line
+	var comments []*model.Comment
+	if err := l.svcCtx.Mysql.
+		Where("video_id = ?", in.VideoId).
+		Limit(model.PopularVideoStandard).
+		Order("created_at").
+		Find(&comments).Error; err != nil {
+		return nil, err
+	}
 
-	return &video.GetCommentListResponse{}, nil
+	commentList := make([]*video.Comment, 0, len(comments))
+	for _, v := range comments {
+		commentList = append(commentList, &video.Comment{
+			Id:         int64(v.ID),
+			AuthorId:   v.UserId,
+			CreateTime: v.CreatedAt.Unix(),
+			Content:    v.Content,
+		})
+	}
+
+	return &video.GetCommentListResponse{
+		CommentList: commentList,
+	}, nil
 }

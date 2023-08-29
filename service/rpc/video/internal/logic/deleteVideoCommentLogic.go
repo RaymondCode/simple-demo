@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+	"tiktok_startup/service/rpc/video/common/model"
 
 	"tiktok_startup/service/rpc/video/internal/svc"
 	"tiktok_startup/service/rpc/video/video"
@@ -24,7 +27,30 @@ func NewDeleteVideoCommentLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *DeleteVideoCommentLogic) DeleteVideoComment(in *video.DeleteVideoCommentRequest) (*video.Empty, error) {
-	// todo: add your logic here and delete this line
+	if err := l.svcCtx.Mysql.Transaction(func(tx *gorm.DB) error {
+		var comment model.Comment
+		if err := tx.Where("id = ?", in.CommentId).First(&comment).Error; err != nil {
+			return err
+		}
 
+		if err := tx.
+			Where("id = ?", in.CommentId).
+			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Delete(&model.Comment{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Model(&model.Video{}).
+			Where("id = ?", comment.VideoId).
+			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Update("comment_count", gorm.Expr("comment_count - ?", 1)).
+			Error; err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return nil, err
+	}
 	return &video.Empty{}, nil
 }

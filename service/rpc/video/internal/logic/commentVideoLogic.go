@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+	"tiktok_startup/service/rpc/video/common/model"
 
 	"tiktok_startup/service/rpc/video/internal/svc"
 	"tiktok_startup/service/rpc/video/video"
@@ -24,7 +27,36 @@ func NewCommentVideoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Comm
 }
 
 func (l *CommentVideoLogic) CommentVideo(in *video.CommentVideoRequest) (*video.CommentVideoResponse, error) {
-	// todo: add your logic here and delete this line
+	comment := model.Comment{
+		VideoId: in.VideoId,
+		UserId:  in.UserId,
+		Content: in.Content,
+	}
 
-	return &video.CommentVideoResponse{}, nil
+	err := l.svcCtx.Mysql.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&comment).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Model(&model.Video{}).
+			Where("id = ?", in.VideoId).
+			Clauses(clause.Locking{Strength: "UPDATE"}).
+			Update("comment_count", gorm.Expr("comment_count + ?", 1)).
+			Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &video.CommentVideoResponse{
+		Id:          int64(comment.ID),
+		UserId:      comment.UserId,
+		Content:     comment.Content,
+		CreatedTime: comment.CreatedAt.Unix(),
+	}, nil
 }
