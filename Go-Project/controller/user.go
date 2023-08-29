@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gin-gonic/gin"
-	"github.com/life-studied/douyin-simple/dao"
 	"net/http"
 	"strconv"
 	"sync/atomic"
+
+	"github.com/gin-gonic/gin"
+	"github.com/life-studied/douyin-simple/dao"
 
 	"github.com/life-studied/douyin-simple/service"
 )
@@ -106,10 +107,12 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
+	var enToken string
 
 	token := username + password
+	enToken = service.Encryption(username, password)
 
-	user, err := service.LoginUser(username, password)
+	_, err := service.LoginUser(username, password)
 	if err != nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "登录失败！请检查用户名和密码。"},
@@ -117,9 +120,19 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	//在映射中用token查id
+	loggedInUser, found := usersLoginInfo[enToken]
+	if !found {
+		c.JSON(http.StatusInternalServerError, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "登录失败！用户信息不存在。"},
+		})
+		return
+	}
+
+	//返回正确响应
 	c.JSON(http.StatusOK, UserLoginResponse{
-		Response: Response{StatusCode: 0},
-		UserId:   user.ID,
+		Response: Response{StatusCode: 0, StatusMsg: "登录成功！"},
+		UserId:   loggedInUser.Id,
 		Token:    token,
 	})
 }
