@@ -1,12 +1,11 @@
 package response
 
+import "github.com/life-studied/douyin-simple/model"
+
 // User_Response 用户信息的响应结构体
 type User_Response struct {
-	ID            uint   `json:"id,omitempty"`
-	Name          string `json:"name,omitempty"`
-	FollowCount   uint   `json:"follow_count,omitempty"`
-	FollowerCount uint   `json:"follower_count,omitempty"`
-	IsFollow      bool   `json:"is_follow,omitempty"`
+	ID   uint   `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // Comment_Response 评论信息的响应结构体
@@ -24,10 +23,10 @@ type Response struct {
 
 type CommentListResponse struct {
 	Response
-	CommentList []Comment_Response `json:"comment_list,omitempty"`
+	CommentList []model.Comment `json:"comment_list,omitempty"`
 }
 
 type CommentActionResponse struct {
 	Response
-	Comment Comment_Response `json:"comment,omitempty"`
+	Comment model.Comment `json:"comment,omitempty"`
 }

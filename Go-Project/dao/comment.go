@@ -8,12 +8,14 @@ import (
 	"gorm.io/gorm"
 )
 
-// GetCommentByIdListById 根据video_id返回视频评论列表
-func GetCommentByIdListById(videoID int64) ([]model.Comment, error) {
+// QueryCommentsByVideoId 根据视频id查询该视频的评论列表
+func QueryCommentsByVideoId(videoId int64) ([]model.Comment, error) {
 	var comments []model.Comment
-	err := global.DB.Where("video_id = ?", videoID).Find(&comments).Error
-	if err != nil {
-		return nil, err
+	if err := global.DB.Preload("User").Where("video_id = ?", videoId).Find(&comments).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("没有找到%d这个视频的评论！", videoId)
+		}
+		return nil, fmt.Errorf("查询评论失败：%w", err)
 	}
 	return comments, nil
 }
@@ -69,18 +71,4 @@ func UpdateVideoCommentCount(videoID int64, operand int64) error {
 	}
 
 	return nil
-}
-
-// CommentRepository QueryCommentsByVideoId 根据视频id查询该视频的评论列表
-type Comments struct{}
-
-func (c *Comments) QueryCommentsByVideoId(videoId int64) ([]model.Comment, error) {
-	var comments []model.Comment
-	if err := global.DB.Preload("User").Where("video_id = ?", videoId).Find(&comments).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, fmt.Errorf("没有找到%d这个视频的评论！", videoId)
-		}
-		return nil, fmt.Errorf("查询评论失败：%w", err)
-	}
-	return comments, nil
 }
