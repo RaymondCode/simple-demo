@@ -11,23 +11,23 @@ import (
 func FavoriteAction(c *gin.Context) {
 	//接收参数，并判断是否合法
 	token, tokenOk := c.GetQuery("token")
-	if tokenOk {
+	if !tokenOk {
 		c.JSON(http.StatusBadRequest, Response{StatusCode: 400, StatusMsg: "Lack of token"})
 		return
 	}
 	userFromToken, exist := usersLoginInfo[token]
-	if exist {
+	if !exist {
 		c.JSON(http.StatusUnprocessableEntity, Response{StatusCode: 422, StatusMsg: "Token is invalid"})
 		return
 	}
 
 	videoId, videoIdOk := c.GetQuery("video_id")
-	if videoIdOk {
+	if !videoIdOk {
 		c.JSON(http.StatusBadRequest, Response{StatusCode: 400, StatusMsg: "Lack of video_id"})
 		return
 	}
 	actionType, actionTypeOk := c.GetQuery("action_type")
-	if actionTypeOk {
+	if !actionTypeOk {
 		c.JSON(http.StatusBadRequest, Response{StatusCode: 400, StatusMsg: "Lack of action_type"})
 		return
 	}
@@ -68,7 +68,7 @@ func FavoriteAction(c *gin.Context) {
 func FavoriteList(c *gin.Context) {
 	//接收参数，并判断是否合法
 	token, tokenOk := c.GetQuery("token")
-	if tokenOk {
+	if !tokenOk {
 		c.JSON(http.StatusBadRequest, VideoListResponse{
 			Response: Response{
 				StatusCode: 400,
@@ -80,7 +80,7 @@ func FavoriteList(c *gin.Context) {
 	}
 	//检测token
 	userFromToken, exist := usersLoginInfo[token]
-	if exist {
+	if !exist {
 		c.JSON(http.StatusUnprocessableEntity, VideoListResponse{
 			Response: Response{
 				StatusCode: 422,
@@ -97,7 +97,7 @@ func FavoriteList(c *gin.Context) {
 	}
 	//用不到但是必须要有的接收参数
 	_, userIdOk := c.GetQuery("user_id")
-	if userIdOk {
+	if !userIdOk {
 		c.JSON(http.StatusBadRequest, VideoListResponse{
 			Response: Response{
 				StatusCode: 400,
