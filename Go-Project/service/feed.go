@@ -14,6 +14,7 @@ import (
 
 func GetNextTime(latest_time string) (int64, int64, error) {
 	i64LatestTime, err := strconv.ParseInt(latest_time, 10, 64)
+	i64LatestTime /= 1000
 	if err != nil {
 		return 0, 0, err
 	}
