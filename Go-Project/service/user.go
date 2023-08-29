@@ -1,8 +1,6 @@
 package service
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -37,10 +35,7 @@ func IsUserLegal(userName string, passWord string) error {
 // 对token进行加密
 func Encryption(username, password string) string {
 	token := username + password
-	hash := sha256.New()
-	hash.Write([]byte(token))
-	enToken := hex.EncodeToString(hash.Sum(nil))
-	return enToken
+	return token
 }
 
 // 查询用户名是否重复
@@ -66,6 +61,7 @@ func RequireAllUser() ([]dao.User, error) {
 	}
 	return users, nil
 }
+
 // 查询用户名和密码
 func LoginUser(username, password string) (dao.User, error) {
 	user, err := dao.GetUserByUsernameAndPassword(username, password)
