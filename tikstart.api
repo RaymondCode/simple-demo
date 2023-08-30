@@ -1,0 +1,82 @@
+syntax = "v1"
+
+type Empty {
+}
+
+type BasicResponse {
+	StatusCode int32  `json:"status_code"`
+	StatusMsg  string `json:"status_msg"`
+}
+
+type (
+	RegisterRequest {
+		Username string `form:"username"`
+		Password string `form:"password"`
+	}
+
+	RegisterResponse {
+		BasicResponse
+		UserId int64  `json:"user_id"`
+		Token  string `json:"token"`
+	}
+)
+
+type (
+	LoginRequest {
+		Username string `form:"username"`
+		Password string `form:"password"`
+	}
+
+	LoginResponse {
+		BasicResponse
+		UserId int64  `json:"user_id"`
+		Token  string `json:"token"`
+	}
+)
+
+type (
+	User {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+	}
+
+	GetUserInfoRequest {
+		UserId int64  `form:"user_id"`
+		Token  string `form:"token"`
+	}
+
+	GetUserInfoResponse {
+		BasicResponse
+		User User `json:"user"`
+	}
+)
+
+@server(
+	group: app
+)
+service tikstart {
+	@handler Ping
+	get /ping (Empty) returns (BasicResponse)
+}
+
+@server(
+	group: user
+	prefix: /douyin/user
+)
+service tikstart {
+	@handler Register
+	post /register (RegisterRequest) returns (RegisterResponse)
+
+	@handler Login
+	post /login (LoginRequest) returns (LoginResponse)
+}
+
+@server(
+	group : user
+	prefix: /douyin/user
+	middleware: JwtAuth
+)
+service tikstart {
+	@handler GetUserInfo
+	get / (GetUserInfoRequest) returns (GetUserInfoResponse)
+}

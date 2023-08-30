@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package user;
+option go_package = "./user";
+
+message PingRequest {
+  string ping = 1;
+}
+
+message PingResponse {
+  string pong = 1;
+}
+
+message CreateRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message CreateResponse {
+  int64 user_id = 1;
+}
+
+message QueryByIdRequest {
+  int64 user_id = 1;
+}
+
+message QueryByNameRequest {
+  string username = 1;
+}
+
+message QueryResponse {
+  int64 user_id = 1;
+  string username = 2;
+//  int64 follow_count = 3;
+//  int64 follower_count = 4;
+//  string avatar = 6;
+//  string background_image = 7;
+//  string signature = 8;
+//  int64 total_favorited = 9;
+//  int64 work_count = 10;
+//  int64 favorite_count = 11;
+  bytes password = 12;
+  int64 created_at = 15;
+  int64 updated_at = 16;
+}
+
+service User {
+  rpc Ping(PingRequest) returns(PingResponse);
+  rpc Create(CreateRequest) returns(CreateResponse);
+  rpc QueryById(QueryByIdRequest) returns(QueryResponse);
+  rpc QueryByName(QueryByNameRequest) returns(QueryResponse);
+}
