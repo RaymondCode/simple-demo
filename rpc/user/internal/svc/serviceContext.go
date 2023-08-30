@@ -36,7 +36,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 }
 
 func getDSN(c *config.Config) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
+	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		c.MySQL.User,
 		c.MySQL.Password,
 		c.MySQL.Host,

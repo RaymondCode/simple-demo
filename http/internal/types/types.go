@@ -32,8 +32,9 @@ type LoginResponse struct {
 }
 
 type User struct {
-	Id   int64  `json:"id"`
-	Name string `json:"name"`
+	Id       int64  `json:"id"`
+	Name     string `json:"name"`
+	IsFollow bool   `json:"is_follow"`
 }
 
 type GetUserInfoRequest struct {

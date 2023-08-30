@@ -57,12 +57,13 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoRequest) (resp *typ
 	}
 	return &types.GetUserInfoResponse{
 		BasicResponse: types.BasicResponse{
-			StatusCode: 200,
+			StatusCode: 0,
 			StatusMsg:  "",
 		},
 		User: types.User{
-			Id:   res.UserId,
-			Name: res.Username,
+			Id:       res.UserId,
+			Name:     res.Username,
+			IsFollow: false,
 		},
 	}, nil
 }
