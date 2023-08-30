@@ -2,6 +2,7 @@ package dao
 
 import (
 	"errors"
+	"github.com/life-studied/douyin-simple/model"
 
 	"github.com/life-studied/douyin-simple/global"
 	"gorm.io/gorm"
@@ -66,4 +67,13 @@ func GetUserByUsernameAndPassword(username, password string) (User, error) {
 		return User{}, result.Error
 	}
 	return User{}, nil
+}
+
+func QueryUserById(id int64) (*model.User, error) {
+	var user model.User
+	err := global.DB.Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }

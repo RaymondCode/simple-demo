@@ -22,15 +22,15 @@ func CommentAction(c *gin.Context) {
 	actionType := c.Query("action_type")
 	commentText := c.Query("comment_text")
 
-	token := c.Query("token")
-	user, exists := usersLoginInfo[token]
-	if !exists {
+
+	userID, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	if err != nil {
+
 		c.JSON(http.StatusBadRequest, response.CommentActionResponse{
 			Response: response.Response{StatusCode: http.StatusBadRequest, StatusMsg: "无效的token"},
 		})
 		return
 	}
-	userID := user.Id
 
 	// 判断操作类型
 	if actionType == "1" {

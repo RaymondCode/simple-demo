@@ -23,17 +23,27 @@ func IntTime2StrTime(intTime int64) string {
 func CreateComment(userID int64, videoID int64, commentText string) (response.CommentActionResponse, error) {
 	// 获取评论时间
 	currentTime := time.Now().Unix()
+	user, err := dao.QueryUserById(userID)
+	if err != nil {
+		// 处理videoID解析错误
+		commentActionResponse := response.CommentActionResponse{
+			Response: response.Response{StatusCode: http.StatusInternalServerError, StatusMsg: "用户查询异常"},
+		}
+		return commentActionResponse, err
+	}
+
 	// 发布评论
 	// 创建comment结构体
 	comment := model.Comment{
 		UserId:     userID,
 		VideoId:    videoID,
+		User:       *user,
 		Content:    commentText,
 		CreateDate: IntTime2StrTime(currentTime),
 	}
 	//  将comment增添到数据库中
 	tx := dao.BeginTransaction()
-	err := dao.CreateComment(&comment)
+	err = dao.CreateComment(&comment)
 	if err != nil {
 		// 如果发生错误，将数据库回滚到未添加评论的初始状态
 		defer dao.RollbackTransaction(tx)
@@ -46,7 +56,7 @@ func CreateComment(userID int64, videoID int64, commentText string) (response.Co
 
 	}
 	// 更新视频表评论总数+1
-	err = dao.UpdateVideoCommentCount(videoID, 1)
+	err = dao.InCreCommentCount(videoID, 1)
 	if err != nil {
 		// 如果发生错误，将数据库回滚到未添加评论的初始状态
 		defer dao.RollbackTransaction(tx)
@@ -121,7 +131,7 @@ func DeleteComment(userID int64, videoID int64, commentID int64) (response.Comme
 			return commentActionResponse, err
 		}
 		// 更新视频表评论总数-1
-		err = dao.UpdateVideoCommentCount(videoID, -1)
+		err = dao.DeCreCommentCount(videoID, -1)
 		if err != nil {
 			// 如果发生错误，将数据库回滚到未删除评论的初始状态
 			defer dao.RollbackTransaction(tx)
