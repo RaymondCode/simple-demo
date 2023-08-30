@@ -52,6 +52,42 @@ type (
 	}
 )
 
+type (
+	FollowRequest {
+		ToUserId   int64  `form:"to_user_id"`
+		Token      string `form:"token"`
+		ActionType int32  `form:"action_type"`
+	}
+
+	FollowResponse {
+		BasicResponse
+	}
+)
+
+type (
+	Video {
+		Id            int64  `json:"id"`
+		Title         string `json:"title"`
+		Author        User   `json:"author"`
+		PlayUrl       string `json:"play_url"`
+		CoverUrl      string `json:"cover_url"`
+		FavoriteCount int64  `json:"favorite_count"`
+		CommentCount  int64  `json:"comment_count"`
+		IsFavorite    bool   `json:"is_favorite"`
+	}
+
+	GetVideoListRequest {
+		LatestTime int64  `form:"latest_time,optional"`
+		Token      string `form:"token,optional"`
+	}
+
+	GetVideoListResponse {
+		BasicResponse
+		Next_time int64   `json:"next_time"`
+		VideoList []Video `json:"video_list"`
+	}
+)
+
 @server(
 	group: app
 )
@@ -80,4 +116,13 @@ service tikstart {
 service tikstart {
 	@handler GetUserInfo
 	get / (GetUserInfoRequest) returns (GetUserInfoResponse)
+}
+
+@server (
+	group: social
+	prefix: /douyin/relation
+)
+service tikstart {
+	@handler Follow
+	post /action (FollowRequest) returns (FollowResponse)
 }

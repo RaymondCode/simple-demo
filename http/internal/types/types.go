@@ -4,17 +4,6 @@ package types
 type Empty struct {
 }
 
-type Video struct {
-	Id            int64  `json:"id"`
-	Title         string `json:"title"`
-	Author        User   `json:"author"`
-	PlayUrl       string `json:"play_url"`
-	CoverUrl      string `json:"cover_url"`
-	FavoriteCount int64  `json:"favorite_count"`
-	CommentCount  int64  `json:"comment_count"`
-	IsFavorite    bool   `json:"is_favorite"`
-}
-
 type BasicResponse struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg"`
@@ -56,6 +45,27 @@ type GetUserInfoRequest struct {
 type GetUserInfoResponse struct {
 	BasicResponse
 	User User `json:"user"`
+}
+
+type FollowRequest struct {
+	ToUserId   int64  `form:"to_user_id"`
+	Token      string `form:"token"`
+	ActionType int32  `form:"action_type"`
+}
+
+type FollowResponse struct {
+	BasicResponse
+}
+
+type Video struct {
+	Id            int64  `json:"id"`
+	Title         string `json:"title"`
+	Author        User   `json:"author"`
+	PlayUrl       string `json:"play_url"`
+	CoverUrl      string `json:"cover_url"`
+	FavoriteCount int64  `json:"favorite_count"`
+	CommentCount  int64  `json:"comment_count"`
+	IsFavorite    bool   `json:"is_favorite"`
 }
 
 type GetVideoListRequest struct {
