@@ -78,3 +78,13 @@ type GetVideoListResponse struct {
 	Next_time int64   `json:"next_time"`
 	VideoList []Video `json:"video_list"`
 }
+
+type GetFriendListRequest struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
+type GetFriendListResponse struct {
+	BasicResponse
+	UserList []int64 `json:"user_list"`
+}

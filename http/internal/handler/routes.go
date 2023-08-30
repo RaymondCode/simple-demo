@@ -63,4 +63,15 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		},
 		rest.WithPrefix("/douyin/relation"),
 	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/friend/list",
+				Handler: social.GetFriendListHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/douyin/relation"),
+	)
 }
