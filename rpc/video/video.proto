@@ -63,7 +63,7 @@ message GetVideoListByAuthorRequest{
   int64 AuthorId = 1;
 }
 message GetVideoListByAuthorResponse{
-  VideoInfo video = 1;
+  repeated VideoInfo video = 1;
 }
 //实现点击喜欢视频
 message FavoriteVideoRequest{

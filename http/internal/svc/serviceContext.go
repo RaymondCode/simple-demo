@@ -6,18 +6,21 @@ import (
 	"tikstart/http/internal/config"
 	"tikstart/http/internal/middleware"
 	"tikstart/rpc/user/userClient"
+	"tikstart/rpc/video/videoClient"
 )
 
 type ServiceContext struct {
-	Config  config.Config
-	UserRpc userClient.User
-	JwtAuth rest.Middleware
+	Config   config.Config
+	UserRpc  userClient.User
+	VideoRpc videoClient.Video
+	JwtAuth  rest.Middleware
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:  c,
-		UserRpc: userClient.NewUser(zrpc.MustNewClient(c.UserRpc)),
-		JwtAuth: middleware.NewJwtAuthMiddleware(c).Handle,
+		Config:   c,
+		UserRpc:  userClient.NewUser(zrpc.MustNewClient(c.UserRpc)),
+		VideoRpc: videoClient.NewVideo(zrpc.MustNewClient(c.VideoRpc)),
+		JwtAuth:  middleware.NewJwtAuthMiddleware(c).Handle,
 	}
 }
