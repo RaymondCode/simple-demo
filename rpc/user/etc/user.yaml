@@ -1,0 +1,19 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8080
+Mode: dev
+
+#MySQL:
+#  Host: 127.0.0.1
+#  Port: 6033
+#  User: microservice
+#  Password: password
+#  Database: microservice_user
+#  TablePrefix: ""
+
+MySQL:
+  Host: ts.dn11.top
+  Port: 33066
+  User: root
+  Password: SXFsvsxegJ4PtI84MR
+  Database: tiktok_startup
+  TablePrefix: "dev_"
