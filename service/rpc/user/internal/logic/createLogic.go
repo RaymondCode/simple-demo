@@ -2,11 +2,15 @@ package logic
 
 import (
 	"context"
-
+	"github.com/golang/protobuf/ptypes/any"
+	"github.com/zeromicro/go-zero/core/logx"
+	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"tikstart/common"
+	"tikstart/model"
 	"tikstart/service/rpc/user/internal/svc"
 	"tikstart/service/rpc/user/user"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CreateLogic struct {
@@ -24,7 +28,39 @@ func NewCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateLogi
 }
 
 func (l *CreateLogic) Create(in *user.CreateRequest) (*user.CreateResponse, error) {
-	// todo: add your logic here and delete this line
+	username := in.Username
+	password := in.Password
 
-	return &user.CreateResponse{}, nil
+	var count int64
+	err := l.svcCtx.DB.Model(&model.User{}).Where("username = ?", username).Count(&count).Error
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	if count > 0 {
+		return nil, common.ErrUserAlreadyExists.Err()
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	newUser := &model.User{
+		Username: username,
+		Password: hashedPassword,
+	}
+
+	err = l.svcCtx.DB.Create(newUser).Error
+	if err != nil {
+		st, _ := status.New(codes.Internal, "error creating user record").WithDetails(
+			&any.Any{
+				Value: []byte(err.Error()),
+			})
+		return nil, st.Err()
+	}
+
+	return &user.CreateResponse{
+		UserId: newUser.UserId,
+	}, nil
 }
