@@ -1,9 +1,7 @@
 package controller
 
 import (
-	"fmt"
 	"log"
-
 	"net/http"
 	"strconv"
 	"sync/atomic"
@@ -17,6 +15,7 @@ import (
 // usersLoginInfo use map to store user info, and key is username+password for demo
 // user data will be cleared every time the server starts
 // test data: username=zhanglei, password=douyin
+
 var usersLoginInfo = map[string]User{}
 
 var userIdSequence = int64(0)
@@ -29,7 +28,7 @@ type UserLoginResponse struct {
 
 type UserResponse struct {
 	Response
-	User dao.User `json:"user"`
+	User User `json:"user"`
 }
 
 func Register(c *gin.Context) {
@@ -150,10 +149,15 @@ func UserInfo(c *gin.Context) {
 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	} else {
-		fmt.Println("User = ", service.MapToJson(user))
+		token := user.Name + user.Password
+		respUser, exists := usersLoginInfo[token]
+		if !exists {
+			return
+		}
+		service.MapToJson(respUser)
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
-			User:     user,
+			User:     respUser,
 		})
 	}
 }
