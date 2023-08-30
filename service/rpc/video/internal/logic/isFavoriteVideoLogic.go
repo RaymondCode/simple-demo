@@ -3,8 +3,7 @@ package logic
 import (
 	"context"
 	"gorm.io/gorm"
-	"tikstart/service/rpc/video/common/model"
-
+	"tikstart/common/model"
 	"tikstart/service/rpc/video/internal/svc"
 	"tikstart/service/rpc/video/video"
 

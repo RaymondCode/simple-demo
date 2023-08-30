@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"tikstart/service/rpc/video/common/model"
+	"tikstart/common/model"
 	"tikstart/service/rpc/video/internal/config"
 )
 
