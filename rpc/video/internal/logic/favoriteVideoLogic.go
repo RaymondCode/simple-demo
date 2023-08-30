@@ -5,7 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"tikstart/rpc/video/common/model"
+	"tikstart/common/model"
 	"tikstart/rpc/video/internal/svc"
 	"tikstart/rpc/video/video"
 )
