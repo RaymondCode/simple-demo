@@ -5,8 +5,8 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"tiktok_startup/common/model"
-	"tiktok_startup/service/rpc/contact/internal/config"
+	"tikstart/common/model"
+	"tikstart/service/rpc/contact/internal/config"
 )
 
 type ServiceContext struct {

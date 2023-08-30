@@ -1,3 +1,12 @@
 Name: tikstart
 Host: 0.0.0.0
 Port: 8888
+
+UserRpc:
+  Endpoints:
+    - 127.0.0.1:8080
+  NonBlock: true
+
+JwtAuth:
+  Secret: ?xX7nYmfM<(4r%p
+  Expire: 1209600 # 14天

@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"tiktok_startup/service/rpc/video/internal/logic"
-	"tiktok_startup/service/rpc/video/internal/svc"
-	"tiktok_startup/service/rpc/video/video"
+	"tikstart/service/rpc/video/internal/logic"
+	"tikstart/service/rpc/video/internal/svc"
+	"tikstart/service/rpc/video/video"
 )
 
 type VideoServer struct {

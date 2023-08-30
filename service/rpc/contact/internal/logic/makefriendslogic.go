@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 	"gorm.io/gorm"
-	"tiktok_startup/common/model"
+	"tikstart/common/model"
 
-	"tiktok_startup/service/rpc/contact/contact"
-	"tiktok_startup/service/rpc/contact/internal/svc"
+	"tikstart/service/rpc/contact/contact"
+	"tikstart/service/rpc/contact/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

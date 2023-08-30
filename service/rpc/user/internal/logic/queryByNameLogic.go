@@ -5,9 +5,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
-	"tikstart/common"
-	"tikstart/model"
-
+	error2 "tikstart/common/error"
+	"tikstart/common/model"
 	"tikstart/service/rpc/user/internal/svc"
 	"tikstart/service/rpc/user/user"
 
@@ -35,7 +34,7 @@ func (l *QueryByNameLogic) QueryByName(in *user.QueryByNameRequest) (*user.Query
 	err := l.svcCtx.DB.Where("username = ?", username).First(&userRecord).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return nil, common.ErrUserNotFound.Err()
+			return nil, error2.ErrUserNotFound.Err()
 		} else {
 			return nil, status.Error(codes.Internal, err.Error())
 		}

@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/status"
-	"tiktok_startup/common/model"
-	"tiktok_startup/service/rpc/contact/contact"
-	"tiktok_startup/service/rpc/contact/internal/svc"
+	"tikstart/common/model"
+	"tikstart/service/rpc/contact/contact"
+	"tikstart/service/rpc/contact/internal/svc"
 )
 
 type CreateMessageLogic struct {

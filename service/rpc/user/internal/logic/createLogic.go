@@ -7,8 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"tikstart/common"
-	"tikstart/model"
+	error2 "tikstart/common/error"
+	"tikstart/common/model"
 	"tikstart/service/rpc/user/internal/svc"
 	"tikstart/service/rpc/user/user"
 )
@@ -38,7 +38,7 @@ func (l *CreateLogic) Create(in *user.CreateRequest) (*user.CreateResponse, erro
 	}
 
 	if count > 0 {
-		return nil, common.ErrUserAlreadyExists.Err()
+		return nil, error2.ErrUserAlreadyExists.Err()
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)

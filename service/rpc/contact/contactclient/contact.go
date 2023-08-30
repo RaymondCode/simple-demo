@@ -6,7 +6,7 @@ package contactclient
 import (
 	"context"
 
-	"tiktok_startup/service/rpc/contact/contact"
+	"tikstart/service/rpc/contact/contact"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

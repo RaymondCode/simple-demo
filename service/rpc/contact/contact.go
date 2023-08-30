@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"tiktok_startup/service/rpc/contact/contact"
-	"tiktok_startup/service/rpc/contact/internal/config"
-	"tiktok_startup/service/rpc/contact/internal/server"
-	"tiktok_startup/service/rpc/contact/internal/svc"
+	"tikstart/service/rpc/contact/contact"
+	"tikstart/service/rpc/contact/internal/config"
+	"tikstart/service/rpc/contact/internal/server"
+	"tikstart/service/rpc/contact/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

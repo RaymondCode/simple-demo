@@ -11,8 +11,8 @@ Mode: dev
 #  TablePrefix: ""
 
 MySQL:
-  Host: ts.dn11.top:33066
-  Port: 3306
+  Host: ts.dn11.top
+  Port: 33066
   User: root
   Password: SXFsvsxegJ4PtI84MR
   Database: tiktok_startup

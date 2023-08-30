@@ -24,7 +24,8 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 }
 
 func (l *PingLogic) Ping(req *types.Empty) (resp *types.BasicResponse, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	return &types.BasicResponse{
+		StatusCode: 0,
+		StatusMsg:  "pong",
+	}, nil
 }

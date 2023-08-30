@@ -1,8 +1,6 @@
 package model
 
-import (
-	"time"
-)
+import "time"
 
 // TODO: follow and follower
 //type User struct {
@@ -18,9 +16,15 @@ import (
 //}
 
 type User struct {
-	UserId    int64     `gorm:"not null;primarykey;autoIncrement"`
-	Username  string    `gorm:"type:varchar(24);not null;uniqueIndex"`
-	Password  []byte    `gorm:"type:VARBINARY(60);not null"`
+	UserId   int64  `gorm:"not null;primarykey;autoIncrement"`
+	Username string `gorm:"type:varchar(24);not null;uniqueIndex"`
+	Password []byte `gorm:"type:VARBINARY(60);not null"`
+
+	FollowCount int64
+	FanCount    int64
+	Follows     []*User `gorm:"many2many:follows;"`                         // 关注列表
+	Fans        []*User `gorm:"many2many:follows;joinForeignKey:follow_id"` // 粉丝列表
+
 	CreatedAt time.Time `gorm:"not null"`
 	UpdatedAt time.Time `gorm:"not null"`
 }

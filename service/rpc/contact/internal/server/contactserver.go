@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"tiktok_startup/service/rpc/contact/contact"
-	"tiktok_startup/service/rpc/contact/internal/logic"
-	"tiktok_startup/service/rpc/contact/internal/svc"
+	"tikstart/service/rpc/contact/contact"
+	"tikstart/service/rpc/contact/internal/logic"
+	"tikstart/service/rpc/contact/internal/svc"
 )
 
 type ContactServer struct {
