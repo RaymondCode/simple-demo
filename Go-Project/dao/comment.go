@@ -42,6 +42,9 @@ func GetCommentById(commentID int64) (model.Comment, error) {
 
 // CreateComment 创建评论
 func CreateComment(comment *model.Comment) error {
+	var maxID int
+	global.DB.Table("comments").Select("MAX(id)").Scan(&maxID)
+	comment.Id = int64(maxID + 1)
 	err := global.DB.Create(&comment).Error
 	return err
 }
@@ -61,4 +64,3 @@ func InCreCommentCount(videoId int64, count int) error {
 func DeCreCommentCount(videoId int64, count int) error {
 	return global.DB.Model(&model.Video{}).Where("id = ?", videoId).Update("comment_count", gorm.Expr("comment_count - ?", count)).Error
 }
-

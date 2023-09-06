@@ -56,18 +56,18 @@ func CreateComment(userID int64, videoID int64, commentText string) (response.Co
 
 	}
 	// 更新视频表评论总数+1
-	err = dao.InCreCommentCount(videoID, 1)
-	if err != nil {
-		// 如果发生错误，将数据库回滚到未添加评论的初始状态
-		defer dao.RollbackTransaction(tx)
-		fmt.Printf("更新评论总数异常：%s", err)
-
-		commentActionResponse := response.CommentActionResponse{
-			Response: response.Response{StatusCode: http.StatusInternalServerError, StatusMsg: "更新视频评论数异常"},
-		}
-		return commentActionResponse, err
-
-	}
+	//err = dao.InCreCommentCount(videoID, 1)
+	//if err != nil {
+	//	// 如果发生错误，将数据库回滚到未添加评论的初始状态
+	//	defer dao.RollbackTransaction(tx)
+	//	fmt.Printf("更新评论总数异常：%s", err)
+	//
+	//	commentActionResponse := response.CommentActionResponse{
+	//		Response: response.Response{StatusCode: http.StatusInternalServerError, StatusMsg: "更新视频评论数异常"},
+	//	}
+	//	return commentActionResponse, err
+	//
+	//}
 
 	// 创建Comment_Response响应结构体
 	createDate := IntTime2CommentTime(currentTime)
