@@ -56,7 +56,7 @@ func Publish(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	playUrl := "http://" + string(ip) + ":8080" + "/public/" + finalName
+	playUrl := "http://" + string(ip) + ":8080" + "/static/" + finalName
 	DemoVideos = append(DemoVideos, Video{
 		Id:            int64(newId),
 		Author:        user,
