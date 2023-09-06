@@ -131,18 +131,18 @@ func DeleteComment(userID int64, videoID int64, commentID int64) (response.Comme
 			return commentActionResponse, err
 		}
 		// 更新视频表评论总数-1
-		err = dao.DeCreCommentCount(videoID, -1)
-		if err != nil {
-			// 如果发生错误，将数据库回滚到未删除评论的初始状态
-			defer dao.RollbackTransaction(tx)
-			fmt.Printf("更新视频评论数异常：%s", err)
-
-			commentActionResponse = response.CommentActionResponse{
-				Response: response.Response{StatusCode: http.StatusInternalServerError, StatusMsg: "更新视频评论数异常"},
-			}
-
-			return commentActionResponse, err
-		}
+		//err = dao.DeCreCommentCount(videoID, -1)
+		//if err != nil {
+		//	// 如果发生错误，将数据库回滚到未删除评论的初始状态
+		//	defer dao.RollbackTransaction(tx)
+		//	fmt.Printf("更新视频评论数异常：%s", err)
+		//
+		//	commentActionResponse = response.CommentActionResponse{
+		//		Response: response.Response{StatusCode: http.StatusInternalServerError, StatusMsg: "更新视频评论数异常"},
+		//	}
+		//
+		//	return commentActionResponse, err
+		//}
 
 		commentActionResponse = response.CommentActionResponse{
 			Response: response.Response{StatusCode: 0, StatusMsg: "删除成功"},
