@@ -56,6 +56,8 @@ func Publish(c *gin.Context) {
 	if err != nil {
 		return
 	}
+	//内网测试ip
+	//ip := "10.200.138.3"
 	playUrl := "http://" + string(ip) + ":8080" + "/static/" + finalName
 	DemoVideos = append(DemoVideos, Video{
 		Id:            int64(newId),

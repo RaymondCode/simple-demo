@@ -12,6 +12,15 @@
 4. **点赞与评论系统**：用户可以对喜欢的视频进行点赞，并留下评论。点赞和评论系统的实现使得用户之间可以进行互动和交流。这一功能是社交类应用中常见且重要的部分，为开发者提供了实现用户间互动的接口设计和逻辑处理的机会。 
 5. **统计与数据分析**：douyin-simple 支持对视频观看量、点赞数等数据进行统计和分析。这一功能使得开发者能够探索使用数据来优化用户体验和提高应用性能的方法。 
 
+## 启动项目
+
+```
+cd ./Go-Project
+go mod tidy
+go build
+./douyin-simple
+```
+
 ## 项目结构说明
 
 > `douyin-simple`
@@ -30,18 +39,17 @@
 
 #### 后端核心技术栈
 
-| 技术       | 说明              | 版本 | 备注                                          |
-| ---------- | ----------------- | ---- | --------------------------------------------- |
-| `gorm`     | `MySql`连接驱动库 |      | https://gorm.io/zh_CN/docs/index.html         |
-| `go-redis` | `redis`连接客户端 |      | https://github.com/redis/go-redis             |
-| `grpc`     | 微服务框架        |      | https://grpc.io/docs/languages/go/quickstart/ |
+| 技术       | 说明              | 版本   | 备注                                  |
+| ---------- | ----------------- | ------ | ------------------------------------- |
+| `gorm`     | `MySql`连接驱动库 | 1.25.4 | https://gorm.io/zh_CN/docs/index.html |
+| `go-redis` | `redis`连接客户端 |        | https://github.com/redis/go-redis     |
+| gin        | http框架          | 1.9.1  | https://gin-gonic.com/zh-cn/docs/     |
 
 #### 后端拓展技术栈
 
-| 技术    | 说明           | 版本   | 备注                               |
-| ------- | -------------- | ------ | ---------------------------------- |
-| `sonic` | `json`序列化库 |        | https://github.com/bytedance/sonic |
-| `viper` | 配置解决方案库 | 1.16.0 |                                    |
+| 技术  | 说明           | 版本   | 备注                           |
+| ----- | -------------- | ------ | ------------------------------ |
+| viper | 配置解决方案库 | 1.16.0 | https://github.com/spf13/viper |
 
 ## 环境要求
 
@@ -79,7 +87,15 @@
 
 ### 前端App
 
+<img src="./assets/image-20230907092903070.png" alt="image-20230907092903070" style="zoom:33%;" />
+
+<img src="./assets/image-20230907092945095.png" alt="image-20230907092945095" style="zoom:33%;" />
+
+<img src="./assets/image-20230907093014712.png" alt="image-20230907093014712" style="zoom:33%;" />
+
 ### 后端服务器
+
+![image-20230907092728533](./assets/image-20230907092728533.png)
 
 ## 开发组成员
 
